@@ -4,10 +4,15 @@
 \alias{setup_BWASPR}
 \title{Setting up a BWASPR analysis structure}
 \usage{
-setup_BWASPR()
+setup_BWASPR(datafile, parfile)
 }
 \arguments{
-\item{setup_BWASPR()}{}
+\item{datafile, }{parfile
+setup_BWASPR()}
+}
+\value{
+a list consisting of a data frame with the data input files) and a 
+        data frame with parameters
 }
 \description{
 Setting up a BWASPR analysis structure
