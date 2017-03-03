@@ -3,6 +3,9 @@ Title: Various R functions and scripts for the analyis of BWASP workflow output
 Version: 0.0.0.9000
 Authors@R: c(person("Volker", "Brendel", email = "vbrendel@indiana.edu", role = c("aut", "cre")),
              person("Shengyao", "Chen", email = "chenshe@indiana.edu", role = c("aut")))
+Author: Volker Brendel [aut, cret],
+        Shengyao Chen [aut]
+Maintainer: Volker Brendel <vbrendel@indiana.edu>
 Description: The BWASP workflow for BS-seq data analysis produces methylation
    site files *CpGhsm.mcalls and *CpGscd.mcalls.  BWASPR provides R functions
    and scripts to analysis the *mcalls files.

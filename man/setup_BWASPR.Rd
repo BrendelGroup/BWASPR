@@ -2,18 +2,28 @@
 % Please edit documentation in R/setup_BWASP.R
 \name{setup_BWASPR}
 \alias{setup_BWASPR}
-\title{Setting up a BWASPR analysis structure}
+\title{setup_BWASPR()
+Setting up a BWASPR analysis structure}
 \usage{
 setup_BWASPR(datafile, parfile)
 }
 \arguments{
-\item{datafile, }{parfile
-setup_BWASPR()}
+\item{datafile}{A BWASP data description file consisting of rows of
+tab-deliminted entries with consecutive labesl for Species, Study,
+Sample, Replicate, Type, and BWASP mcalls file location.}
+
+\item{parfile}{A BWASPR parameter file with parameter settings used in
+in the analysis.}
 }
 \value{
-a list consisting of a data frame with the data input files) and a 
+A list consisting of a data frame with the data input files and a 
         data frame with parameters
 }
 \description{
+setup_BWASPR()
 Setting up a BWASPR analysis structure
+}
+\examples{
+  setup_BWASRP(datefile="./Pc.dat",parfile="Pc.par")
+
 }

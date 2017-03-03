@@ -2,16 +2,45 @@
 % Please edit documentation in R/mcalls2mkobj.R
 \name{mcalls2mkobj}
 \alias{mcalls2mkobj}
-\title{Setting up a BWASPR analysis structure}
+\title{mcalls2mkobj()
+This function will select BWASP mcalls files according to specified
+selection criteria and read the data into methylBase objects.}
 \usage{
-mcalls2mkobj(inputdf, species, study, type, assembly)
+mcalls2mkobj(inputdf, species = "all", study = "all", sample = "all",
+  replicate = c(1:20), type = "CpGhsm", assembly = "unknown")
 }
 \arguments{
-\item{datafile}{mcalls2mkobj()}
+\item{inputdf}{A data frame as returned by setup_BWASPR from the input
+data file.  Each row corresponds to a BWASP-generated output, with columns
+indicating Species, Study, Sample, Replicate, Type, and File.}
+
+\item{species}{A character string specifying the Species to be pulled out of
+inputdf; default: "all".}
+
+\item{study}{A list of character strings specifying the Studies to be pulled
+out of inputdf; default: "all".}
+
+\item{sample}{A list of character strings specifying the Samples to be pulled
+out of inputdf; default: "all".}
+
+\item{replicate}{A list of integers specifying the Replicates to be pulled
+out of inputdf; default: c(1:20).}
+
+\item{type}{The type should be CpGhsm or CpGscd, as per BWASP output.}
+
+\item{assembly}{Label for the underlying genome assembly version; default:
+"unknown".}
 }
 \value{
-a methylBase object
+A methylKit-package methylRaw or methylRawList object.
 }
 \description{
-Setting up a BWASPR analysis structure
+mcalls2mkobj()
+This function will select BWASP mcalls files according to specified
+selection criteria and read the data into methylBase objects.
+}
+\examples{
+  mcalls2mkobj(myfiles[[1]],species="all",study="PA",type="CpGhsm",
+               assembly="Pcan-1.0")
+
 }
