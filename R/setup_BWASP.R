@@ -11,7 +11,9 @@
 #'         data frame with parameters
 #'
 #' @examples
-#'   setup_BWASRP(datefile="./Pc.dat",parfile="Pc.par")
+#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'
 #' @export
 
