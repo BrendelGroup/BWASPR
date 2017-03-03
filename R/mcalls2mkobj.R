@@ -1,26 +1,60 @@
-#' Setting up a BWASPR analysis structure
-#'
-#' @param datafile
 #' mcalls2mkobj()
-#' @return a methylBase object
+#' This function will select BWASP mcalls files according to specified
+#' selection criteria and read the data into methylBase objects.
+#'
+#' @param inputdf A data frame as returned by setup_BWASPR from the input
+#'   data file.  Each row corresponds to a BWASP-generated output, with columns
+#'   indicating Species, Study, Sample, Replicate, Type, and File.
+#' @param species A character string specifying the Species to be pulled out of
+#'   inputdf; default: "all".
+#' @param study A list of character strings specifying the Studies to be pulled
+#'   out of inputdf; default: "all".
+#' @param sample A list of character strings specifying the Samples to be pulled
+#'   out of inputdf; default: "all".
+#' @param replicate A list of integers specifying the Replicates to be pulled
+#'   out of inputdf; default: c(1:20).
+#' @param type The type should be CpGhsm or CpGscd, as per BWASP output.
+#' @param assembly Label for the underlying genome assembly version; default:
+#'   "unknown".
+#'
+#' @return A methylKit-package methylRaw or methylRawList object.
+#'
+#' @examples
+#'   mcalls2mkobj(myfiles[[1]],species="all",study="PA",type="CpGhsm",
+#'                assembly="Pcan-1.0")
 #'
 #' @importFrom methylKit methRead
-#'
 #' @export
 
-mcalls2mkobj <- function(inputdf,species,study,type,assembly){
+mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
+                         replicate=c(1:20),type="CpGhsm",assembly="unknown"){
     message("... loading mc objects ..")
     if (species != "all") {
         inputdf <- inputdf[inputdf$Species == species,]
     }
     if (study != "all") {
-        inputdf <- inputdf[inputdf$Study == study,]
+        inputdf <- inputdf[inputdf$Study %in% study,]
+    }
+    if (sample != "all") {
+        inputdf <- inputdf[inputdf$Sample %in% sample,]
+    }
+    if (!identical(replicate,c(1:20))) {
+        inputdf <- inputdf[inputdf$Replicate %in% replicate,]
     }
     if (type != "all") {
         inputdf <- inputdf[inputdf$Type == type,]
     }
 
-    locations <- as.list(inputdf$Source)
+    nrow(inputdf)
+    if (!nrow(inputdf)) {
+        stop("no matching data")
+    }
+    else {
+        locations <- as.list(inputdf$Source)
+        message("   ... matching data sets being loaded are:\n")
+        write.table(inputdf,row.names=F,quote=F)
+        message("")
+    }
 
     sampleids <- as.list(inputdf$Sample)
     treatmentvec <- c()
@@ -29,12 +63,13 @@ mcalls2mkobj <- function(inputdf,species,study,type,assembly){
         treatmentvec <- c(treatmentvec,rep(i-1,tmp$lengths[i]))
     }
 
-    mcobj <- methRead(location = locations,
+    mrobj <- methRead(location = locations,
                       sample.id = sampleids,
                       assembly = assembly,
                       header = TRUE,
                       treatment = treatmentvec,
                       mincov = 1
-                      )
-    return(mcobj)
+                     )
+    message("... done ..")
+    return(mrobj)
 }
