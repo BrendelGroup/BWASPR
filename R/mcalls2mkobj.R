@@ -19,16 +19,22 @@
 #'
 #' @return A methylKit-package methylRaw or methylRawList object.
 #'
-#' @examples
-#'   mcalls2mkobj(myfiles[[1]],species="all",study="PA",type="CpGhsm",
-#'                assembly="Pcan-1.0")
-#'
 #' @importFrom methylKit methRead
+#'
+#' @examples
+#'   library("methylKit")
+#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   mcalls2mkobj(myfiles[[1]],species="all",study="HE",type="CpGhsm",
+#'                assembly="Amel-4.5")
+#'
 #' @export
 
 mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
                          replicate=c(1:20),type="CpGhsm",assembly="unknown"){
     message("... loading mc objects ..")
+    system("pwd")
     if (species != "all") {
         inputdf <- inputdf[inputdf$Species == species,]
     }
