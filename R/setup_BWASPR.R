@@ -7,8 +7,9 @@
 #' @param parfile  A BWASPR parameter file with parameter settings used in
 #'   in the analysis.
 #'
-#' @return A list consisting of a data frame with the data input files and a 
-#'         data frame with parameters
+#' @return A list consisting of a data frame with the data input file paths
+#'         (identified as list item "datafiles") and a data frame with
+#'         parameter assignments (identified as list item "parameters")
 #'
 #' @importFrom utils read.csv
 #'
@@ -16,6 +17,8 @@
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   myfiles$parameters[myfiles$parameters$Variable == "ASSEMBLYVERSION",2]
+#'   as.numeric(myfiles$parameters[myfiles$parameters$Variable == "GENOMESIZE",2])
 #'
 #' @export
 
@@ -32,7 +35,7 @@ setup_BWASPR <- function(datafile,parfile){
                      stringsAsFactors=FALSE
                     )
     colnames(pfile) <- c("Variable", "Value")
-    files <- list(dfiles,pfile)
+    files <- list("datafiles"=dfiles,"parameters"=pfile)
     message("... done ...")
     return(files)
 }

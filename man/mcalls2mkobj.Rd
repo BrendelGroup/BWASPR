@@ -43,7 +43,7 @@ selection criteria and read the data into methylBase objects.
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  mcalls2mkobj(myfiles[[1]],species="all",study="HE",type="CpGhsm",
+  mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
                assembly="Amel-4.5")
 
 }
