@@ -62,7 +62,13 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
         message("")
     }
 
-    sampleids <- as.list(inputdf$Sample)
+# ... add replicate numbers to replicates in sampleids:
+    s <- as.list(inputdf$Sample)
+    r <- as.list(inputdf$Replicate)
+    s <- mapply(function(x,y) if (y > 0) {paste(x,y,sep="_")} else {x}, s,r)
+    sampleids <- as.list(s)
+
+# ... group distinct samples as "treatments" in methylKit notation:
     treatmentvec <- c()
     tmp <- rle(inputdf$Sample)
     for (i in 1:length(tmp$lengths)) {
