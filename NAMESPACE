@@ -3,3 +3,5 @@
 export(mcalls2mkobj)
 export(setup_BWASPR)
 importFrom(methylKit,methRead)
+importFrom(utils,read.csv)
+importFrom(utils,write.table)

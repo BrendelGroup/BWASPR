@@ -40,7 +40,6 @@ This function will select BWASP mcalls files according to specified
 selection criteria and read the data into methylBase objects.
 }
 \examples{
-  library("methylKit")
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)

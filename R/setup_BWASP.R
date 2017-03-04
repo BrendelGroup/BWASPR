@@ -10,6 +10,8 @@
 #' @return A list consisting of a data frame with the data input files and a 
 #'         data frame with parameters
 #'
+#' @importFrom utils read.csv
+#'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")

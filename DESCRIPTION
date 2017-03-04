@@ -10,6 +10,9 @@ Description: The BWASP workflow for BS-seq data analysis produces methylation
    site files *CpGhsm.mcalls and *CpGscd.mcalls.  BWASPR provides R functions
    and scripts to analysis the *mcalls files.
 Depends: R (>= 3.3.2)
+Imports:
+   methylKit,
+   utils
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
