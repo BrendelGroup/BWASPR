@@ -7,7 +7,8 @@ This function will select BWASP mcalls files according to specified
 selection criteria and read the data into methylBase objects.}
 \usage{
 mcalls2mkobj(inputdf, species = "all", study = "all", sample = "all",
-  replicate = c(1:20), type = "CpGhsm", assembly = "unknown")
+  replicate = c(1:20), type = "CpGhsm", mincov = 1,
+  assembly = "unknown")
 }
 \arguments{
 \item{inputdf}{A data frame as returned by setup_BWASPR from the input
@@ -28,6 +29,9 @@ out of inputdf; default: c(1:20).}
 
 \item{type}{The type should be CpGhsm or CpGscd, as per BWASP output.}
 
+\item{mincov}{Integer value specifying the mincov parameter for readMeth();
+default: 1.}
+
 \item{assembly}{Label for the underlying genome assembly version; default:
 "unknown".}
 }
@@ -44,6 +48,6 @@ selection criteria and read the data into methylBase objects.
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-               assembly="Amel-4.5")
+               mincov=1,assembly="Amel-4.5")
 
 }
