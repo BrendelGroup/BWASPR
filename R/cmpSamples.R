@@ -1,0 +1,36 @@
+#' cmpSamples()
+#' This function will methylKit::unite() input samples and compare
+#' them using methylKit::getCorrelation() and methylKit::PCASamples.
+#'
+#' @param mrobj A methylRaw object as returned by methylKit::unite()
+#' @param destrand methylKit::unite() parameter; default: FALSE.
+#'   destrand=TRUE combines CpG methylation calls from both strands.
+#' @param plot2file A logical determining whether plot output should be
+#'   sent to PDF files; default: FALSE.
+#'
+#' @return the data obtained from methylKit::unite()
+#'
+#' @importFrom methylKit unite getData getCorrelation PCASamples
+#'
+#' @examples
+#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
+#'                        mincvrg=1,assembly="Amel-4.5")
+#'   cmpSamples(AmHE,destrand=TRUE,plot2file=TRUE)
+#'
+#' @export
+
+cmpSamples <- function(mrobj,destrand=FALSE,plot2file=FALSE){
+    message("... comparing samples ..")
+
+    mbobj <- unite(mrobj,destrand=destrand)
+    data <- getData(mbobj)
+
+    getCorrelation(mbobj, plot=T)
+    PCASamples(mbobj, adj.lim=c(2, 2))
+
+    message("... done ..")
+    return(data)
+}

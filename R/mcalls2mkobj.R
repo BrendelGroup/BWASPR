@@ -14,6 +14,8 @@
 #' @param replicate A list of integers specifying the Replicates to be pulled
 #'   out of inputdf; default: c(1:20).
 #' @param type The type should be CpGhsm or CpGscd, as per BWASP output.
+#' @param mincov Integer value specifying the mincov parameter for readMeth();
+#'   default: 1.
 #' @param assembly Label for the underlying genome assembly version; default:
 #'   "unknown".
 #'
@@ -27,14 +29,15 @@
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-#'                assembly="Amel-4.5")
+#'                mincov=1,assembly="Amel-4.5")
 #'
 #' @export
 
 mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
-                         replicate=c(1:20),type="CpGhsm",assembly="unknown"){
+                         replicate=c(1:20),type="CpGhsm",mincov=1,
+                         assembly="unknown"){
     message("... loading mc objects ..")
-    system("pwd")
+
     if (species != "all") {
         inputdf <- inputdf[inputdf$Species == species,]
     }
@@ -80,7 +83,7 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
                       assembly = assembly,
                       header = TRUE,
                       treatment = treatmentvec,
-                      mincov = 1
+                      mincov = mincov
                      )
     message("... done ..")
     return(mrobj)
