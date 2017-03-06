@@ -61,7 +61,7 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
     else {
         locations <- as.list(inputdf$Source)
         message("   ... matching data sets being loaded are:\n")
-        write.table(inputdf,row.names=F,quote=F)
+        write.table(inputdf,file=stderr(),row.names=F,quote=F)
         message("")
     }
 

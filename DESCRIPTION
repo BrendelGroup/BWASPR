@@ -11,6 +11,7 @@ Description: The BWASP workflow for BS-seq data analysis produces methylation
    and scripts to analysis the *mcalls files.
 Depends: R (>= 3.3.2)
 Imports:
+   grDevices,
    methylKit,
    utils
 License: GPL-3

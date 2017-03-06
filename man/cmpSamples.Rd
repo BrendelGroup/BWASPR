@@ -6,7 +6,7 @@
 This function will methylKit::unite() input samples and compare
 them using methylKit::getCorrelation() and methylKit::PCASamples.}
 \usage{
-cmpSamples(mrobj, destrand = FALSE, plot2file = FALSE)
+cmpSamples(mrobj, destrand = FALSE, plotfile = "not_set")
 }
 \arguments{
 \item{mrobj}{A methylRaw object as returned by methylKit::unite()}
@@ -14,8 +14,9 @@ cmpSamples(mrobj, destrand = FALSE, plot2file = FALSE)
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands.}
 
-\item{plot2file}{A logical determining whether plot output should be
-sent to PDF files; default: FALSE.}
+\item{plotfile}{If specified other than the default "not_set", then plots
+are saved in PDF file "plotfile".pdf; otherwise either no plots are
+generated or the R default plot outputs are used.}
 }
 \value{
 the data obtained from methylKit::unite()
@@ -29,8 +30,8 @@ them using methylKit::getCorrelation() and methylKit::PCASamples.
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-                       mincvrg=1,assembly="Amel-4.5")
-  cmpSamples(AmHE,destrand=TRUE,plot2file=TRUE)
+  AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
+                       type="CpGhsm", mincov=1,assembly="Amel-4.5")
+  cmpSamples(AmHE,destrand=TRUE,plotfile="myplots")
 
 }

@@ -3,6 +3,8 @@
 export(cmpSamples)
 export(mcalls2mkobj)
 export(setup_BWASPR)
+importFrom(grDevices,dev.off)
+importFrom(grDevices,pdf)
 importFrom(methylKit,PCASamples)
 importFrom(methylKit,getCorrelation)
 importFrom(methylKit,getData)
