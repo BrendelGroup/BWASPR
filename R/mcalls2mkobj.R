@@ -61,7 +61,7 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
     else {
         locations <- as.list(inputdf$Source)
         message("   ... matching data sets being loaded are:\n")
-        write.table(inputdf,row.names=F,quote=F)
+        write.table(inputdf,file=stderr(),row.names=F,quote=F)
         message("")
     }
 
@@ -76,6 +76,13 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
     tmp <- rle(inputdf$Sample)
     for (i in 1:length(tmp$lengths)) {
         treatmentvec <- c(treatmentvec,rep(i-1,tmp$lengths[i]))
+    }
+
+# ... add Study to sampleids if there are multiple studies:
+    if (length(unique(inputdf$Study))>1) {
+        s <- as.list(inputdf$Study)
+        s <- mapply(function(x,y) paste(x,y,sep="_"), sampleids,s)
+        sampleids <- as.list(s)
     }
 
     mrobj <- methRead(location = locations,
