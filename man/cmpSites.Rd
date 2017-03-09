@@ -17,14 +17,14 @@ cmpSites(sample1hsm, sample1scd, sample1label, sample2hsm, sample2scd,
 
 \item{sample2hsm}{A methylRaw object}
 
+\item{sample2scd}{A methylRaw object}
+
 \item{sample2label}{A string}
 
 \item{nbrpms}{integer}
-
-\item{sample3scd}{A methylRaw object}
 }
 \value{
-something
+a list of df's
 }
 \description{
 cmpSites()
