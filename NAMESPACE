@@ -2,8 +2,10 @@
 
 export(cmStats)
 export(cmpSamples)
+export(cmpSites)
 export(mcalls2mkobj)
 export(setup_BWASPR)
+import(sqldf)
 importFrom(grDevices,dev.off)
 importFrom(grDevices,pdf)
 importFrom(methylKit,PCASamples)

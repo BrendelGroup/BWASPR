@@ -13,6 +13,7 @@ Depends: R (>= 3.3.2)
 Imports:
    grDevices,
    methylKit,
+   sqldf,
    utils
 License: GPL-3
 Encoding: UTF-8
