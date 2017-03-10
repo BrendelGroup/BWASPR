@@ -36,7 +36,8 @@ This function compares (potential) methylation sites between two samples.
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  nbrpms  <- myfiles$parameters[myfiles$parameters$Variable == "TOTALNBRPMSITES",2]
+  nbrpms  <- as.numeric(myfiles$parameters[
+    myfiles$parameters$Variable == "TOTALNBRPMSITES",2])
   AmHEhsm <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                           type="CpGhsm", mincov=1,assembly="Amel-4.5")
   AmHEscd <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
