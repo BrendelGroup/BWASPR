@@ -1,5 +1,6 @@
 #' cmStats()
-#' This function will 
+#' This function generates coverage and methylation statistics for the
+#'   input data set.
 #'
 #' @param mrobj A methylRaw object
 #' @param covlist a vector of coverage threshols; default: c(10)
@@ -18,7 +19,7 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-#'   cmStats(AmHE,plotfile="myplots")
+#'   cmStats(AmHE[[1]],plotfile="myplots")
 #'
 #' @export
 

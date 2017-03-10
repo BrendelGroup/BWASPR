@@ -3,7 +3,8 @@
 \name{cmStats}
 \alias{cmStats}
 \title{cmStats()
-This function will}
+This function generates coverage and methylation statistics for the
+  input data set.}
 \usage{
 cmStats(mrobj, covlist = c(10), plotfile = "not_set")
 }
@@ -21,7 +22,8 @@ the coverage count for the highest threshold in covlist
 }
 \description{
 cmStats()
-This function will
+This function generates coverage and methylation statistics for the
+  input data set.
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -29,6 +31,6 @@ This function will
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-  cmStats(AmHE,plotfile="myplots")
+  cmStats(AmHE[[1]],plotfile="myplots")
 
 }

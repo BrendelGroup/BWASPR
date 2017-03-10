@@ -1,15 +1,17 @@
 #' cmpSites()
-#' This function will 
+#' This function compares (potential) methylation sites between two samples.
 #'
-#' @param sample1hsm A methylRaw object
-#' @param sample1scd A methylRaw object
-#' @param sample1label A string
-#' @param sample2hsm A methylRaw object
-#' @param sample2scd A methylRaw object
-#' @param sample2label A string
-#' @param nbrpms integer
+#' @param sample1hsm A methylRaw object for hsm sites of sample 1.
+#' @param sample1scd A methylRaw object for scd sites of sample 1.
+#' @param sample1label A string serving as a label for sample 1.
+#' @param sample2hsm A methylRaw object for hsm sites of sample 2.
+#' @param sample2scd A methylRaw object for scd sites of stample 2.
+#' @param sample2label A string serving as a label for sample 2.
+#' @param nbrpms Integer representing the number of potential methylation
+#'   sites in the genome; typically derived from the input *.par file.
 #'
-#' @return a list of df's
+#' @return A list of data frames containing data on unique and common
+#'   sites comparing the two samples.
 #'
 #' @importFrom methylKit getData
 #' @import sqldf
@@ -23,8 +25,8 @@
 #'                           type="CpGhsm", mincov=1,assembly="Amel-4.5")
 #'   AmHEscd <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                           type="CpGscd", mincov=1,assembly="Amel-4.5")
-#'   cmpSites(getData(AmHEhsm[[1]]),getData(AmHEscd[[1]]),"Am_HE_fr",
-#'            getData(AmHEhsm[[2]]),getData(AmHEscd[[2]]),"Am_HE_rn",nbrpms)
+#'   mydflist <- cmpSites(getData(AmHEhsm[[1]]),getData(AmHEscd[[1]]),"Am_HE_fr",
+#'                        getData(AmHEhsm[[2]]),getData(AmHEscd[[2]]),"Am_HE_rn",nbrpms)
 #'
 #' @export
 
@@ -56,8 +58,7 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
     
     # ? Which sites are common between samples 1 and 2, and which sites are unique in each sample?
     #
-    
-    commonHSM <- sqldf('SELECT sample1hsm.SeqPos as SeqPos, sample1hsm.chr as chr, sample1hsm.start as start, sample1hsm.end as end, sample1hsm.strand as strand, sample1hsm.coverage as s1coverage, sample1hsm.numCs as s1numCs, sample1hsm.numTs as s1numTs, sample1hsm.PrcntM as s1PrcntM, sample2hsm.coverage as s2coverage, sample2hsm.numCs as s2numCs, sample2hsm.numTs as s2numTs, sample2hsm.PrcntM as s2PrcntM from sample1hsm INNER JOIN sample2hsm ON sample1hsm.SeqPos = sample2hsm.SeqPos')
+    commonHSM <- sqldf('SELECT sample1hsm.SeqPos as SeqPos, sample1hsm.chr as chr, sample1hsm.start as start, sample1hsm.end as end, sample1hsm.strand as strand, sample1hsm.coverage as covHSM1, sample1hsm.numCs as hsm1numCs, sample1hsm.numTs as hsm1numTs, sample1hsm.PrcntM as s1PrcntM, sample2hsm.coverage as covHSM2, sample2hsm.numCs as hsm2numCs, sample2hsm.numTs as hsm2numTs, sample2hsm.PrcntM as s2PrcntM from sample1hsm INNER JOIN sample2hsm ON sample1hsm.SeqPos = sample2hsm.SeqPos')
     NBRcommonHSM <- dim(commonHSM)[1]
     
     unique1HSM<- sqldf('SELECT sample1hsm.SeqPos, sample1hsm.chr, sample1hsm.start, sample1hsm.end, sample1hsm.coverage, sample1hsm.numCs, sample1hsm.numTs from sample1hsm LEFT JOIN sample2hsm ON sample1hsm.SeqPos = sample2hsm.SeqPos WHERE sample2hsm.SeqPos IS NULL')
@@ -70,8 +71,7 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
     # ? For a more refined analysis, we find the numbers of common and unique sites only within
     #   the set of sites that were sufficiently covered (i.e., detectable) in both samples:
     #
-    
-    commonSCD <- sqldf('SELECT sample1scd.SeqPos, sample1scd.chr, sample1scd.start, sample1scd.end, sample1scd.strand, sample1scd.coverage as s3coverage, sample1scd.numCs as s3numCs, sample1scd.numTs as s3numTs, sample2scd.coverage as s4coverage, sample2scd.numCs as s4numCs, sample2scd.numTs as s4numTs from sample1scd INNER JOIN sample2scd ON sample1scd.SeqPos = sample2scd.SeqPos')
+    commonSCD <- sqldf('SELECT sample1scd.SeqPos, sample1scd.chr, sample1scd.start, sample1scd.end, sample1scd.strand, sample1scd.coverage as covSCD1, sample1scd.numCs as scd1numCs, sample1scd.numTs as scd1numTs, sample2scd.coverage as covSCD2, sample2scd.numCs as scd2numCs, sample2scd.numTs as scd2numTs from sample1scd INNER JOIN sample2scd ON sample1scd.SeqPos = sample2scd.SeqPos')
     NBRcommonSCD <- dim(commonSCD)[1]
     
     unique1SCD <- sqldf('SELECT sample1scd.SeqPos, sample1scd.chr, sample1scd.start, sample1scd.end, sample1scd.coverage, sample1scd.numCs, sample1scd.numTs from sample1scd LEFT JOIN sample2scd ON sample1scd.SeqPos = sample2scd.SeqPos WHERE sample2scd.SeqPos IS NULL')
@@ -80,13 +80,13 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
     unique2SCD <- sqldf('SELECT sample2scd.SeqPos, sample2scd.chr, sample2scd.start, sample2scd.end, sample2scd.coverage, sample2scd.numCs, sample2scd.numTs from sample2scd LEFT JOIN sample1scd ON sample2scd.SeqPos = sample1scd.SeqPos WHERE sample1scd.SeqPos IS NULL')
     NBRunique2SCD <- dim(unique2SCD)[1]
     
-    hsm1cSCD <- sqldf('SELECT sample1hsm.SeqPos, sample1hsm.chr, sample1hsm.start, sample1hsm.end, sample1hsm.strand, sample1hsm.coverage, sample1hsm.numCs, sample1hsm.numTs, sample1hsm.PrcntM, commonSCD.s3coverage, commonSCD.s4coverage from sample1hsm INNER JOIN commonSCD ON sample1hsm.SeqPos = commonSCD.SeqPos')
+    hsm1cSCD <- sqldf('SELECT sample1hsm.SeqPos, sample1hsm.chr, sample1hsm.start, sample1hsm.end, sample1hsm.strand, sample1hsm.coverage, sample1hsm.numCs, sample1hsm.numTs, sample1hsm.PrcntM, commonSCD.covSCD1, commonSCD.covSCD2 from sample1hsm INNER JOIN commonSCD ON sample1hsm.SeqPos = commonSCD.SeqPos')
     NBRhsm1cSCD <- dim(hsm1cSCD)[1]
     
     unique1HSMn2SCD <- sqldf('SELECT sample1hsm.SeqPos, sample1hsm.chr, sample1hsm.start, sample1hsm.end, sample1hsm.coverage, sample1hsm.numCs, sample1hsm.numTs from sample1hsm LEFT JOIN commonSCD ON sample1hsm.SeqPos = commonSCD.SeqPos WHERE commonSCD.SeqPos IS NULL')
     NBRunique1HSMn2SCD <- dim(unique1HSMn2SCD)[1]
     
-    hsm2cSCD <- sqldf('SELECT sample2hsm.SeqPos, sample2hsm.chr, sample2hsm.start, sample2hsm.end, sample2hsm.strand, sample2hsm.coverage, sample2hsm.numCs, sample2hsm.numTs, sample2hsm.PrcntM, commonSCD.s3coverage, commonSCD.s4coverage from sample2hsm INNER JOIN commonSCD ON sample2hsm.SeqPos = commonSCD.SeqPos')
+    hsm2cSCD <- sqldf('SELECT sample2hsm.SeqPos, sample2hsm.chr, sample2hsm.start, sample2hsm.end, sample2hsm.strand, sample2hsm.coverage, sample2hsm.numCs, sample2hsm.numTs, sample2hsm.PrcntM, commonSCD.covSCD1, commonSCD.covSCD2 from sample2hsm INNER JOIN commonSCD ON sample2hsm.SeqPos = commonSCD.SeqPos')
     NBRhsm2cSCD <- dim(hsm2cSCD)[1]
     
     unique2HSMn1SCD <- sqldf('SELECT sample2hsm.SeqPos, sample2hsm.chr, sample2hsm.start, sample2hsm.end, sample2hsm.coverage, sample2hsm.numCs, sample2hsm.numTs from sample2hsm LEFT JOIN commonSCD ON sample2hsm.SeqPos = commonSCD.SeqPos WHERE commonSCD.SeqPos IS NULL')
