@@ -25,8 +25,11 @@
 #'                           type="CpGhsm", mincov=1,assembly="Amel-4.5")
 #'   AmHEscd <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                           type="CpGscd", mincov=1,assembly="Amel-4.5")
-#'   mydflist <- cmpSites(getData(AmHEhsm[[1]]),getData(AmHEscd[[1]]),"Am_HE_fr",
-#'                        getData(AmHEhsm[[2]]),getData(AmHEscd[[2]]),"Am_HE_rn",nbrpms)
+#'   s1hsm <- getData(AmHEhsm[[1]]
+#'   s1scd <- getData(AmHEscd[[1]]
+#'   s2hsm <- getData(AmHEhsm[[2]]
+#'   s2scd <- getData(AmHEscd[[2]]
+#'   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms)
 #'
 #' @export
 
