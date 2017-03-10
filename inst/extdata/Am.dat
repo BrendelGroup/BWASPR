@@ -1,4 +1,6 @@
 # Samples from Herb et al. (2012) Nature Neuroscience:
 #
 Am	HE	forager	0	CpGhsm	./BWASPR/extdata/Amel-forager.CpGhsm.mcalls
+Am	HE	forager	0	CpGscd	./BWASPR/extdata/Amel-forager.CpGscd.mcalls
 Am	HE	nurse	0	CpGhsm	./BWASPR/extdata/Amel-nurse.CpGhsm.mcalls
+Am	HE	nurse	0	CpGscd	./BWASPR/extdata/Amel-nurse.CpGscd.mcalls

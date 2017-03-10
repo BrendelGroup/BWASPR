@@ -19,7 +19,9 @@
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
-#'                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
+#'                        sample="all",replicate=c(0),
+#'                        type="CpGhsm", mincov=1,
+#'                        assembly="Amel-4.5")
 #'   cmpSamples(AmHE,destrand=TRUE,plotfile="myplots")
 #'
 #' @export
