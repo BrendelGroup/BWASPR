@@ -1,8 +1,8 @@
 #' genome_annotation()
-#' annotate the methylated sites
+#' This function annotates the methylated sites with different genomic features (e.g. genes, exon, promoter, etc.)
 #'
-#' @param mrobj
-#' @param genome_info
+#' @param mrobj a methylRaw object or a methylRawList object
+#' @param genome_info a list of GRanges objects that contains genome infomation
 #'
 #' @return A data frame that store the genome annotation data
 #'
@@ -15,7 +15,8 @@
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles)
 #'   genome <- read_genome_info(myfiles$parameters)
 #'   genome_annotation_info <- genome_annotation(AmHE, genome, save_output_data = FALSE)
-#'   genome_annotation(AmHE, genome, outputdata = 'AmHE_genome_annotation.Rda')
+#'   or genome_annotation(AmHE, genome, outputdata = 'AmHE_genome_annotation.Rda')
+#'   
 #'
 #' @export
 
