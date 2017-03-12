@@ -1,5 +1,5 @@
 #' read_genome_info_genomation()
-#' This function will read the genome information
+#' This function will read the genome information via the gffToGRanges function in genomation
 #'
 #' @param inputdf A data frame as returned by setup_BWASPR from the input
 #'   data file.  Each row corresponds to a BWASP-generated output, with columns
