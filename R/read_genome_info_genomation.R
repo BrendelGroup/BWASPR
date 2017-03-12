@@ -1,0 +1,104 @@
+#' read_genome_info_genomation()
+#' This function will read the genome information
+#'
+#' @param inputdf A data frame as returned by setup_BWASPR from the input
+#'   data file.  Each row corresponds to a BWASP-generated output, with columns
+#'   indicating Species, Study, Sample, Replicate, Type, and File.
+#'
+#' @return A list consisting of genome information including
+#' gene.gr,
+#' exon.gr,
+#' pcexon.gr,
+#' promoter.gr,
+#' CDS.gr,
+#' fiveprimeUTR.gr,
+#' threeprimeUTR.gr,
+#' fiveprimeUTR_unique.gr,
+#' threeprimeUTRnotCDS.gr,
+#' threeprimeUTR_unique.gr,
+#' ncexon.grl
+#'
+#' @importFrom GRanges
+#'
+#' @examples
+#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   genome <- read_genome_info_genomation(myfiles$parameters)
+#'
+
+
+# reading genome information
+read_genome_info_genomation <- function(inputdf){
+  # read the directory of genome info from inputdf
+  GFF3DIR               <- inputdf[inputdf$Variable == 'SPECIESGFF3DIR', "Value"]
+  # testing:
+  GFF3DIR <- '../Am/genome/GFF3DIR/'
+  genelist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'GENELISTGFF3', "Value"],sep="/")
+  exonlist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'EXONLISTGFF3', "Value"],sep="/")
+  proteincodingexonlist <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PCGEXNLISTGFF3', "Value"],sep="/")
+  promoterlist          <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PROMOTRLISTGFF3', "Value"],sep="/")
+  cdslist               <- paste(GFF3DIR,inputdf[inputdf$Variable == 'CDSLISTGFF3', "Value"],sep="/")
+  UTRflag               <- inputdf[inputdf$Variable == 'UTRFLAGSET', "Value"]
+  if (UTRflag == 1) {
+    fiveprimeUTRlist    <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
+    threeprimeUTRlist   <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
+  }
+
+  # Read genome information
+  gene.gr <- gffToGRanges(genelist)
+  # Read the exon file ...
+  exon.gr <- gffToGRanges(exonlist)
+  #Read the protein coding exon file ...
+  pcexon.gr <- gffToGRanges(proteincodingexonlist)
+  # Read the promoter file ...
+  promoter.gr <- gffToGRanges(promoterlist)
+  # Read the CDS file ...
+  CDS.gr <- gffToGRanges(cdslist)
+
+  if (UTRflag == 1) {
+    # Read the 5'UTR file ...
+    fiveprimeUTR.gr <- gffToGRanges(fiveprimeUTRlist)
+    # Read the 3'UTR file ...
+    threeprimeUTR.gr <- gffToGRanges(threeprimeUTRlist)
+    # To obtain the five-prime UTR that does not overlap with CDS
+    if (length(fiveprimeUTR.gr) > 0) {
+      fiveprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(fiveprimeUTR.gr,CDS.gr, ignore.strand = TRUE))
+    } else {
+      fiveprimeUTR_unique.gr <- fiveprimeUTR.gr;
+    }
+    # # To obtain the three-prime UTR that does not overlap with CDS
+    # #
+    if (length(threeprimeUTR.gr) > 0) {
+      threeprimeUTRnotCDS.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTR.gr,CDS.gr, ignore.strand = TRUE))
+    } else {
+      threeprimeUTRnotCDS.gr <- threeprimeUTR.gr;
+    }
+
+    if (length(threeprimeUTRnotCDS.gr) > 0) {
+      threeprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTRnotCDS.gr,fiveprimeUTR_unique.gr, ignore.strand = TRUE))
+    } else {
+      threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
+    }
+    #
+  }
+  # Calculate the non-coding regions of the exons
+  if (length(exon.gr) > 0) {
+    ncexon.gr <- suppressWarnings(GenomicRanges::setdiff(exon.gr,pcexon.gr, ignore.strand = TRUE))
+  } else {
+    ncexon.gr <- exon.gr
+  }
+
+  return(list('gene' = gene.gr,
+              'exon' = exon.gr,
+              'pcexon' = pcexon.gr,
+              'promoter' = promoter.gr,
+              'CDS' = CDS.gr,
+              'fiveprimeUTR' = fiveprimeUTR.gr,
+              'threeprimeUTR' = threeprimeUTR.gr,
+              'fiveprimeUTR' = fiveprimeUTR_unique.gr,
+              'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
+              'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
+              'ncexon' = ncexon.gr
+  ))
+}
