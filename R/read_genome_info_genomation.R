@@ -33,7 +33,7 @@ read_genome_info_genomation <- function(inputdf){
   # read the directory of genome info from inputdf
   GFF3DIR               <- inputdf[inputdf$Variable == 'SPECIESGFF3DIR', "Value"]
   # testing:
-  GFF3DIR <- '../Am/genome/GFF3DIR/'
+  # GFF3DIR <- '../Am/genome/GFF3DIR/'
   genelist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'GENELISTGFF3', "Value"],sep="/")
   exonlist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'EXONLISTGFF3', "Value"],sep="/")
   proteincodingexonlist <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PCGEXNLISTGFF3', "Value"],sep="/")
