@@ -23,19 +23,15 @@
 #' @export
 
 plot_genome_annotation <- function(mrobj, genome_annotation_info, if_plot = FALSE, output_file_dir = './BWASPR/R/genome_annotation.pdf', number_of_sites = 200){
+  # import the library for this function
   library(ComplexHeatmap)
   library(circlize)
-
+  # prep the data to plot in the figure
   plot_matrix <- head(genome_annotation_info, number_of_sites)
   label_matrix = as.data.frame(ifelse(plot_matrix == 0, "No", "Yes"))
-
-  #############################################################################################
-  # Heatmap
-  #############################################################################################
-  # issue here, the Rscript could not directly save the pdf as planned.
-
   sample_list <- getSampleID(mrobj)
 
+  # if not plot, then only draw on plots
 if (if_plot == FALSE){
   ha = HeatmapAnnotation(df = data.frame(caste = sample_list))
   ha1 = rowAnnotation(df = label_matrix['gene'], name = 'gene', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(gene = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
@@ -53,6 +49,7 @@ if (if_plot == FALSE){
   )
   draw(heatmap + ha1 + ha2 + ha3 + ha4 + ha5)
 }
+  # else, save the figure into a file directory that is specified by user or default
 else{
   pdf(output_file_dir, length(sample_list) * 3, number_of_sites * 0.03)
   draw(heatmap + ha1 + ha2 + ha3 + ha4 + ha5)
