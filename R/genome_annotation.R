@@ -6,7 +6,10 @@
 #'
 #' @return A data frame that store the genome annotation data
 #'
-#' @importFrom
+#' @importFrom methylKit percMethylation
+#' @importFrom genomation annotateWithFeature
+#' @import GenomicRanges
+#' @import methods
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
