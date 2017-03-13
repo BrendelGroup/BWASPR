@@ -96,7 +96,7 @@ read_genome_info_genomation <- function(inputdf){
               'CDS' = CDS.gr,
               'fiveprimeUTR' = fiveprimeUTR.gr,
               'threeprimeUTR' = threeprimeUTR.gr,
-              'fiveprimeUTR' = fiveprimeUTR_unique.gr,
+              'fiveprimeUTR_unique' = fiveprimeUTR_unique.gr,
               'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
               'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
               'ncexon' = ncexon.gr
