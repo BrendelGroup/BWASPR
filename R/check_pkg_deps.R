@@ -1,7 +1,7 @@
 #' check_pkg_deps()
 #' This function import the libraries that are required
 #'
-#' @param
+#  @param
 #'
 #' @return If required packages are not installed, return a message. If required packages are installed, return nothing
 #'
