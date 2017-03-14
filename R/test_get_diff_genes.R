@@ -3,7 +3,7 @@
 #'
 #' @param mrobj a methylRawList object
 #'
-#' @param threshould threshould of methylation level change
+#' @param threshold
 #' @param qvalue
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
