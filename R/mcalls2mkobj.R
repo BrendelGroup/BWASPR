@@ -41,10 +41,10 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
     if (species != "all") {
         inputdf <- inputdf[inputdf$Species == species,]
     }
-    if (study != "all") {
+    if (!identical(study,"all")) {
         inputdf <- inputdf[inputdf$Study %in% study,]
     }
-    if (sample != "all") {
+    if (!identical(sample,"all")) {
         inputdf <- inputdf[inputdf$Sample %in% sample,]
     }
     if (!identical(replicate,c(1:20))) {

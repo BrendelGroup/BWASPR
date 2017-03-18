@@ -18,7 +18,8 @@
                              #' threeprimeUTR_unique.gr,
                              #' ncexon.grl
 #'
-#' @importFrom GRanges
+#' @importFrom GenomicRanges GRanges
+#' @import IRanges
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -26,6 +27,7 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   genome <- read_genome_info(myfiles$parameters)
 #'
+#' @export
 
 
 # reading genome information
