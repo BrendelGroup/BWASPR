@@ -236,5 +236,6 @@ read_genome_info <- function(inputdf){
                 'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
                 'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
                 'ncexon' = ncexon.gr
-                ))
+                )
+           )
 }

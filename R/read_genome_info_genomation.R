@@ -29,9 +29,10 @@ read_genome_info_genomation <- function(inputdf){
     promoterlist          <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PROMOTRLISTGFF3', "Value"],sep="/")
     cdslist               <- paste(GFF3DIR,inputdf[inputdf$Variable == 'CDSLISTGFF3', "Value"],sep="/")
     UTRflag               <- inputdf[inputdf$Variable == 'UTRFLAGSET', "Value"]
+
     if (UTRflag == 1) {
-        fiveprimeUTRlist    <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
-        threeprimeUTRlist   <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
+        fiveprimeUTRlist  <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
+        threeprimeUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
     }
 
     # Read genome information
