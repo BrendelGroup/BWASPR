@@ -3,32 +3,24 @@
 \name{read_genome_info_genomation}
 \alias{read_genome_info_genomation}
 \title{read_genome_info_genomation()
-This function will read the genome information via the gffToGRanges function in genomation}
+This function converts the gff3 formated data.frame into a list with GRanges objects.
+The gff3 files directories were specified by setup_BWASPR()}
 \usage{
 read_genome_info_genomation(inputdf)
 }
 \arguments{
-\item{inputdf}{A data frame as returned by setup_BWASPR from the input
-data file.  Each row corresponds to a BWASP-generated output, with columns
-indicating Species, Study, Sample, Replicate, Type, and File.}
+\item{inputdf}{A data frame as returned by setup_BWASPR from the input data file.
+The data frame contains the directories to specific generic features of DNA and the UTRflag.}
 }
 \value{
-A list consisting of genome information including
-gene.gr,
-exon.gr,
-pcexon.gr,
-promoter.gr,
-CDS.gr,
-fiveprimeUTR.gr,
-threeprimeUTR.gr,
-fiveprimeUTR_unique.gr,
-threeprimeUTRnotCDS.gr,
-threeprimeUTR_unique.gr,
-ncexon.grl
+A list consisting of GRanges objects that describe generic features of DNA including:
+  gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
+  fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon
 }
 \description{
 read_genome_info_genomation()
-This function will read the genome information via the gffToGRanges function in genomation
+This function converts the gff3 formated data.frame into a list with GRanges objects.
+The gff3 files directories were specified by setup_BWASPR()
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

@@ -1,25 +1,16 @@
 #' read_genome_info()
-#' This function will read the genome information
+#' This function converts the gff3 formated data.frame into a list with GRanges objects.
+#' The gff3 files directories were specified by setup_BWASPR()
 #'
-#' @param inputdf A data frame as returned by setup_BWASPR from the input
-#'   data file.  Each row corresponds to a BWASP-generated output, with columns
-#'   indicating Species, Study, Sample, Replicate, Type, and File.
+#' @param inputdf A data frame as returned by setup_BWASPR from the input data file.
+#'   The data frame contains the directories to specific generic features of DNA and the UTRflag.
 #'
-#' @return A list consisting of genome information including
-                             #' gene.gr,
-                             #' exon.gr,
-                             #' pcexon.gr,
-                             #' promoter.gr,
-                             #' CDS.gr,
-                             #' fiveprimeUTR.gr,
-                             #' threeprimeUTR.gr,
-                             #' fiveprimeUTR_unique.gr,
-                             #' threeprimeUTRnotCDS.gr,
-                             #' threeprimeUTR_unique.gr,
-                             #' ncexon.grl
+#' @return A list consisting of GRanges objects that describe generic features of DNA including:
+#'   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
+#'   fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon.
 #'
-#' @importFrom GenomicRanges GRanges
-#' @import IRanges
+#' @importFrom GenomicRanges GRanges, setdiff
+#' @importFrom utils read.table
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -34,14 +25,13 @@
 read_genome_info <- function(inputdf){
     # read the directory of genome info from inputdf
     GFF3DIR               <- inputdf[inputdf$Variable == 'SPECIESGFF3DIR', "Value"]
-    # testing:
-    #  GFF3DIR <- '../Am/genome/GFF3DIR/'
     genelist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'GENELISTGFF3', "Value"],sep="/")
     exonlist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'EXONLISTGFF3', "Value"],sep="/")
     proteincodingexonlist <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PCGEXNLISTGFF3', "Value"],sep="/")
     promoterlist          <- paste(GFF3DIR,inputdf[inputdf$Variable == 'PROMOTRLISTGFF3', "Value"],sep="/")
     cdslist               <- paste(GFF3DIR,inputdf[inputdf$Variable == 'CDSLISTGFF3', "Value"],sep="/")
     UTRflag               <- inputdf[inputdf$Variable == 'UTRFLAGSET', "Value"]
+
     if (UTRflag == 1) {
       fiveprimeUTRlist    <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
       threeprimeUTRlist   <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
@@ -222,15 +212,17 @@ read_genome_info <- function(inputdf){
       }
 
     if (length(threeprimeUTRnotCDS.gr) > 0) {
-      threeprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTRnotCDS.gr,fiveprimeUTR_unique.gr, ignore.strand = TRUE))
+      threeprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTRnotCDS.gr,
+                                                                         fiveprimeUTR_unique.gr,
+                                                                         ignore.strand = TRUE
+                                                                         )
+                                                  )
       } else {
       threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
     }
-    #
     }
-    #
-    # # Calculate the non-coding regions of the exons
-    # #
+
+    # Calculate the non-coding regions of the exons
     #
     if (length(exon.gr) > 0) {
       ncexon.gr <- suppressWarnings(GenomicRanges::setdiff(exon.gr,pcexon.gr, ignore.strand = TRUE))
@@ -249,5 +241,6 @@ read_genome_info <- function(inputdf){
                 'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
                 'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
                 'ncexon' = ncexon.gr
-                ))
+                )
+           )
 }
