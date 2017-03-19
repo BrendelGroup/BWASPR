@@ -38,36 +38,6 @@ plot_genome_annotation <- function(mrobj,
     library(ComplexHeatmap)
     library(circlize)
     # prep the data to plot in the figure
-    plot_matrix  <- head(genome_annotation_info, number_of_sites)
-    label_matrix <- as.data.frame(ifelse(plot_matrix == 0, "No", "Yes"))
-    sample_list  <- getSampleID(mrobj)
-
-    # if not plot, then only draw on plots
-    if (if_plot == FALSE){
-        ha = HeatmapAnnotation(df = data.frame(caste = sample_list))
-        ha1 = rowAnnotation(df = label_matrix['gene'], name = 'gene', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(gene = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
-        ha2 = rowAnnotation(df = label_matrix['exon'], name = 'exon', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(exon = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
-        ha3 = rowAnnotation(df = label_matrix['pcexon'], name = 'pcexon', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(pcexon = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
-        ha4 = rowAnnotation(df = label_matrix['CDS'], name = 'CDS', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(CDS = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
-        ha5 = rowAnnotation(df = label_matrix['promoter'], name = 'promoter', show_annotation_name = TRUE, width = unit(2, "mm"), col = list(promoter = c('No' =  "gray", 'Yes' = "blue")), annotation_name_side = 'top')
-
-        heatmap <- Heatmap(plot_matrix[, 1:length(sample_list)],
-                           col = colorRamp2(c(0, 50, 100), c('blue4', 'blue', 'lightskyblue')),
-                           name = 'methylation level',
-                           show_row_names = FALSE,
-                           column_title = 'Representative methylome annotation', row_title = 'methylated sites',
-                           top_annotation = ha, top_annotation_height = unit(3, "mm")
-                          )
-        draw(heatmap + ha1 + ha2 + ha3 + ha4 + ha5)
-    }
-    # else, save the figure into a file directory that is specified by user or default
-    else{
-        pdf(output_file_dir, length(sample_list) * 3, number_of_sites * 0.03)
-        draw(heatmap + ha1 + ha2 + ha3 + ha4 + ha5)
-        dev.off()
-    }
-# =======
-    # prep the data to plot in the figure
     #
     plot_matrix <- head(genome_annotation_info, number_of_sites)
     label_matrix = as.data.frame(ifelse(plot_matrix == 0, "No", "Yes"))
