@@ -1,13 +1,11 @@
 #' get_diff_genes()
 #' This function will get a list of genes with diff methylated CpG sites
 #'
-#' @param mrobj a methylRawList object
-#'
-#' @param threshold
-#' @param qvalue
+#' @param mrobj A methylRaw object or a methylRawList object.
+#' @param threshold cutoff for percent methylation difference
+#' @param qvalue cutoff for q-value
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
-#'
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

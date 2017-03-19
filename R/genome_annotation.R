@@ -42,6 +42,7 @@ genome_annotation <- function(mrobj, genome_info, save_output_data = TRUE, outpu
     for (i in names(genome_info)){
         meth[i] <- get(paste(i, 'annot', sep = '_'))@members
     }
+    # ?may need to rename the 'label' here
     #
 	meth_data <- getData(meth)
 	label <- subset(meth_data, select = c('chr', 'start', 'end', 'strand', names(genome_info)))
