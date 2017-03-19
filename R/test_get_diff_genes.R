@@ -1,5 +1,5 @@
 #' get_diff_genes()
-#' This function will get a list of genes with diff methylated CpG sites
+#' ??This function will get a list of genes with diff methylated CpG sites
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
 #' @param threshold cutoff for percent methylation difference
