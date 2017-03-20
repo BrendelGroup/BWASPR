@@ -2,8 +2,8 @@
 #' ??This function will get a list of genes with diff methylated CpG sites
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
-#' @param threshold cutoff for percent methylation difference
-#' @param qvalue cutoff for q-value
+#' @param threshold cutoff for percent methylation difference, default threshold = 0.25
+#' @param qvalue cutoff for q-value, defualt q-value = 0.05
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
 #'
@@ -18,7 +18,7 @@
 #'
 #' @export
 
-get_diff_genes<- function(mrobj, genome, threshold = 0, qvalue = 1){
+get_diff_genes<- function(mrobj, genome, threshold = 0.25, qvalue = 0.05){
 	# fetch sample_list and treatment_list
 	sample_list <- getSampleID(mrobj)
 	treatment_list <- getTreatment(mrobj)
