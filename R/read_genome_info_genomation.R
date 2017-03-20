@@ -9,7 +9,7 @@
 #'   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
 #'   fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon
 #'
-#' @importFrom methlyKit gffToGRanges
+#' @importFrom genomation gffToGRanges
 #' @importFrom GenomicRanges setdiff
 #'
 #' @examples

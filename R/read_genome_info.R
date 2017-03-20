@@ -9,7 +9,8 @@
 #'   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
 #'   fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon.
 #'
-#' @importFrom GenomicRanges GRanges, setdiff
+#' @importFrom GenomicRanges GRanges setdiff
+#' @import IRanges
 #' @importFrom utils read.table
 #'
 #' @examples

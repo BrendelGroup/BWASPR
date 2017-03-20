@@ -10,7 +10,7 @@
 #'
 #' @return A data frame that store the genome annotation data
 #'
-#' @import methods utils
+#  @import methods utils
 #' @import ComplexHeatmap
 #' @importFrom ComplexHeatmap draw
 #' @import circlize
@@ -91,11 +91,11 @@ plot_genome_annotation <- function(mrobj,
     # if not plot, then only draw on plots,
     # else, save the figure into a file directory that is specified by user or default
     #
-    if (if_plot == FALSE){
+    if (plot == FALSE){
         draw(heatmap + ha_gene + ha_exon + ha_pcexon + ha_cds + ha_promoter)
     } else{
-        pdf(output_file_dir, length(sample_list) * 3, number_of_sites * 0.03)
-        draw(heatmap + ha1 + ha2 + ha3 + ha4 + ha5)
+        pdf(output_file, length(sample_list) * 3, number_of_sites * 0.03)
+        draw(heatmap + ha_gene + ha_exon + ha_pcexon + ha_cds + ha_promoter)
         dev.off()
     }
 }
