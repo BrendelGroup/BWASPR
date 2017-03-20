@@ -11,6 +11,7 @@
 #'
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
+#' @importFrom IRanges subsetByOverlaps
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

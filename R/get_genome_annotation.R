@@ -1,6 +1,6 @@
-#' read_genome_info_genomation()
-#' This function converts the gff3 formated data.frame into a list with GRanges objects.
-#' The gff3 files directories were specified by setup_BWASPR()
+#' get_genome_annotation()
+#' This function derives GRanges objects from the GFF3-formatted input file data.
+#' The GFF3 input files should be specified by setup_BWASPR().
 #'
 #' @param inputdf A data frame as returned by setup_BWASPR from the input data file.
 #'   The data frame contains the directories to specific generic features of DNA and the UTRflag.
@@ -16,12 +16,12 @@
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   genome <- read_genome_info_genomation(myfiles$parameters)
+#'   genome <- get_genome_annotation(myfiles$parameters)
 #'
 #' @export
 
 
-read_genome_info_genomation <- function(inputdf){
+get_genome_annotation <- function(inputdf){
     # read the directory of genome info from inputdf
     GFF3DIR               <- inputdf[inputdf$Variable == 'SPECIESGFF3DIR', "Value"]
     genelist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'GENELISTGFF3', "Value"],sep="/")
@@ -36,36 +36,22 @@ read_genome_info_genomation <- function(inputdf){
         threeprimeUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
     }
 
-    # Read genome information
-    #
-    gene.gr <- gffToGRanges(genelist)
-    # Read the exon file
-    #
-    exon.gr <- gffToGRanges(exonlist)
-    #Read the protein coding exon file
-    #
-    pcexon.gr <- gffToGRanges(proteincodingexonlist)
-    # Read the promoter file
-    #
+    gene.gr     <- gffToGRanges(genelist)
+    exon.gr     <- gffToGRanges(exonlist)
+    pcexon.gr   <- gffToGRanges(proteincodingexonlist)
     promoter.gr <- gffToGRanges(promoterlist)
-    # Read the CDS file
-    #
-    CDS.gr <- gffToGRanges(cdslist)
+    CDS.gr      <- gffToGRanges(cdslist)
 
     if (UTRflag == 1) {
-        # Read the 5'UTR file
-        #
-        fiveprimeUTR.gr <- gffToGRanges(fiveprimeUTRlist)
-        # Read the 3'UTR file
-        #
+        fiveprimeUTR.gr  <- gffToGRanges(fiveprimeUTRlist)
         threeprimeUTR.gr <- gffToGRanges(threeprimeUTRlist)
         # To obtain the five-prime UTR that does not overlap with CDS
         #
         if (length(fiveprimeUTR.gr) > 0) {
             fiveprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(fiveprimeUTR.gr,CDS.gr,
                                                                               ignore.strand = TRUE
-                                                                              )
-                                                       )
+                                                                             )
+                                                      )
         } else {
             fiveprimeUTR_unique.gr <- fiveprimeUTR.gr;
         }
@@ -74,20 +60,19 @@ read_genome_info_genomation <- function(inputdf){
         if (length(threeprimeUTR.gr) > 0) {
             threeprimeUTRnotCDS.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTR.gr,CDS.gr,
                                                                               ignore.strand = TRUE
-                                                                              )
-                                                       )
+                                                                             )
+                                                      )
         } else {
             threeprimeUTRnotCDS.gr <- threeprimeUTR.gr;
         }
-
         if (length(threeprimeUTRnotCDS.gr) > 0) {
             threeprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTRnotCDS.gr,
                                                                                fiveprimeUTR_unique.gr,
                                                                                ignore.strand = TRUE
-                                                                               )
-                                                        )
+                                                                              )
+                                                       )
         } else {
-        threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
+            threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
         }
     }
 
@@ -109,6 +94,6 @@ read_genome_info_genomation <- function(inputdf){
                 'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
                 'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
                 'ncexon' = ncexon.gr
-                )
-           )
+               )
+          )
 }
