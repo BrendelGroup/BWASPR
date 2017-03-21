@@ -3,14 +3,15 @@
 \name{plot_diff_genes_pattern}
 \alias{plot_diff_genes_pattern}
 \title{plot_diff_genes_pattern()
-This function will plot out the mC level pattern in genes that were identified with diff methylated C sites}
+??This function will plot out the mC level pattern in genes that were identified with diff methylated C sites}
 \usage{
-plot_diff_genes_pattern(mrobj, diff_genes, output_figure)
+plot_diff_genes_pattern(mrobj, diff_genes,
+  output_figure = "meth_diff_genes.pdf")
 }
 \arguments{
 \item{diff_genes}{diff genes}
 
-\item{output_figure}{name of the output figure}
+\item{output_figure}{dir/file name of the output figure}
 
 \item{mcobj}{a methylRawList object}
 }
@@ -19,9 +20,16 @@ A Granges object that contains a list of genes that have diff methylated C sites
 }
 \description{
 plot_diff_genes_pattern()
-This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
+??This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
 }
 \examples{
-  meth_diff_genes <- get_diff_genes(mcobj)
+  mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+  myparf <- system.file("extdata","Am.par",package="BWASPR")
+  myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+  AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
+                       mincvrg=1,assembly="Amel-4.5")
+  genome <- read_genome_info(myfiles$parameters)
+  meth_diff <- get_diff_genes(AmHE, genome)
+  plot_diff_genes_pattern <- function(AmHE, meth_diff)
 
 }
