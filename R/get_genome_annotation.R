@@ -48,9 +48,9 @@ get_genome_annotation <- function(inputdf){
         # To obtain the five-prime UTR that does not overlap with CDS
         #
         if (length(fiveprimeUTR.gr) > 0) {
-            fiveprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(fiveprimeUTR.gr,CDS.gr,
-                                                                              ignore.strand = TRUE
-                                                                             )
+            fiveprimeUTR_unique.gr <- suppressWarnings(setdiff(fiveprimeUTR.gr,CDS.gr,
+                                                               ignore.strand=TRUE
+                                                              )
                                                       )
         } else {
             fiveprimeUTR_unique.gr <- fiveprimeUTR.gr;
@@ -58,18 +58,18 @@ get_genome_annotation <- function(inputdf){
         # To obtain the three-prime UTR that does not overlap with CDS
         #
         if (length(threeprimeUTR.gr) > 0) {
-            threeprimeUTRnotCDS.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTR.gr,CDS.gr,
-                                                                              ignore.strand = TRUE
-                                                                             )
+            threeprimeUTRnotCDS.gr <- suppressWarnings(setdiff(threeprimeUTR.gr,CDS.gr,
+                                                               ignore.strand=TRUE
+                                                              )
                                                       )
         } else {
             threeprimeUTRnotCDS.gr <- threeprimeUTR.gr;
         }
         if (length(threeprimeUTRnotCDS.gr) > 0) {
-            threeprimeUTR_unique.gr <- suppressWarnings(GenomicRanges::setdiff(threeprimeUTRnotCDS.gr,
-                                                                               fiveprimeUTR_unique.gr,
-                                                                               ignore.strand = TRUE
-                                                                              )
+            threeprimeUTR_unique.gr <- suppressWarnings(setdiff(threeprimeUTRnotCDS.gr,
+                                                                fiveprimeUTR_unique.gr,
+                                                                ignore.strand=TRUE
+                                                               )
                                                        )
         } else {
             threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
@@ -78,7 +78,7 @@ get_genome_annotation <- function(inputdf){
 
     # Calculate the non-coding regions of the exons
     if (length(exon.gr) > 0) {
-        ncexon.gr <- suppressWarnings(GenomicRanges::setdiff(exon.gr,pcexon.gr, ignore.strand = TRUE))
+        ncexon.gr <- suppressWarnings(setdiff(exon.gr,pcexon.gr, ignore.strand=TRUE))
     } else {
         ncexon.gr <- exon.gr
     }
