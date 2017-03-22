@@ -12,7 +12,7 @@
 #'
 #' @importFrom methylKit percMethylation unite
 #' @importFrom genomation annotateWithFeature
-#' @import htmlwidgets saveWidget
+#' @importFrom utils write.table
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
