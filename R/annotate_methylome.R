@@ -49,7 +49,7 @@ annotate_methylome <- function(mrobj,
     for (i in names(genome_info)){
         meth[i] <- get(paste(i, 'annot', sep = '_'))@members
     }
-    # change the methylBase object into a datagrame and set the correct col names
+    # change the methylBase object into a dataframe and set the correct col names
     #
 	meth_data  <- getData(meth)
 	label      <- subset(meth_data,
