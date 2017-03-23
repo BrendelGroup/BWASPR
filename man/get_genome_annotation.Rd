@@ -15,7 +15,7 @@ The data frame contains the directories to specific generic features of DNA and 
 \value{
 A list consisting of GRanges objects that describe generic features of DNA including:
   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
-  fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon
+  fiveprimeUTRunique,threeprimeUTRnotCDS,threeprimeUTRunique,ncexon
 }
 \description{
 get_genome_annotation()
