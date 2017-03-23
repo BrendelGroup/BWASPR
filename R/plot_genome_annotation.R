@@ -16,7 +16,7 @@
 #' @importFrom methylKit getSampleID
 #' @importFrom grid unit
 #'
-#' @example
+#' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)

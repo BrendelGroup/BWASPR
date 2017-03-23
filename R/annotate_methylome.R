@@ -59,7 +59,7 @@ annotate_methylome <- function(mrobj,
 
     if (save_output_data == TRUE){
         write.table(annotate_methylome,
-                    file = outputdata
+                    file = outputdata,
                     sep = '\t',
                     row.names = FALSE
                    )
