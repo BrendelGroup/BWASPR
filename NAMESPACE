@@ -15,11 +15,8 @@ import(ComplexHeatmap)
 import(circlize)
 import(methods)
 import(sqldf)
-<<<<<<< HEAD
 import(utils)
-=======
 importFrom(BiocGenerics,width)
->>>>>>> 2c0a8c9982252c3ad160ed969286a4965e6020e3
 importFrom(ComplexHeatmap,draw)
 importFrom(GenomicRanges,setdiff)
 importFrom(genomation,annotateWithFeature)
