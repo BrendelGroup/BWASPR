@@ -3,12 +3,14 @@
 \name{get_diff_genes}
 \alias{get_diff_genes}
 \title{get_diff_genes()
-??This function will get a list of genes with diff methylated CpG sites}
+This function will get a list of genes with diff methylated CpG sites}
 \usage{
 get_diff_genes(mrobj, genome, threshold = 0.25, qvalue = 0.05)
 }
 \arguments{
 \item{mrobj}{A methylRaw object or a methylRawList object.}
+
+\item{genome}{Genome annotation returns by get_genome_annotation()}
 
 \item{threshold}{cutoff for percent methylation difference, default threshold = 0.25}
 
@@ -19,7 +21,7 @@ A Granges object that contains a list of genes that have diff methylated C sites
 }
 \description{
 get_diff_genes()
-??This function will get a list of genes with diff methylated CpG sites
+This function will get a list of genes with diff methylated CpG sites
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
