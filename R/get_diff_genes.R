@@ -80,6 +80,7 @@ get_diff_genes<- function(mrobj, genome, threshold = 0.25, qvalue = 0.05){
 		# get the final methdiffgenes
 		diff_genes <- unlist(GRangesList(unlist(methygenes)))
 	}
-	return(diff_genes)
+	return(list('diff_genes' = diff_genes,
+	            'diff_sites' = all_diff_sites))
 }
 
