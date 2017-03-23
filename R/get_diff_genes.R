@@ -7,6 +7,10 @@
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
 #'
+#' @import methylKit
+#' @importFrom GenomicRanges GRangesList
+#' @importFrom IRanges subsetByOverlaps
+#'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
