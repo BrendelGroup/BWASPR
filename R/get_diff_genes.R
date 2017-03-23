@@ -1,11 +1,10 @@
 #' get_diff_genes()
 #' This function will get a list of genes with diff methylated CpG sites
 #'
-#' @param mrobj a methylRawList object
-#' @param genome output from read_genome_info
-#' @param threshold Threshold of methylation level change
-#' @param qvalue criterion for determination of significance
-#' @param mc.cores Number of cores used by methylKit functions
+#' @param mrobj A methylRaw object or a methylRawList object.
+#' @param genome Genome annotation returns by get_genome_annotation()
+#' @param threshold cutoff for percent methylation difference, default threshold = 0.25
+#' @param qvalue cutoff for q-value, defualt q-value = 0.05
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
 #'
@@ -24,14 +23,14 @@
 #'
 #' @export
 
-get_diff_genes<- function(mrobj, genome, threshold=0, qvalue=1, mc.cores=1){
+get_diff_genes<- function(mrobj, genome, threshold = 0.25, qvalue = 0.05){
 	# fetch sample_list and treatment_list
 	sample_list <- getSampleID(mrobj)
 	treatment_list <- getTreatment(mrobj)
 	# get the gene GRanges
 	genes <- genome[['gene']]
 	# get the number of treatments
-	# if number of treatment == 1, compare intra caste
+	# if number of treatment == 1, compare intra a caste
 	# if number of treatment > 1, compare inter castes
 	number_of_treatment <- length(unique(treatment_list))
 	unique_treatment_list <- unique(treatment_list)
@@ -40,9 +39,9 @@ get_diff_genes<- function(mrobj, genome, threshold=0, qvalue=1, mc.cores=1){
 		# change the treatment list to a c(0:length(treatment_list))
 		mrobj <- reorganize(mrobj, treatment = 0 : (length(treatment_list) - 1))
 		# unite the mrobj
-		meth <- unite(mrobj, destrand=TRUE, mc.cores=mc.cores)
+		meth <- unite(mrobj, destrand = TRUE, mc.cores = 8)
 		# calculate the diff meth
-		diff <- calculateDiffMeth(meth, mc.cores=mc.cores)
+		diff <- calculateDiffMeth(meth, mc.cores = 8)
 		# set the threshold
 		diff_th <- getMethylDiff(diff, difference = threshold, qvalue = qvalue)
 		# get the genes with diff meth sites
@@ -68,9 +67,9 @@ get_diff_genes<- function(mrobj, genome, threshold=0, qvalue=1, mc.cores=1){
 									 sample.ids = pair_sample_list,
 									 treatment = pair_treatment_list)
 			# unite the mrobj in the mrobjRawList for calculate the meth diff
-			meth <- unite(mrobj, destrand=TRUE, mc.cores=mc.cores)
+			meth <- unite(mrobj, destrand = TRUE)
 			# calculate the diff meth
-			diff <- calculateDiffMeth(meth, mc.cores=mc.cores)
+			diff <- calculateDiffMeth(meth)
 			# set the threshold
 			assign(paste(pair, collapse = ''),getMethylDiff(diff, difference = threshold, qvalue = qvalue))
 		}
@@ -85,3 +84,4 @@ get_diff_genes<- function(mrobj, genome, threshold=0, qvalue=1, mc.cores=1){
 	return(list('diff_genes' = diff_genes,
 	            'diff_sites' = all_diff_sites))
 }
+
