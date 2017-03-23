@@ -7,7 +7,7 @@
 #'
 #' @return A list consisting of GRanges objects that describe generic features of DNA including:
 #'   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
-#'   fiveprimeUTR_unique,threeprimeUTRnotCDS,threeprimeUTR_unique,ncexon
+#'   fiveprimeUTRunique,threeprimeUTRnotCDS,threeprimeUTRunique,ncexon
 #'
 #' @importFrom genomation gffToGRanges
 #' @importFrom GenomicRanges setdiff
@@ -48,12 +48,12 @@ get_genome_annotation <- function(inputdf){
         # To obtain the five-prime UTR that does not overlap with CDS
         #
         if (length(fiveprimeUTR.gr) > 0) {
-            fiveprimeUTR_unique.gr <- suppressWarnings(setdiff(fiveprimeUTR.gr,CDS.gr,
+            fiveprimeUTRunique.gr <- suppressWarnings(setdiff(fiveprimeUTR.gr,CDS.gr,
                                                                ignore.strand=TRUE
                                                               )
                                                       )
         } else {
-            fiveprimeUTR_unique.gr <- fiveprimeUTR.gr;
+            fiveprimeUTRunique.gr <- fiveprimeUTR.gr;
         }
         # To obtain the three-prime UTR that does not overlap with CDS
         #
@@ -66,13 +66,13 @@ get_genome_annotation <- function(inputdf){
             threeprimeUTRnotCDS.gr <- threeprimeUTR.gr;
         }
         if (length(threeprimeUTRnotCDS.gr) > 0) {
-            threeprimeUTR_unique.gr <- suppressWarnings(setdiff(threeprimeUTRnotCDS.gr,
-                                                                fiveprimeUTR_unique.gr,
+            threeprimeUTRunique.gr <- suppressWarnings(setdiff(threeprimeUTRnotCDS.gr,
+                                                                fiveprimeUTRunique.gr,
                                                                 ignore.strand=TRUE
                                                                )
                                                        )
         } else {
-            threeprimeUTR_unique.gr <- threeprimeUTRnotCDS.gr;
+            threeprimeUTRunique.gr <- threeprimeUTRnotCDS.gr;
         }
     }
 
@@ -90,9 +90,9 @@ get_genome_annotation <- function(inputdf){
                 'CDS' = CDS.gr,
                 'fiveprimeUTR' = fiveprimeUTR.gr,
                 'threeprimeUTR' = threeprimeUTR.gr,
-                'fiveprimeUTR_unique' = fiveprimeUTR_unique.gr,
+                'fiveprimeUTRunique' = fiveprimeUTRunique.gr,
                 'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
-                'threeprimeUTR_unique' = threeprimeUTR_unique.gr,
+                'threeprimeUTRunique' = threeprimeUTRunique.gr,
                 'ncexon' = ncexon.gr
                )
           )
