@@ -1,5 +1,5 @@
 #' get_diff_genes()
-#' ??This function will get a list of genes with diff methylated CpG sites
+#' This function will get a list of genes with diff methylated CpG sites
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
 #' @param genome Genome annotation returns by get_genome_annotation()
