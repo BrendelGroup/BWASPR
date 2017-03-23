@@ -25,7 +25,7 @@ get_diff_genes<- function(mrobj, genome, threshold = 0.25, qvalue = 0.05){
 	# get the gene GRanges
 	genes <- genome[['gene']]
 	# get the number of treatments
-	# if number of treatment == 1, compare intra a casteqaz123
+	# if number of treatment == 1, compare intra a caste
 	# if number of treatment > 1, compare inter castes
 	number_of_treatment <- length(unique(treatment_list))
 	unique_treatment_list <- unique(treatment_list)
