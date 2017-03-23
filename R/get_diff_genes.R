@@ -2,6 +2,7 @@
 #' ??This function will get a list of genes with diff methylated CpG sites
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
+#' @param genome Genome annotation returns by get_genome_annotation()
 #' @param threshold cutoff for percent methylation difference, default threshold = 0.25
 #' @param qvalue cutoff for q-value, defualt q-value = 0.05
 #'
