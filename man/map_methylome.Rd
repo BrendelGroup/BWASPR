@@ -7,7 +7,7 @@ This function annotates maps the scd and hsm site onto different genomic
   features (e.g. genes, exon, promoter, etc.)}
 \usage{
 map_methylome(studymk, slabel, studymc, clabel, genome_info, gnmsize, UTRflag,
-  outputdata = "some.Rda")
+  outfile = "")
 }
 \arguments{
 \item{studymk}{methylRaw object representing an hsm sample}
@@ -24,8 +24,7 @@ map_methylome(studymk, slabel, studymc, clabel, genome_info, gnmsize, UTRflag,
 
 \item{UTRflag}{Numerical, indicating whether or not the annotation included UTRs (1 or 0)}
 
-\item{outputdata}{If specified, then the result is saved in the specified file name; otherwise the result
-is saved in '$wd/something.Rda'}
+\item{outfile}{If specified, then the result is saved in the specified file name.}
 }
 \value{
 Should return something useful
@@ -43,6 +42,6 @@ This function annotates maps the scd and hsm site onto different genomic
   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
   ginfo <- get_genome_annotation(myfiles$parameters)
-  map_methylome(AmHE, ginfo, gnmsize, outputdata='AmHE_map_methylome.Rda')
+  map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
 
 }

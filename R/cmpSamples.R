@@ -5,7 +5,7 @@
 #' @param mrobj A methylRaw object as returned by methylKit::unite()
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands.
-#' @param plotfile If specified other than the default "not_set", then plots
+#' @param plotfile If specified other than the default "", then plots
 #'   are saved in PDF file "plotfile".pdf; otherwise either no plots are
 #'   generated or the R default plot outputs are used.
 #'
@@ -26,13 +26,13 @@
 #'
 #' @export
 
-cmpSamples <- function(mrobj,destrand=FALSE,plotfile="not_set"){
+cmpSamples <- function(mrobj,destrand=FALSE,plotfile=""){
     message("... comparing samples ..")
 
     mbobj <- unite(mrobj,destrand=destrand)
     data <- getData(mbobj)
 
-    if (plotfile != "not_set") {
+    if (plotfile != "") {
         pdf(paste(plotfile,"pdf",sep="."))
         getCorrelation(mbobj, plot=T)
         PCASamples(mbobj, adj.lim=c(2, 2))
