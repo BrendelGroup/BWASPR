@@ -6,8 +6,8 @@
 This function annotates maps the scd and hsm site onto different genomic
   features (e.g. genes, exon, promoter, etc.)}
 \usage{
-map_methylome(studymk, slabel, studymc, clabel, genome_info, gnmsize, UTRflag,
-  outfile = "")
+map_methylome(studymk, slabel, studymc, clabel, genome_info, species, gnmsize,
+  UTRflag, outfile = "")
 }
 \arguments{
 \item{studymk}{methylRaw object representing an hsm sample}
@@ -19,6 +19,8 @@ map_methylome(studymk, slabel, studymc, clabel, genome_info, gnmsize, UTRflag,
 \item{clabel}{Label for the control sample}
 
 \item{genome_info}{A list of GRanges objects that contains genome infomation.}
+
+\item{species}{Label for the species being analyzed}
 
 \item{gnmsize}{Genome size}
 
@@ -37,11 +39,11 @@ This function annotates maps the scd and hsm site onto different genomic
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
-  myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  AmHE <- mcalls2mkobj(myfiles$datafiles)
+  infiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+  AmHE <- mcalls2mkobj(infiles$datafiles)
   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
-  ginfo <- get_genome_annotation(myfiles$parameters)
+  ginfo <- get_genome_annotation(infiles$parameters)
   map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
 
 }

@@ -7,6 +7,7 @@
 #' @param studymc methylRaw object representing the scd control
 #' @param clabel Label for the control sample
 #' @param genome_info A list of GRanges objects that contains genome infomation.
+#' @param species Label for the species being analyzed
 #' @param gnmsize Genome size
 #' @param UTRflag Numerical, indicating whether or not the annotation included UTRs (1 or 0)
 #' @param outfile If specified, then the result is saved in the specified file name.
@@ -18,18 +19,18 @@
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
-#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   AmHE <- mcalls2mkobj(myfiles$datafiles)
+#'   infiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   AmHE <- mcalls2mkobj(infiles$datafiles)
 #'   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
 #'   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
-#'   ginfo <- get_genome_annotation(myfiles$parameters)
+#'   ginfo <- get_genome_annotation(infiles$parameters)
 #'   map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
 #'
 #' @export
 
 ################################################################################
 map_methylome <- function(studymk,slabel,studymc,clabel,
-                          genome_info,gnmsize,UTRflag,
+                          genome_info,species,gnmsize,UTRflag,
                           outfile=""){
 
     if (outfile != "") {
