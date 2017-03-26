@@ -7,10 +7,10 @@
 #' @param studymc methylRaw object representing the scd control
 #' @param clabel Label for the control sample
 #' @param genome_info A list of GRanges objects that contains genome infomation.
+#' @param species Label for the species being analyzed
 #' @param gnmsize Genome size
 #' @param UTRflag Numerical, indicating whether or not the annotation included UTRs (1 or 0)
-#' @param outputdata If specified, then the result is saved in the specified file name; otherwise the result
-#'   is saved in '$wd/something.Rda'
+#' @param outfile If specified, then the result is saved in the specified file name.
 #'
 #' @return Should return something useful
 #'
@@ -19,20 +19,23 @@
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
-#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   AmHE <- mcalls2mkobj(myfiles$datafiles)
+#'   infiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   AmHE <- mcalls2mkobj(infiles$datafiles)
 #'   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
 #'   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
-#'   ginfo <- get_genome_annotation(myfiles$parameters)
-#'   map_methylome(AmHE, ginfo, gnmsize, outputdata='AmHE_map_methylome.Rda')
+#'   ginfo <- get_genome_annotation(infiles$parameters)
+#'   map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
 #'
 #' @export
 
 ################################################################################
 map_methylome <- function(studymk,slabel,studymc,clabel,
-                          genome_info,gnmsize,UTRflag,
-                          outputdata = 'some.Rda'){
+                          genome_info,species,gnmsize,UTRflag,
+                          outfile=""){
 
+    if (outfile != "") {
+        sink(outfile)
+    }
     gene.gr <- genome_info$gene
     exon.gr <- genome_info$exon
     pcexon.gr <- genome_info$pcexon
@@ -240,5 +243,8 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     cat( sprintf("Number of sites identified in %s %s   other intergenic regions:   %9d   (%8.2f) (%6.2f%% of control)   %6.2f%%   (%5.2f O/E)\n",species,slabel,slabel.SitesInIntergenicRegions.number,slabel.SitesInIntergenicRegions.density,100*slabel.SitesInIntergenicRegions.number/clabel.SitesInIntergenicRegions.number,100*slabel.SitesInIntergenicRegions.fraction,slabel.SitesInIntergenicRegions.fraction/intergenicsanspromoter.fraction) )   
     
     cat( sprintf( "\n\n" ) )
+    if (outfile != "") {
+        sink()
+    }
     return(1)
 }

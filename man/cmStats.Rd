@@ -6,14 +6,16 @@
 This function generates coverage and methylation statistics for the
   input data set.}
 \usage{
-cmStats(mrobj, covlist = c(10), plotfile = "not_set")
+cmStats(mrobj, covlist = c(10), outfile = "", plotfile = "")
 }
 \arguments{
 \item{mrobj}{A methylRaw object}
 
 \item{covlist}{a vector of coverage threshols; default: c(10)}
 
-\item{plotfile}{If specified other than the default "not_set", then plots
+\item{outfile}{If specified then output is printed to the specified file.}
+
+\item{plotfile}{If specified other than the default "", then plots
 are saved in PDF file "plotfile".pdf; otherwise either no plots are
 generated or the R default plot outputs are used.}
 }
@@ -31,6 +33,6 @@ This function generates coverage and methylation statistics for the
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-  cmStats(AmHE[[1]],plotfile="myplots")
+  cmStats(AmHE[[1]],covlist=c(10,20),outfile="Am_HE-statistics.txt",plotfile="myplots")
 
 }

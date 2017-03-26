@@ -28,8 +28,8 @@ This function will get a list of genes with diff methylated CpG sites
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-                       mincvrg=1,assembly="Amel-4.5")
-  genome <- read_genome_info(myfiles$parameters)
+                       mincov=1,assembly="Amel-4.5")
+  genome <- get_genome_annotation(myfiles$parameters)
   meth_diff <- get_diff_genes(AmHE, genome)
 
 }
