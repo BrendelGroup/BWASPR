@@ -31,7 +31,9 @@ cal_methyl_level_in_gene <- function(mrobj,
     meth      <- unite(mrobj, destrand = TRUE)
     perc_meth <- percMethylation(meth, rowids = FALSE, save.txt = FALSE)
     sampleid  <- getSampleID(meth)
-    # annotate methylome with different genes, here is just a test, choose the first 50 genes for test
+    ### annotate methylome with different genes, here is just a test, choose the first 50 genes for test
+    ##
+    # Notice only first 50 genes here!!!!
     gene      <- genome_info$gene[1:50]
     for (i in seq_along(gene)){
         gene_name <- gene[i]$ID

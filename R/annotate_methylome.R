@@ -27,41 +27,41 @@
 
 annotate_methylome <- function(mrobj,
                                genome_info,
-                               save_output_data = TRUE,
-                               outputdata = 'annotate_methylome_data.txt'
+                               save_output_data=TRUE,
+                               outfile='annotate_methylome_data.txt'
                               ){
     # unite all the methlRawList object into a methylBase object and calculate the percentage methylation scores
     #
-    meth      <- unite(mrobj, destrand = TRUE)
-    perc_meth <- percMethylation(meth, rowids = FALSE, save.txt = FALSE)
+    meth      <- unite(mrobj,destrand=TRUE)
+    perc_meth <- percMethylation(meth,rowids=FALSE,save.txt=FALSE)
     # annotate methylome with generic features from genome information
     #
     for (i in names(genome_info)){
-        assign(paste(i, 'annot', sep = '_'),
-               annotateWithFeature(as(meth, 'GRanges'),
+        assign(paste(i,'annot',sep='_'),
+               annotateWithFeature(as(meth,'GRanges'),
                                    genome_info[[i]],
-                                   strand = TRUE,
-                                   intersect.chr = FALSE)
+                                   strand=TRUE,
+                                   intersect.chr=FALSE)
               )
     }
     # add the methylome annotation to the methylBase object
     #
     for (i in names(genome_info)){
-        meth[i] <- get(paste(i, 'annot', sep = '_'))@members
+        meth[i] <- get(paste(i,'annot',sep='_'))@members
     }
     # change the methylBase object into a dataframe and set the correct col names
     #
 	meth_data  <- getData(meth)
 	label      <- subset(meth_data,
-	                     select = c('chr', 'start', 'end', 'strand', names(genome_info))
+	                     select=c('chr','start','end','strand',names(genome_info))
 	                    )
-  	annotate_methylome <- cbind(perc_meth, label)
+  	annotate_methylome <- cbind(perc_meth,label)
 
-    if (save_output_data == TRUE){
+    if (save_output_data==TRUE){
         write.table(annotate_methylome,
-                    file = outputdata,
-                    sep = '\t',
-                    row.names = FALSE
+                    file=outputdata,
+                    sep='\t',
+                    row.names=FALSE
                    )
     }
     return(annotate_methylome)
