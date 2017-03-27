@@ -6,7 +6,7 @@
 This function will methylKit::unite() input samples and compare
 them using methylKit::getCorrelation() and methylKit::PCASamples.}
 \usage{
-cmpSamples(mrobj, destrand = FALSE, plotfile = "not_set")
+cmpSamples(mrobj, destrand = FALSE, plotfile = "")
 }
 \arguments{
 \item{mrobj}{A methylRaw object as returned by methylKit::unite()}
@@ -14,7 +14,7 @@ cmpSamples(mrobj, destrand = FALSE, plotfile = "not_set")
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands.}
 
-\item{plotfile}{If specified other than the default "not_set", then plots
+\item{plotfile}{If specified other than the default "", then plots
 are saved in PDF file "plotfile".pdf; otherwise either no plots are
 generated or the R default plot outputs are used.}
 }

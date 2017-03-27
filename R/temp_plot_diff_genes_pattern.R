@@ -1,7 +1,7 @@
 #' plot_diff_genes_pattern()
 #' This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
 #'
-#' @param mcobj a methylRawList object
+#' @param mrobj a methylRawList object
 #' @param diff_genes diff genes
 #' @param output_figure dir/file name of the output figure
 #'
@@ -13,8 +13,13 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
 #'                        mincvrg=1,assembly="Amel-4.5")
+<<<<<<< HEAD
 #'   ginfo <- get_genome_annotation(myfiles$parameters)
 #'   meth_diff <- get_diff_genes(AmHE, ginfo)
+=======
+#'   genome <- get_genome_annotation(myfiles$parameters)
+#'   meth_diff <- get_diff_genes(AmHE, genome)
+>>>>>>> upstream/master
 #'   plot_diff_genes_pattern <- function(AmHE, meth_diff)
 #'
 #' @export
