@@ -23,7 +23,10 @@
 #'
 #' @export
 
-get_diff_genes<- function(mrobj,genome,threshold=0.25,qvalue=0.05){
+get_diff_genes<- function(mrobj,genome,
+                          threshold=0.25,qvalue=0.05,
+                          outfile1='methyl_diff_sites.txt',
+                          outfile2='methyl_diff_genes.txt'){
 	# fetch sample_list and treatment_list
 	sample_list <- getSampleID(mrobj)
 	treatment_list <- getTreatment(mrobj)
@@ -62,13 +65,14 @@ get_diff_genes<- function(mrobj,genome,threshold=0.25,qvalue=0.05){
     		pair_mask <- grepl(paste(pair,collapse='|'),treatment_list)
 			pair_sample_list <- sample_list[pair_mask]
 			pair_treatment_list <- treatment_list[pair_mask]
+			diff_treatment_list <- as.numeric(pair_treatment_list == unique(pair_treatment_list)[1])
 			# subset the mrobj that contains all the mcfiles
 			# to create a mrobj that only contains the mcfiles from the 2 castes for comparision
 			pair_mrobj <- reorganize(mrobj,
 									 sample.ids=pair_sample_list,
-									 treatment=pair_treatment_list)
+									 treatment=diff_treatment_list)
 			# unite the mrobj in the mrobjRawList for calculate the meth diff
-			meth <- unite(mrobj,destrand=TRUE)
+			meth <- unite(pair_mrobj,destrand=TRUE)
 			# calculate the diff meth
 			diff <- calculateDiffMeth(meth)
 			# set the threshold
@@ -83,7 +87,14 @@ get_diff_genes<- function(mrobj,genome,threshold=0.25,qvalue=0.05){
 		# get the final methdiffgenes
 		diff_genes <- unlist(GRangesList(unlist(methygenes)))
 	}
-	return(list('diff_genes'=diff_genes,
-	            'diff_sites'=diff_sites))
+	
+	if (outfile1 != ''){
+	    write.table(diff_sites,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
+	}
+	if (outfile2 != ''){
+	    write.table(diff_genes,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
+	}
+	return(list('diff_sites'=diff_sites,
+	            'diff_genes'=diff_genes))
 }
 
