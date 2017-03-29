@@ -4,6 +4,10 @@
 #' @param mrobj a methylRawList object
 #' @param diff_genes diff genes
 #' @param output_figure dir/file name of the output figure
+#' 
+#' @importFrom dplyr %>% mutate
+#' @importFrom GenomicRanges resize
+#' @importFrom genomation ScoreMatrixList intersectScoreMatrixList multiHeatMatrix
 #'
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
 #'
@@ -15,12 +19,12 @@
 #'                        mincvrg=1,assembly="Amel-4.5")
 
 #'   genome <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- get_diff_genes(AmHE, genome)
-#'   plot_diff_genes_pattern <- function(AmHE, meth_diff)
+#'   meth_diff <- get_mdiff_info(AmHE, genome)
+#'   plot_diff_genes_pattern(AmHE, meth_diff)
 #'
 #' @export
 
-plot_diff_genes_pattern <- function(mrobj, diff_genes, output_figure = 'meth_diff_genes.pdf') {
+plot_diff_genes_pattern <- function(mrobj, diff_genes, outfile = 'meth_diff_genes.pdf') {
     sample_list <- getSampleID(mrobj)
 
     # calculate the percentageCs
@@ -48,7 +52,7 @@ plot_diff_genes_pattern <- function(mrobj, diff_genes, output_figure = 'meth_dif
     test.sub <- intersectScoreMatrixList(test,reorder=FALSE)
 
     # plot the figure
-    pdf(output_figure)
+    pdf(outfile)
     #options(repr.plot.width = 8, repr.plot.height = 5)
     multiHeatMatrix(test.sub,
                     col=topo.colors(10),
@@ -58,6 +62,6 @@ plot_diff_genes_pattern <- function(mrobj, diff_genes, output_figure = 'meth_dif
                     xlab=sample_list,
                     legend=TRUE
                    )
-	#dev.off()
+	dev.off()
 
 }
