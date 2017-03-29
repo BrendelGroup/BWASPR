@@ -1,5 +1,6 @@
-#' get_diff_genes()
-#' This function will get a list of genes with diff methylated CpG sites
+#' get_mdiff_info()
+#' This function will get a GRanges object contains differentially methylated sites between treatments
+#' and get a GRanges object contains genes with differentially methylated sites
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
 #' @param genome Genome annotation returns by get_genome_annotation()
@@ -19,18 +20,17 @@
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
 #'                        mincov=1,assembly="Amel-4.5")
 #'   genome <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- get_diff_genes(AmHE, genome)
+#'   meth_diff <- get_mdiff_info(AmHE, genome)
 #'
 #' @export
 
-get_diff_genes<- function(mrobj,genome,
+get_mdiff_info<- function(mrobj,genome,
                           threshold=0.25,qvalue=0.05,
                           outfile1='methyl_diff_sites.txt',
                           outfile2='methyl_diff_genes.txt'){
-	# fetch sample_list and treatment_list
+	# fetch basic information for sample and genome annotation
 	sample_list <- getSampleID(mrobj)
 	treatment_list <- getTreatment(mrobj)
-	# get the gene GRanges
 	genes <- genome[['gene']]
 	# get the number of treatments
 	# if number of treatment == 1, compare intra a caste
@@ -40,7 +40,9 @@ get_diff_genes<- function(mrobj,genome,
 	# if number of treatment == 1, compare intra a caste
 	if (number_of_treatment==1) {
 		# change the treatment list to a c(0:length(treatment_list))
-		mrobj <- reorganize(mrobj,treatment=0:(length(treatment_list)-1))
+		mrobj <- reorganize(mrobj,
+		                    sample.ids=sample_list,
+		                    treatment=0:(length(treatment_list)-1))
 		# unite the mrobj
 		meth <- unite(mrobj,destrand=TRUE,mc.cores=8)
 		# calculate the diff meth
@@ -59,32 +61,28 @@ get_diff_genes<- function(mrobj,genome,
 		pair_combination <- lapply(seq_len(ncol(pair_combination)),function(i) pair_combination[,i])
 		# go through each pair in all the pair combinations
 		for (pair in pair_combination) {
-			# get the sample ID list and treatment list from the 2 castes for comparison
-		    # very clumsy here, need modification
-		    # modified with grepl
     		pair_mask <- grepl(paste(pair,collapse='|'),treatment_list)
 			pair_sample_list <- sample_list[pair_mask]
 			pair_treatment_list <- treatment_list[pair_mask]
 			diff_treatment_list <- as.numeric(pair_treatment_list == unique(pair_treatment_list)[1])
-			# subset the mrobj that contains all the mcfiles
-			# to create a mrobj that only contains the mcfiles from the 2 castes for comparision
+
 			pair_mrobj <- reorganize(mrobj,
 									 sample.ids=pair_sample_list,
 									 treatment=diff_treatment_list)
-			# unite the mrobj in the mrobjRawList for calculate the meth diff
-			meth <- unite(pair_mrobj,destrand=TRUE)
-			# calculate the diff meth
-			diff <- calculateDiffMeth(meth)
-			# set the threshold
+			pair_meth <- unite(pair_mrobj,destrand=TRUE)
+			diff <- calculateDiffMeth(pair_meth,mc.cores=8)
 			assign(paste(pair,collapse=''),getMethylDiff(diff,difference=threshold,qvalue=qvalue))
 		}
-		# combine all the meth diff results together
-		all_diff_combination_result_names <- lapply(pair_combination,function(i) paste(i,collapse=''))
-		all_diff_sites <- sapply(all_diff_combination_result_names,function(i) as(get(i),'GRanges'))
-		diff_sites <- unlist(GRangesList(unlist(all_diff_sites)))
-		# get the genes with diff meth sites
-		methygenes <- sapply(all_diff_combination_result_names,function(i) subsetByOverlaps(genes,as(get(i),'GRanges')))
-		# get the final methdiffgenes
+		# combine all the methyl diff sites from all pairwise comparison into a GRanges object
+		combine_diff_combination_result_names <- lapply(pair_combination,
+		                                            function(i) paste(i,collapse=''))
+		combine_diff_sites <- sapply(combine_diff_combination_result_names,
+		                         function(i) as(get(i),'GRanges'))
+		diff_sites <- unlist(GRangesList(unlist(combine_diff_sites)))
+		# annotate the sites with genes 
+		methygenes <- sapply(combine_diff_combination_result_names,
+		                     function(i) subsetByOverlaps(genes,as(get(i),'GRanges')))
+		# combine all the methyl diff genes into a GRanges object
 		diff_genes <- unlist(GRangesList(unlist(methygenes)))
 	}
 	
