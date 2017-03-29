@@ -5,12 +5,12 @@
 \title{get_diff_genes()
 This function will get a list of genes with diff methylated CpG sites}
 \usage{
-get_diff_genes(mrobj, genome, threshold = 0.25, qvalue = 0.05)
+get_diff_genes(mrobj, genome_ann, threshold = 0.25, qvalue = 0.05)
 }
 \arguments{
 \item{mrobj}{A methylRaw object or a methylRawList object.}
 
-\item{genome}{Genome annotation returns by get_genome_annotation()}
+\item{genome_ann}{Genome annotation returned by get_genome_annotation()}
 
 \item{threshold}{cutoff for percent methylation difference, default threshold = 0.25}
 
@@ -29,7 +29,7 @@ This function will get a list of genes with diff methylated CpG sites
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
                        mincov=1,assembly="Amel-4.5")
-  genome <- get_genome_annotation(myfiles$parameters)
-  meth_diff <- get_diff_genes(AmHE, genome)
+  genome_ann <- get_genome_annotation(myfiles$parameters)
+  meth_diff <- get_diff_genes(AmHE,genome_ann,threshold=0.25,qvalue=0.05)
 
 }
