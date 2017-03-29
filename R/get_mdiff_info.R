@@ -1,0 +1,98 @@
+#' get_mdiff_info()
+#' This function will get a GRanges object contains differentially methylated sites between treatments
+#' and get a GRanges object contains genes with differentially methylated sites
+#'
+#' @param mrobj A methylRaw object or a methylRawList object.
+#' @param genome Genome annotation returns by get_genome_annotation()
+#' @param threshold cutoff for percent methylation difference, default threshold = 0.25
+#' @param qvalue cutoff for q-value, defualt q-value = 0.05
+#'
+#' @return A Granges object that contains a list of genes that have diff methylated C sites
+#'
+#' @import methylKit
+#' @importFrom GenomicRanges GRangesList
+#' @importFrom IRanges subsetByOverlaps
+#'
+#' @examples
+#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
+#'                        mincov=1,assembly="Amel-4.5")
+#'   genome <- get_genome_annotation(myfiles$parameters)
+#'   meth_diff <- get_mdiff_info(AmHE, genome)
+#'
+#' @export
+
+get_mdiff_info<- function(mrobj,genome,
+                          threshold=0.25,qvalue=0.05,
+                          outfile1='methyl_diff_sites.txt',
+                          outfile2='methyl_diff_genes.txt'){
+	# fetch basic information for sample and genome annotation
+	sample_list <- getSampleID(mrobj)
+	treatment_list <- getTreatment(mrobj)
+	genes <- genome[['gene']]
+	# get the number of treatments
+	# if number of treatment == 1, compare intra a caste
+	# if number of treatment > 1, compare inter castes
+	number_of_treatment <- length(unique(treatment_list))
+	unique_treatment_list <- unique(treatment_list)
+	# if number of treatment == 1, compare intra a caste
+	if (number_of_treatment==1) {
+		# change the treatment list to a c(0:length(treatment_list))
+		mrobj <- reorganize(mrobj,
+		                    sample.ids=sample_list,
+		                    treatment=0:(length(treatment_list)-1))
+		# unite the mrobj
+		meth <- unite(mrobj,destrand=TRUE,mc.cores=8)
+		# calculate the diff meth
+		diff <- calculateDiffMeth(meth,mc.cores=8)
+		# set the threshold
+		diff_th <- getMethylDiff(diff,difference=threshold,qvalue=qvalue)
+		all_diff_sites <- as(diff_th,'GRanges')
+		# get the genes with diff meth sites
+		diffgenes <- subsetByOverlaps(gene.gr,as(diff_th,'GRanges'))
+	}
+
+	# if number of treatment > 1, compare inter castes
+	if (number_of_treatment>1) {
+		# generate combinations between different castes
+		pair_combination <- combn(unique_treatment_list,2)
+		pair_combination <- lapply(seq_len(ncol(pair_combination)),function(i) pair_combination[,i])
+		# go through each pair in all the pair combinations
+		for (pair in pair_combination) {
+    		pair_mask <- grepl(paste(pair,collapse='|'),treatment_list)
+			pair_sample_list <- sample_list[pair_mask]
+			pair_treatment_list <- treatment_list[pair_mask]
+			diff_treatment_list <- as.numeric(pair_treatment_list == unique(pair_treatment_list)[1])
+
+			pair_mrobj <- reorganize(mrobj,
+									 sample.ids=pair_sample_list,
+									 treatment=diff_treatment_list)
+			pair_meth <- unite(pair_mrobj,destrand=TRUE)
+			diff <- calculateDiffMeth(pair_meth,mc.cores=8)
+			assign(paste(pair,collapse=''),getMethylDiff(diff,difference=threshold,qvalue=qvalue))
+		}
+		# combine all the methyl diff sites from all pairwise comparison into a GRanges object
+		combine_diff_combination_result_names <- lapply(pair_combination,
+		                                            function(i) paste(i,collapse=''))
+		combine_diff_sites <- sapply(combine_diff_combination_result_names,
+		                         function(i) as(get(i),'GRanges'))
+		diff_sites <- unlist(GRangesList(unlist(combine_diff_sites)))
+		# annotate the sites with genes 
+		methygenes <- sapply(combine_diff_combination_result_names,
+		                     function(i) subsetByOverlaps(genes,as(get(i),'GRanges')))
+		# combine all the methyl diff genes into a GRanges object
+		diff_genes <- unlist(GRangesList(unlist(methygenes)))
+	}
+	
+	if (outfile1 != ''){
+	    write.table(diff_sites,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
+	}
+	if (outfile2 != ''){
+	    write.table(diff_genes,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
+	}
+	return(list('diff_sites'=diff_sites,
+	            'diff_genes'=diff_genes))
+}
+

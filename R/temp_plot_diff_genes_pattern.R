@@ -1,5 +1,5 @@
 #' plot_diff_genes_pattern()
-#' ??This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
+#' This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
 #'
 #' @param mrobj a methylRawList object
 #' @param diff_genes diff genes
@@ -13,6 +13,7 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
 #'                        mincvrg=1,assembly="Amel-4.5")
+
 #'   genome <- get_genome_annotation(myfiles$parameters)
 #'   meth_diff <- get_diff_genes(AmHE, genome)
 #'   plot_diff_genes_pattern <- function(AmHE, meth_diff)
@@ -20,41 +21,43 @@
 #' @export
 
 plot_diff_genes_pattern <- function(mrobj, diff_genes, output_figure = 'meth_diff_genes.pdf') {
-  sample_list <- getSampleID(mrobj)
+    sample_list <- getSampleID(mrobj)
 
-  # calculate the percentageCs
-  for (i in seq_along(sample_list)){
-    mrobj[[i]] <- mrobj[[i]] %>% mutate(percentageCs = round(numCs / coverage, digits = 2))
-    mrobj[[i]] <- as(mrobj[[i]], 'GRanges')
-  }
-  # resize the diff_genes (GRanges)
-  methdiffgenes_resize.gr <- resize(diff_genes, 20000)
-  targets = GRangesList(mrobj)
+    # calculate the percentageCs
+    for (i in seq_along(sample_list)){
+        mrobj[[i]] <- mrobj[[i]] %>% mutate(percentageCs = round(numCs / coverage,digits=2))
+        mrobj[[i]] <- as(mrobj[[i]],'GRanges')
+        mrobj[[i]] <- subsetByOverlaps(mrobj[[i]],diff_genes$diff_sites)
+    }
 
-  test <- ScoreMatrixList(targets,
-                          methdiffgenes_resize.gr,
-                          bin.num = 20,
-                          # using differnt bin.op could be interesting
-                          bin.op = 'mean',
-                          strand.aware = FALSE,
-                          weight.col ='percentageCs',
-                          is.noCovNA = TRUE
-  )
+    targets = GRangesList(mrobj)
+    print(targets)
+    # resize the diff_genes (GRanges)
+    methdiffgenes_resize.gr <- resize(diff_genes$diff_genes,20000)
 
-  test.sub <- intersectScoreMatrixList(test, reorder = FALSE)
+    test <- ScoreMatrixList(targets,
+                            methdiffgenes_resize.gr,
+                            bin.num=20,
+                            # using differnt bin.op could be interesting
+                            bin.op='mean',
+                            strand.aware=FALSE,
+                            weight.col='percentageCs',
+                            is.noCovNA=TRUE
+                           )
 
-  # plot the figure
-  pdf(output_figure)
-  options(repr.plot.width = 8, repr.plot.height = 5)
-  multiHeatMatrix(test.sub,
-                  col = topo.colors(10),
-                  xcoords=c(0, 20000),
-                  matrix.main=names(targets),
-                  common.scale = TRUE,
-                  xlab = sample_list,
-                  legend = TRUE
-  )
-	dev.off()
+    test.sub <- intersectScoreMatrixList(test,reorder=FALSE)
 
-	return(test.sub)
+    # plot the figure
+    pdf(output_figure)
+    #options(repr.plot.width = 8, repr.plot.height = 5)
+    multiHeatMatrix(test.sub,
+                    col=topo.colors(10),
+                    xcoords=c(0, 20000),
+                    matrix.main=names(targets),
+                    common.scale=TRUE,
+                    xlab=sample_list,
+                    legend=TRUE
+                   )
+	#dev.off()
+
 }
