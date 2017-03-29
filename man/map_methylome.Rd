@@ -3,10 +3,10 @@
 \name{map_methylome}
 \alias{map_methylome}
 \title{map_methylome()
-This function annotates maps the scd and hsm site onto different genomic
-  features (e.g. genes, exon, promoter, etc.)}
+This function maps the scd and hsm sites onto different genomic features
+  (e.g. genes, exon, promoter, etc.)}
 \usage{
-map_methylome(studymk, slabel, studymc, clabel, genome_info, species, gnmsize,
+map_methylome(studymk, slabel, studymc, clabel, genome_ann, species, gnmsize,
   UTRflag, outfile = "")
 }
 \arguments{
@@ -18,7 +18,7 @@ map_methylome(studymk, slabel, studymc, clabel, genome_info, species, gnmsize,
 
 \item{clabel}{Label for the control sample}
 
-\item{genome_info}{A list of GRanges objects that contains genome infomation.}
+\item{genome_ann}{A list of GRanges objects that contains genome annotation.}
 
 \item{species}{Label for the species being analyzed}
 
@@ -33,17 +33,28 @@ Should return something useful
 }
 \description{
 map_methylome()
-This function annotates maps the scd and hsm site onto different genomic
-  features (e.g. genes, exon, promoter, etc.)
+This function maps the scd and hsm sites onto different genomic features
+  (e.g. genes, exon, promoter, etc.)
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   infiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  AmHE <- mcalls2mkobj(infiles$datafiles)
+  asmblv <- infiles$parameters[infiles$parameters$Variable == "ASSEMBLYVERSION",2]
   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
+  AmHEhsm <- mcalls2mkobj(infiles$datafiles,species="Am",study="HE",
+                          sample=list("forager","nurse"),replicate=c(0),
+                          type="CpGhsm",mincov=1,assembly=asmblv
+                         )
+  AmHEscd <- mcalls2mkobj(infiles$datafiles,species="Am",study="HE",
+                          sample=list("forager","nurse"),replicate=c(0),
+                          type="CpGscd",mincov=1,assembly=asmblv
+                         )
   ginfo <- get_genome_annotation(infiles$parameters)
-  map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
+  map_methylome(AmHEhsm[[1]],"forager_hsm",AmHEscd[[1]],"forager_scd",ginfo,
+                species="Am",gnmsize,UTRflag=UTRflag,
+                outfile="AmHE-methylome-map.txt"
+               )
 
 }

@@ -30,8 +30,8 @@ This function plots a heatmap to show the annotation of the first 200 methylated
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles)
-  genome <- get_genome_annotation(myfiles$parameters)
-  methylome_annotation <- annotate_methylome(AmHE, genome, save_output_data = FALSE)
-  plot_genome_annotation(AmHE, methylome_annotation)
+  genome_ann <- get_genome_annotation(myfiles$parameters)
+  methylome_annotation <- annotate_methylome(AmHE,genome_ann,outfile="")
+  plot_genome_annotation(AmHE,methylome_annotation)
 
 }

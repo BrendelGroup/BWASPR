@@ -85,7 +85,7 @@ plot_genome_annotation <- function(mrobj,
     if (plot == FALSE){
         draw(heatmap + ha_gene + ha_cds + ha_promoter)
     } else{
-        pdf(output_file, length(sample_list) * 3, number_of_sites * 0.03)
+        pdf(output_file, length(sample_list) * 2, number_of_sites * 0.03)
         draw(heatmap + ha_gene + ha_cds + ha_promoter)
         dev.off()
     }
