@@ -31,7 +31,7 @@ annotate_methylome <- function(mrobj,
     #   the percentage methylation scores:
     #
     meth      <- unite(mrobj,destrand=TRUE)
-    perc_meth <- percMethylation(meth,rowids=FALSE,save.txt=FALSE)
+    perc_meth <- round(percMethylation(meth,rowids=FALSE,save.txt=FALSE),2)
 
     # ... annotate the methylome with generic genome features as provided by
     #   genome_ann and add respective columns to meth@.Data:
