@@ -21,6 +21,7 @@ Imports:
    methods,
    methylKit,
    sqldf,
+   S4Vectors,
    utils
 License: GPL-3
 Encoding: UTF-8
