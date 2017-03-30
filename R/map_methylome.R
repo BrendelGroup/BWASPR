@@ -1,12 +1,12 @@
 #' map_methylome()
-#' This function annotates maps the scd and hsm site onto different genomic
-#'   features (e.g. genes, exon, promoter, etc.)
+#' This function maps the scd and hsm sites onto different genomic features
+#'   (e.g. genes, exon, promoter, etc.)
 #'
 #' @param studymk methylRaw object representing an hsm sample
 #' @param slabel Label for the sample
 #' @param studymc methylRaw object representing the scd control
 #' @param clabel Label for the control sample
-#' @param genome_info A list of GRanges objects that contains genome infomation.
+#' @param genome_ann A list of GRanges objects that contains genome annotation.
 #' @param species Label for the species being analyzed
 #' @param gnmsize Genome size
 #' @param UTRflag Numerical, indicating whether or not the annotation included UTRs (1 or 0)
@@ -20,36 +20,47 @@
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   infiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   AmHE <- mcalls2mkobj(infiles$datafiles)
+#'   asmblv <- infiles$parameters[infiles$parameters$Variable == "ASSEMBLYVERSION",2]
 #'   gnmsize <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
 #'   UTRflag <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
+#'   AmHEhsm <- mcalls2mkobj(infiles$datafiles,species="Am",study="HE",
+#'                           sample=list("forager","nurse"),replicate=c(0),
+#'                           type="CpGhsm",mincov=1,assembly=asmblv
+#'                          )
+#'   AmHEscd <- mcalls2mkobj(infiles$datafiles,species="Am",study="HE",
+#'                           sample=list("forager","nurse"),replicate=c(0),
+#'                           type="CpGscd",mincov=1,assembly=asmblv
+#'                          )
 #'   ginfo <- get_genome_annotation(infiles$parameters)
-#'   map_methylome(AmHE, ginfo, gnmsize, outfile="AmHE-methylome-map.txt")
+#'   map_methylome(AmHEhsm[[1]],"forager_hsm",AmHEscd[[1]],"forager_scd",ginfo,
+#'                 species="Am",gnmsize,UTRflag=UTRflag,
+#'                 outfile="AmHE-methylome-map.txt"
+#'                )
 #'
 #' @export
 
 ################################################################################
 map_methylome <- function(studymk,slabel,studymc,clabel,
-                          genome_info,species,gnmsize,UTRflag,
+                          genome_ann,species,gnmsize,UTRflag,
                           outfile=""){
 
     if (outfile != "") {
         sink(outfile)
     }
-    gene.gr <- genome_info$gene
-    exon.gr <- genome_info$exon
-    pcexon.gr <- genome_info$pcexon
-    promoter.gr <- genome_info$promoter
-    CDS.gr <- genome_info$CDS
-    fiveprimeUTR.gr <- genome_info$fiveprimeUTR
-    threeprimeUTR.gr <- genome_info$threeprimeUTR
-    fiveprimeUTRunique.gr <- genome_info$fiveprimeUTRunique
-    threeprimeUTRunique.gr <- genome_info$threeprimeUTRunique
-    ncexon.gr <- genome_info$ncexon
-#   for (n in names(genome_info)){
-#        mygr <- paste(n,"gr",sep=".")
-#        assign(eval(paste(text=mygr)),genome_info$n)
-#    }
+#   gene.gr <- genome_ann$gene
+#   exon.gr <- genome_ann$exon
+#   pcexon.gr <- genome_ann$pcexon
+#   promoter.gr <- genome_ann$promoter
+#   CDS.gr <- genome_ann$CDS
+#   fiveprimeUTR.gr <- genome_ann$fiveprimeUTR
+#   threeprimeUTR.gr <- genome_ann$threeprimeUTR
+#   fiveprimeUTRunique.gr <- genome_ann$fiveprimeUTRunique
+#   threeprimeUTRunique.gr <- genome_ann$threeprimeUTRunique
+#   ncexon.gr <- genome_ann$ncexon
+    for (n in names(genome_ann)){
+         mygr <- paste(n,"gr",sep=".")
+         assign(eval(paste(text=mygr)),genome_ann$n)
+     }
 
     # Calculate the fraction of genic and intergenic regions in the genome:
     #

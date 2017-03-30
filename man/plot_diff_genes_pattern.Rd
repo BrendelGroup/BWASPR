@@ -26,7 +26,7 @@ This function will plot out the mC level pattern in genes that were identified w
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-                       mincvrg=1,assembly="Amel-4.5")
+                       mincov=1,assembly="Amel-4.5")
   genome <- get_genome_annotation(myfiles$parameters)
   meth_diff <- get_mdiff_info(AmHE, genome)
   plot_diff_genes_pattern(AmHE, meth_diff)
