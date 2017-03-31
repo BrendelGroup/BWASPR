@@ -39,19 +39,20 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
     nbtreatments <- length(unique(treatment_list))
     unique_treatment_list <- unique(treatment_list)
 # If mrobj consists of only one treatment, compare replicates:
+#VB: I DON'T KNOW THAT THIS CASE MAKES SENSE - getMethylDiff NEEDS treatment=c(0,1)
     if (nbtreatments == 1) {
         mrobj <- reorganize(mrobj,treatment=0 : (length(treatment_list) - 1))
         meth <- unite(mrobj,destrand=TRUE,mc.cores=mc.cores)
         diff <- calculateDiffMeth(meth,mc.cores=mc.cores)
         diff_th <- getMethylDiff(diff,difference=threshold,qvalue=qvalue)
         dmsites.gr <- as(diff_th,'GRanges')
-        dmgenes.gr <- subsetByOverlaps(gene.gr, as(diff_th, 'GRanges'))
+        dmgenes.gr <- subsetByOverlaps(genes,dmsites.gr)
     }
 
 # If mrobj consists of multiple treatments, compare corresponding samples:
     if (nbtreatments > 1) {
         pairs <- combn(unique_treatment_list, 2, simplify=FALSE)
-        for (pair in pairs) {
+        dmsites.gr <- lapply(pairs, function(pair) {
             pair_samples <- list(sample_list[pair[1]+1],sample_list[pair[2]+1])
             pair_treatments <- c(pair[1],pair[2])
             pair_mrobj <- reorganize(mrobj,
@@ -61,27 +62,26 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
             meth <- unite(pair_mrobj,destrand=TRUE)
             meth@treatment=c(0,1)
             pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
-            assign(paste(sample_list[pair[1]+1],sample_list[pair[2]+1],sep=".vs."),
+            pairname <- paste(sample_list[pair[1]+1],
+                              sample_list[pair[2]+1],sep=".vs.")
+            assign(pairname,
                    getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
                   )
+            gr <- as(get(pairname),'GRanges')
+            S4Vectors::mcols(gr)$comparison <- pairname
+            return(gr)
         }
-
-        pairnames <- lapply(pairs, function(p) paste(sample_list[p[1]+1],sample_list[p[2]+1],sep=".vs."))
-        dmsites.gr <- sapply(pairnames, function(p) {
-                               gr <- as(get(p),'GRanges')
-                               S4Vectors::mcols(gr)$comparison <- p
-                               return(gr)
-                               }
-                            )
+        )
         dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
-        dmgenes.gr <- sapply(pairnames, function(p) {
-                               gr <- subsetByOverlaps(genes,
-                                                      as(get(p),'GRanges')
-                                                     )
-                               S4Vectors::mcols(gr)$comparison <- p
-                               return(gr)
-                               }
-                            )
+
+        dmgenes.gr <- lapply(seq_along(pairs), function(i) {
+            gr <- subsetByOverlaps(genes,dmsites.gr[[i]])
+            pairname <- paste(sample_list[pairs[[i]][1]+1],
+                              sample_list[pairs[[i]][2]+1],sep=".vs.")
+            S4Vectors::mcols(gr)$comparison <- pairname
+            return(gr)
+         }
+         )
         dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
     }
     if (outfile1 != ''){
