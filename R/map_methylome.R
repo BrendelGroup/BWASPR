@@ -47,20 +47,16 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     if (outfile != "") {
         sink(outfile)
     }
-#   gene.gr <- genome_ann$gene
-#   exon.gr <- genome_ann$exon
-#   pcexon.gr <- genome_ann$pcexon
-#   promoter.gr <- genome_ann$promoter
-#   CDS.gr <- genome_ann$CDS
-#   fiveprimeUTR.gr <- genome_ann$fiveprimeUTR
-#   threeprimeUTR.gr <- genome_ann$threeprimeUTR
-#   fiveprimeUTRunique.gr <- genome_ann$fiveprimeUTRunique
-#   threeprimeUTRunique.gr <- genome_ann$threeprimeUTRunique
-#   ncexon.gr <- genome_ann$ncexon
-    for (n in names(genome_ann)){
-         mygr <- paste(n,"gr",sep=".")
-         assign(eval(paste(text=mygr)),genome_ann$n)
-     }
+    gene.gr                <- genome_ann$gene
+    exon.gr                <- genome_ann$exon
+    pcexon.gr              <- genome_ann$pcexon
+    promoter.gr            <- genome_ann$promoter
+    CDS.gr                 <- genome_ann$CDS
+    fiveprimeUTR.gr        <- genome_ann$fiveprimeUTR
+    threeprimeUTR.gr       <- genome_ann$threeprimeUTR
+    fiveprimeUTRunique.gr  <- genome_ann$fiveprimeUTRunique
+    threeprimeUTRunique.gr <- genome_ann$threeprimeUTRunique
+    ncexon.gr              <- genome_ann$ncexon
 
     # Calculate the fraction of genic and intergenic regions in the genome:
     #

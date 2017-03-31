@@ -37,53 +37,46 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
     treatment_list <- getTreatment(mrobj)
     genes <- genome_ann$gene
     nbtreatments <- length(unique(treatment_list))
-    unique_treatment_list <- unique(treatment_list)
-# If mrobj consists of only one treatment, compare replicates:
-#VB: I DON'T KNOW THAT THIS CASE MAKES SENSE - getMethylDiff NEEDS treatment=c(0,1)
-    if (nbtreatments == 1) {
-        mrobj <- reorganize(mrobj,treatment=0 : (length(treatment_list) - 1))
-        meth <- unite(mrobj,destrand=TRUE,mc.cores=mc.cores)
-        diff <- calculateDiffMeth(meth,mc.cores=mc.cores)
-        diff_th <- getMethylDiff(diff,difference=threshold,qvalue=qvalue)
-        dmsites.gr <- as(diff_th,'GRanges')
-        dmgenes.gr <- subsetByOverlaps(genes,dmsites.gr)
+    if (nbtreatments < 2) {
+        stop("WARNING: det_dmsg() requires input data from at least two ",
+             "treatments.")
     }
 
 # If mrobj consists of multiple treatments, compare corresponding samples:
-    if (nbtreatments > 1) {
-        pairs <- combn(unique_treatment_list, 2, simplify=FALSE)
-        dmsites.gr <- lapply(pairs, function(pair) {
-            pair_samples <- list(sample_list[pair[1]+1],sample_list[pair[2]+1])
-            pair_treatments <- c(pair[1],pair[2])
-            pair_mrobj <- reorganize(mrobj,
-                                     sample.ids=pair_samples,
-                                     treatment=pair_treatments
-                                    )
-            meth <- unite(pair_mrobj,destrand=TRUE)
-            meth@treatment=c(0,1)
-            pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
-            pairname <- paste(sample_list[pair[1]+1],
-                              sample_list[pair[2]+1],sep=".vs.")
-            assign(pairname,
-                   getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
-                  )
-            gr <- as(get(pairname),'GRanges')
-            S4Vectors::mcols(gr)$comparison <- pairname
-            return(gr)
-        }
-        )
-        dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
+    unique_treatment_list <- unique(treatment_list)
+    pairs <- combn(unique_treatment_list, 2, simplify=FALSE)
+    dmsites.gr <- lapply(pairs, function(pair) {
+        pair_samples <- list(sample_list[pair[1]+1],sample_list[pair[2]+1])
+        pair_treatments <- c(pair[1],pair[2])
+        pair_mrobj <- reorganize(mrobj,
+                                 sample.ids=pair_samples,
+                                 treatment=pair_treatments
+                                )
+        meth <- unite(pair_mrobj,destrand=TRUE)
+        meth@treatment=c(0,1)
+        pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
+        pairname <- paste(sample_list[pair[1]+1],
+                          sample_list[pair[2]+1],sep=".vs.")
+        assign(pairname,
+               getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
+              )
+        gr <- as(get(pairname),'GRanges')
+        S4Vectors::mcols(gr)$comparison <- pairname
+        return(gr)
+       }
+       )
+    dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
 
-        dmgenes.gr <- lapply(seq_along(pairs), function(i) {
-            gr <- subsetByOverlaps(genes,dmsites.gr[[i]])
-            pairname <- paste(sample_list[pairs[[i]][1]+1],
-                              sample_list[pairs[[i]][2]+1],sep=".vs.")
-            S4Vectors::mcols(gr)$comparison <- pairname
-            return(gr)
-         }
-         )
-        dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
-    }
+    dmgenes.gr <- lapply(seq_along(pairs), function(i) {
+        gr <- subsetByOverlaps(genes,dmsites.gr[[i]])
+        pairname <- paste(sample_list[pairs[[i]][1]+1],
+                          sample_list[pairs[[i]][2]+1],sep=".vs.")
+        S4Vectors::mcols(gr)$comparison <- pairname
+        return(gr)
+       }
+       )
+    dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
+    
     if (outfile1 != ''){
         dmsites$qvalue <- round(dmsites$qvalue,3)
         dmsites$meth.diff <- round(dmsites$meth.diff,2)
