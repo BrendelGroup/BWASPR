@@ -19,7 +19,8 @@
 #' @param assembly Label for the underlying genome assembly version; default:
 #'   "unknown".
 #'
-#' @return A methylKit-package methylRaw or methylRawList object.
+#' @return A methylKit-package methylRaw or methylRawList object (NULL if no
+#'   matching data are found).
 #'
 #' @importFrom methylKit methRead
 #' @importFrom utils write.table
@@ -56,7 +57,9 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
 
     nrow(inputdf)
     if (!nrow(inputdf)) {
-        stop("no matching data")
+        message("NOTE: There are no  matching data for selection ",
+		species, " ", study, " ", sample, " replicates=", replicate)
+        return(NULL)
     }
     else {
         locations <- as.list(inputdf$Source)
