@@ -36,7 +36,8 @@ default: 1.}
 "unknown".}
 }
 \value{
-A methylKit-package methylRaw or methylRawList object.
+A methylKit-package methylRaw or methylRawList object (NULL if no
+  matching data are found).
 }
 \description{
 mcalls2mkobj()
