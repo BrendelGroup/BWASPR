@@ -1,9 +1,9 @@
-#' plot_diff_genes_pattern()
+#' heatmap_dmgenes()
 #' This function will plot out the mC level pattern in genes that were identified with diff methylated C sites
 #'
 #' @param mrobj a methylRawList object
 #' @param diff_genes diff genes
-#' @param output_figure dir/file name of the output figure
+#' @param outfile dir/file name of the output figure
 #' 
 #' @importFrom dplyr %>% mutate
 #' @importFrom GenomicRanges resize
@@ -12,19 +12,18 @@
 #' @return A Granges object that contains a list of genes that have diff methylated C sites
 #'
 #' @examples
-#'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
-#'   myparf <- system.file("extdata","Am.par",package="BWASPR")
+#'   mydatf  <- system.file("extdata","Am.dat",package="BWASPR")
+#'   myparf  <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
-#'                        mincov=1,assembly="Amel-4.5")
-
-#'   genome <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- get_mdiff_info(AmHE, genome)
-#'   plot_diff_genes_pattern(AmHE, meth_diff)
+#'   AmHE    <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
+#'                           mincov=1,assembly="Amel-4.5")
+#'   genome  <- get_genome_annotation(myfiles$parameters)
+#'   mdiff   <- det_dmsg(AmHE, genome)
+#'   heatmap_dmgenes(AmHE, meth_diff)
 #'
 #' @export
 
-plot_diff_genes_pattern <- function(mrobj, diff_genes, outfile = 'meth_diff_genes.pdf') {
+heatmap_dmgenes <- function(mrobj, mdiff, outfile = 'hm_dmgenes.pdf') {
     sample_list <- getSampleID(mrobj)
 
     # calculate the percentageCs
@@ -35,10 +34,9 @@ plot_diff_genes_pattern <- function(mrobj, diff_genes, outfile = 'meth_diff_gene
     }
 
     targets = GRangesList(mrobj)
-    print(targets)
-    # resize the diff_genes (GRanges)
-    methdiffgenes_resize.gr <- resize(diff_genes$diff_genes,20000)
-
+    # resize the mdiff$diff_genes for ScoreMatrixList()
+    methdiffgenes_resize.gr <- resize(mdiff$diff_genes,20000)
+    #...calculate the methylation level across genes
     test <- ScoreMatrixList(targets,
                             methdiffgenes_resize.gr,
                             bin.num=20,
@@ -51,17 +49,17 @@ plot_diff_genes_pattern <- function(mrobj, diff_genes, outfile = 'meth_diff_gene
 
     test.sub <- intersectScoreMatrixList(test,reorder=FALSE)
 
-    # plot the figure
-    pdf(outfile)
-    #options(repr.plot.width = 8, repr.plot.height = 5)
-    multiHeatMatrix(test.sub,
-                    col=topo.colors(10),
-                    xcoords=c(0, 20000),
-                    matrix.main=names(targets),
-                    common.scale=TRUE,
-                    xlab=sample_list,
-                    legend=TRUE
-                   )
+    # ...plot the figure
+    if (outfile != "") {
+    	pdf(outfile)
+    	multiHeatMatrix(test.sub,
+                        col=topo.colors(10),
+                        xcoords=c(0, 20000),
+                        matrix.main=names(targets),
+                        common.scale=TRUE,
+                        xlab=sample_list,
+                        legend=TRUE
+                       )
 	dev.off()
-
+    }
 }
