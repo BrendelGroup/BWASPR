@@ -54,17 +54,21 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
                                 )
         meth <- unite(pair_mrobj,destrand=TRUE)
         meth@treatment=c(0,1)
-        pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
-        assign(pairname,
-               getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
-              )
-        gr <- as(get(pairname),'GRanges')
+        pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
+        difsites <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
+        gr <- as(difsites,"GRanges")
         S4Vectors::mcols(gr)$comparison <- pairname
         return(gr)
        }
        )
+    if (length(dmsites.gr) == 0) {
+        message("No differentially methylated sites are found.")
+        return(list('dmgenes' = GRanges(),
+                    'dmsites' = GRanges()))
+
+    }
     dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
 
     dmgenes.gr <- lapply(seq_along(pairs), function(i) {
