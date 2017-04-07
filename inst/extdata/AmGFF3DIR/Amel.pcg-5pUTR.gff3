@@ -1,0 +1,13 @@
+NW_003383149.1	.	five_prime_UTR	3385	3477	.	-	.	Parent=mRNA21725
+NW_003383297.1	.	five_prime_UTR	758	812	.	-	.	Parent=mRNA21754
+NW_003383271.1	.	five_prime_UTR	1020	1021	.	-	.	Parent=mRNA21748
+NW_003383273.1	.	five_prime_UTR	1363	1572	.	+	.	Parent=mRNA21750
+NW_003383273.1	.	five_prime_UTR	1810	1814	.	+	.	Parent=mRNA21750
+NW_003383234.1	.	five_prime_UTR	2704	2844	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	five_prime_UTR	3398	3561	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	five_prime_UTR	4322	4509	.	+	.	Parent=mRNA21741
+NW_003383096.1	.	five_prime_UTR	75	124	.	+	.	Parent=mRNA21721
+NW_003383386.1	.	five_prime_UTR	6170	6396	.	+	.	Parent=mRNA21760
+NW_003383226.1	.	five_prime_UTR	391	471	.	-	.	Parent=mRNA21735
+NW_003383226.1	.	five_prime_UTR	583	875	.	-	.	Parent=mRNA21735
+NW_003383343.1	.	five_prime_UTR	1162	1263	.	+	.	Parent=mRNA21756

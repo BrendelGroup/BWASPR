@@ -1,0 +1,258 @@
+##sequence-region   NW_003383182.1 82 822
+NW_003383182.1	Gnomon	gene	82	822	.	+	.	ID=gene13394;Name=LOC100577023;Dbxref=BEEBASE:GB42394,GeneID:100577023;gbkey=Gene;gene=LOC100577023
+NW_003383182.1	Gnomon	mRNA	82	822	.	+	.	ID=mRNA21731;Parent=gene13394;Name=XM_003252030.2;Dbxref=GeneID:100577023,Genbank:XM_003252030.2,BEEBASE:GB42394;gbkey=mRNA;gene=LOC100577023;product=tyrosine-protein phosphatase 69D-like;transcript_id=XM_003252030.2
+NW_003383182.1	.	start_codon	82	84	.	+	.	Parent=mRNA21731
+NW_003383182.1	Gnomon	exon	82	330	.	+	.	Parent=mRNA21731;Dbxref=GeneID:100577023,Genbank:XM_003252030.2,BEEBASE:GB42394;gbkey=mRNA;gene=LOC100577023;product=tyrosine-protein phosphatase 69D-like;transcript_id=XM_003252030.2
+NW_003383182.1	Gnomon	CDS	82	330	.	+	0	ID=CDS20887;Parent=mRNA21731;Name=XP_003252078.1;Dbxref=GeneID:100577023,Genbank:XP_003252078.1,BEEBASE:GB42394;gbkey=CDS;gene=LOC100577023;product=tyrosine-protein phosphatase 69D-like;protein_id=XP_003252078.1
+NW_003383182.1	.	intron	331	453	.	+	.	Parent=mRNA21731
+NW_003383182.1	Gnomon	CDS	454	534	.	+	0	ID=CDS20887;Parent=mRNA21731;Name=XP_003252078.1;Dbxref=GeneID:100577023,Genbank:XP_003252078.1,BEEBASE:GB42394;gbkey=CDS;gene=LOC100577023;product=tyrosine-protein phosphatase 69D-like;protein_id=XP_003252078.1
+NW_003383182.1	Gnomon	exon	454	822	.	+	.	Parent=mRNA21731;Dbxref=GeneID:100577023,Genbank:XM_003252030.2,BEEBASE:GB42394;gbkey=mRNA;gene=LOC100577023;product=tyrosine-protein phosphatase 69D-like;transcript_id=XM_003252030.2
+NW_003383182.1	.	stop_codon	532	534	.	+	.	Parent=mRNA21731
+NW_003383182.1	.	three_prime_UTR	535	822	.	+	.	Parent=mRNA21731
+##sequence-region   NW_003383149.1 569 3477
+NW_003383149.1	Gnomon	gene	569	3477	.	-	.	ID=gene13386;Name=LOC102655474;Dbxref=GeneID:102655474;gbkey=Gene;gene=LOC102655474
+NW_003383149.1	Gnomon	mRNA	569	3477	.	-	.	ID=mRNA21725;Parent=gene13386;Name=XM_006572695.1;Dbxref=GeneID:102655474,Genbank:XM_006572695.1;gbkey=mRNA;gene=LOC102655474;product=uncharacterized LOC102655474;transcript_id=XM_006572695.1
+NW_003383149.1	.	three_prime_UTR	569	1415	.	-	.	Parent=mRNA21725
+NW_003383149.1	Gnomon	exon	569	1434	.	-	.	Parent=mRNA21725;Dbxref=GeneID:102655474,Genbank:XM_006572695.1;gbkey=mRNA;gene=LOC102655474;product=uncharacterized LOC102655474;transcript_id=XM_006572695.1
+NW_003383149.1	.	stop_codon	1416	1418	.	-	.	Parent=mRNA21725
+NW_003383149.1	Gnomon	CDS	1416	1434	.	-	1	ID=CDS20885;Parent=mRNA21725;Name=XP_006572758.1;Dbxref=GeneID:102655474,Genbank:XP_006572758.1;gbkey=CDS;gene=LOC102655474;product=uncharacterized protein LOC102655474;protein_id=XP_006572758.1
+NW_003383149.1	.	intron	1435	2575	.	-	.	Parent=mRNA21725
+NW_003383149.1	Gnomon	exon	2576	2779	.	-	.	Parent=mRNA21725;Dbxref=GeneID:102655474,Genbank:XM_006572695.1;gbkey=mRNA;gene=LOC102655474;product=uncharacterized LOC102655474;transcript_id=XM_006572695.1
+NW_003383149.1	Gnomon	CDS	2576	2779	.	-	1	ID=CDS20885;Parent=mRNA21725;Name=XP_006572758.1;Dbxref=GeneID:102655474,Genbank:XP_006572758.1;gbkey=CDS;gene=LOC102655474;product=uncharacterized protein LOC102655474;protein_id=XP_006572758.1
+NW_003383149.1	.	intron	2780	3226	.	-	.	Parent=mRNA21725
+NW_003383149.1	Gnomon	CDS	3227	3384	.	-	0	ID=CDS20885;Parent=mRNA21725;Name=XP_006572758.1;Dbxref=GeneID:102655474,Genbank:XP_006572758.1;gbkey=CDS;gene=LOC102655474;product=uncharacterized protein LOC102655474;protein_id=XP_006572758.1
+NW_003383149.1	Gnomon	exon	3227	3477	.	-	.	Parent=mRNA21725;Dbxref=GeneID:102655474,Genbank:XM_006572695.1;gbkey=mRNA;gene=LOC102655474;product=uncharacterized LOC102655474;transcript_id=XM_006572695.1
+NW_003383149.1	.	start_codon	3382	3384	.	-	.	Parent=mRNA21725
+NW_003383149.1	.	five_prime_UTR	3385	3477	.	-	.	Parent=mRNA21725
+##sequence-region   NW_003383368.1 1179 1617
+##sequence-region   NW_003383409.1 250 2522
+##sequence-region   NW_003383468.1 148 670
+NW_003383468.1	Gnomon	gene	148	670	.	-	.	ID=gene13424;Name=LOC102653899;Dbxref=GeneID:102653899;gbkey=Gene;gene=LOC102653899;partial=true
+NW_003383468.1	Gnomon	mRNA	148	670	.	-	.	ID=mRNA21763;Parent=gene13424;Name=XM_006572724.1;Dbxref=GeneID:102653899,Genbank:XM_006572724.1;gbkey=mRNA;gene=LOC102653899;product=probable cytochrome P450 6a21-like;transcript_id=XM_006572724.1
+NW_003383468.1	.	stop_codon	148	150	.	-	.	Parent=mRNA21763
+NW_003383468.1	Gnomon	exon	148	670	.	-	.	Parent=mRNA21763;Dbxref=GeneID:102653899,Genbank:XM_006572724.1;gbkey=mRNA;gene=LOC102653899;product=probable cytochrome P450 6a21-like;transcript_id=XM_006572724.1
+NW_003383468.1	Gnomon	CDS	148	670	.	-	0	Parent=mRNA21763;Name=XP_006572787.1;Dbxref=GeneID:102653899,Genbank:XP_006572787.1;gbkey=CDS;gene=LOC102653899;product=probable cytochrome P450 6a21-like;protein_id=XP_006572787.1
+NW_003383468.1	.	start_codon	668	670	.	-	.	Parent=mRNA21763
+##sequence-region   NW_003383151.1 3189 5682
+##sequence-region   NW_003383407.1 535 3251
+NW_003383407.1	Gnomon	gene	535	3251	.	-	.	ID=gene13421;Name=LOC100577536;Dbxref=BEEBASE:GB44409,GeneID:100577536;gbkey=Gene;gene=LOC100577536;partial=true
+NW_003383407.1	Gnomon	mRNA	535	3251	.	-	.	ID=mRNA21761;Parent=gene13421;Name=XM_006572723.1;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	.	stop_codon	535	537	.	-	.	Parent=mRNA21761
+NW_003383407.1	Gnomon	exon	535	1049	.	-	.	Parent=mRNA21761;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	Gnomon	CDS	535	1049	.	-	1	ID=CDS20905;Parent=mRNA21761;Name=XP_006572786.1;Dbxref=GeneID:100577536,Genbank:XP_006572786.1,BEEBASE:GB44409;gbkey=CDS;gene=LOC100577536;product=uncharacterized protein LOC100577536;protein_id=XP_006572786.1
+NW_003383407.1	.	intron	1050	1308	.	-	.	Parent=mRNA21761
+NW_003383407.1	Gnomon	exon	1309	1628	.	-	.	Parent=mRNA21761;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	Gnomon	CDS	1309	1628	.	-	0	ID=CDS20905;Parent=mRNA21761;Name=XP_006572786.1;Dbxref=GeneID:100577536,Genbank:XP_006572786.1,BEEBASE:GB44409;gbkey=CDS;gene=LOC100577536;product=uncharacterized protein LOC100577536;protein_id=XP_006572786.1
+NW_003383407.1	.	intron	1629	1832	.	-	.	Parent=mRNA21761
+NW_003383407.1	Gnomon	exon	1833	2118	.	-	.	Parent=mRNA21761;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	Gnomon	CDS	1833	2118	.	-	1	ID=CDS20905;Parent=mRNA21761;Name=XP_006572786.1;Dbxref=GeneID:100577536,Genbank:XP_006572786.1,BEEBASE:GB44409;gbkey=CDS;gene=LOC100577536;product=uncharacterized protein LOC100577536;protein_id=XP_006572786.1
+NW_003383407.1	.	intron	2119	2274	.	-	.	Parent=mRNA21761
+NW_003383407.1	Gnomon	exon	2275	2659	.	-	.	Parent=mRNA21761;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	Gnomon	CDS	2275	2659	.	-	2	ID=CDS20905;Parent=mRNA21761;Name=XP_006572786.1;Dbxref=GeneID:100577536,Genbank:XP_006572786.1,BEEBASE:GB44409;gbkey=CDS;gene=LOC100577536;product=uncharacterized protein LOC100577536;protein_id=XP_006572786.1
+NW_003383407.1	.	intron	2660	3142	.	-	.	Parent=mRNA21761
+NW_003383407.1	Gnomon	exon	3143	3251	.	-	.	Parent=mRNA21761;Dbxref=GeneID:100577536,Genbank:XM_006572723.1,BEEBASE:GB44409;gbkey=mRNA;gene=LOC100577536;product=uncharacterized LOC100577536;transcript_id=XM_006572723.1
+NW_003383407.1	Gnomon	CDS	3143	3251	.	-	0	ID=CDS20905;Parent=mRNA21761;Name=XP_006572786.1;Dbxref=GeneID:100577536,Genbank:XP_006572786.1,BEEBASE:GB44409;gbkey=CDS;gene=LOC100577536;product=uncharacterized protein LOC100577536;protein_id=XP_006572786.1
+NW_003383407.1	.	start_codon	3249	3251	.	-	.	Parent=mRNA21761
+##sequence-region   NW_003383297.1 386 812
+NW_003383297.1	Gnomon	gene	386	812	.	-	.	ID=gene13411;Name=LOC102656681;Dbxref=GeneID:102656681;gbkey=Gene;gene=LOC102656681
+NW_003383297.1	Gnomon	mRNA	386	812	.	-	.	ID=mRNA21754;Parent=gene13411;Name=XM_006572717.1;Dbxref=GeneID:102656681,Genbank:XM_006572717.1;gbkey=mRNA;gene=LOC102656681;product=dehydrogenase%2Freductase SDR family member 11-like;transcript_id=XM_006572717.1
+NW_003383297.1	.	three_prime_UTR	386	394	.	-	.	Parent=mRNA21754
+NW_003383297.1	Gnomon	exon	386	812	.	-	.	Parent=mRNA21754;Dbxref=GeneID:102656681,Genbank:XM_006572717.1;gbkey=mRNA;gene=LOC102656681;product=dehydrogenase%2Freductase SDR family member 11-like;transcript_id=XM_006572717.1
+NW_003383297.1	.	stop_codon	395	397	.	-	.	Parent=mRNA21754
+NW_003383297.1	Gnomon	CDS	395	757	.	-	0	Parent=mRNA21754;Name=XP_006572780.1;Dbxref=GeneID:102656681,Genbank:XP_006572780.1;gbkey=CDS;gene=LOC102656681;product=dehydrogenase%2Freductase SDR family member 11-like;protein_id=XP_006572780.1
+NW_003383297.1	.	start_codon	755	757	.	-	.	Parent=mRNA21754
+NW_003383297.1	.	five_prime_UTR	758	812	.	-	.	Parent=mRNA21754
+##sequence-region   NW_003383271.1 4 1021
+NW_003383271.1	Gnomon	gene	4	1021	.	-	.	ID=gene13404;Name=LOC725851;Dbxref=BEEBASE:GB43029,GeneID:725851;gbkey=Gene;gene=LOC725851
+NW_003383271.1	Gnomon	mRNA	4	1021	.	-	.	ID=mRNA21748;Parent=gene13404;Name=XM_001120262.3;Dbxref=GeneID:725851,Genbank:XM_001120262.3,BEEBASE:GB43029;gbkey=mRNA;gene=LOC725851;product=actin%2C indirect flight muscle-like;transcript_id=XM_001120262.3
+NW_003383271.1	.	three_prime_UTR	4	20	.	-	.	Parent=mRNA21748
+NW_003383271.1	Gnomon	exon	4	1021	.	-	.	Parent=mRNA21748;Dbxref=GeneID:725851,Genbank:XM_001120262.3,BEEBASE:GB43029;gbkey=mRNA;gene=LOC725851;product=actin%2C indirect flight muscle-like;transcript_id=XM_001120262.3
+NW_003383271.1	.	stop_codon	21	23	.	-	.	Parent=mRNA21748
+NW_003383271.1	Gnomon	CDS	21	1019	.	-	0	Parent=mRNA21748;Name=XP_001120262.1;Dbxref=GeneID:725851,Genbank:XP_001120262.1,BEEBASE:GB43029;gbkey=CDS;gene=LOC725851;product=actin%2C indirect flight muscle-like;protein_id=XP_001120262.1
+NW_003383271.1	.	start_codon	1017	1019	.	-	.	Parent=mRNA21748
+NW_003383271.1	.	five_prime_UTR	1020	1021	.	-	.	Parent=mRNA21748
+##sequence-region   NW_003383273.1 1363 2156
+NW_003383273.1	Gnomon	gene	1363	2156	.	+	.	ID=gene13406;Name=LOC102656517;Dbxref=GeneID:102656517;gbkey=Gene;gene=LOC102656517
+NW_003383273.1	Gnomon	mRNA	1363	2156	.	+	.	ID=mRNA21750;Parent=gene13406;Name=XM_006572714.1;Dbxref=GeneID:102656517,Genbank:XM_006572714.1;gbkey=mRNA;gene=LOC102656517;product=protein PFC0760c-like;transcript_id=XM_006572714.1
+NW_003383273.1	Gnomon	exon	1363	1572	.	+	.	Parent=mRNA21750;Dbxref=GeneID:102656517,Genbank:XM_006572714.1;gbkey=mRNA;gene=LOC102656517;product=protein PFC0760c-like;transcript_id=XM_006572714.1
+NW_003383273.1	.	five_prime_UTR	1363	1572	.	+	.	Parent=mRNA21750
+NW_003383273.1	.	intron	1573	1809	.	+	.	Parent=mRNA21750
+NW_003383273.1	.	five_prime_UTR	1810	1814	.	+	.	Parent=mRNA21750
+NW_003383273.1	Gnomon	exon	1810	2156	.	+	.	Parent=mRNA21750;Dbxref=GeneID:102656517,Genbank:XM_006572714.1;gbkey=mRNA;gene=LOC102656517;product=protein PFC0760c-like;transcript_id=XM_006572714.1
+NW_003383273.1	.	start_codon	1815	1817	.	+	.	Parent=mRNA21750
+NW_003383273.1	Gnomon	CDS	1815	2111	.	+	0	Parent=mRNA21750;Name=XP_006572777.1;Dbxref=GeneID:102656517,Genbank:XP_006572777.1;gbkey=CDS;gene=LOC102656517;product=protein PFC0760c-like;protein_id=XP_006572777.1
+NW_003383273.1	.	stop_codon	2109	2111	.	+	.	Parent=mRNA21750
+NW_003383273.1	.	three_prime_UTR	2112	2156	.	+	.	Parent=mRNA21750
+##sequence-region   NW_003383179.1 210 1065
+NW_003383179.1	Gnomon	gene	210	1065	.	+	.	ID=gene13393;Name=Apid73;Dbxref=BEEBASE:GB51306,GeneID:406115;gbkey=Gene;gene=Apid73;partial=true
+NW_003383179.1	Gnomon	mRNA	210	1065	.	+	.	ID=mRNA21730;Parent=gene13393;Name=XM_006572699.1;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	.	start_codon	210	212	.	+	.	Parent=mRNA21730
+NW_003383179.1	Gnomon	exon	210	293	.	+	.	Parent=mRNA21730;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	Gnomon	CDS	210	293	.	+	0	ID=CDS20886;Parent=mRNA21730;Name=XP_006572762.1;Dbxref=GeneID:406115,Genbank:XP_006572762.1,BEEBASE:GB51306;gbkey=CDS;gene=Apid73;product=apidaecins type 22;protein_id=XP_006572762.1
+NW_003383179.1	.	intron	294	373	.	+	.	Parent=mRNA21730
+NW_003383179.1	Gnomon	exon	374	457	.	+	.	Parent=mRNA21730;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	Gnomon	CDS	374	457	.	+	0	ID=CDS20886;Parent=mRNA21730;Name=XP_006572762.1;Dbxref=GeneID:406115,Genbank:XP_006572762.1,BEEBASE:GB51306;gbkey=CDS;gene=Apid73;product=apidaecins type 22;protein_id=XP_006572762.1
+NW_003383179.1	.	intron	458	536	.	+	.	Parent=mRNA21730
+NW_003383179.1	Gnomon	exon	537	620	.	+	.	Parent=mRNA21730;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	Gnomon	CDS	537	620	.	+	0	ID=CDS20886;Parent=mRNA21730;Name=XP_006572762.1;Dbxref=GeneID:406115,Genbank:XP_006572762.1,BEEBASE:GB51306;gbkey=CDS;gene=Apid73;product=apidaecins type 22;protein_id=XP_006572762.1
+NW_003383179.1	.	intron	621	699	.	+	.	Parent=mRNA21730
+NW_003383179.1	Gnomon	exon	700	783	.	+	.	Parent=mRNA21730;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	Gnomon	CDS	700	783	.	+	0	ID=CDS20886;Parent=mRNA21730;Name=XP_006572762.1;Dbxref=GeneID:406115,Genbank:XP_006572762.1,BEEBASE:GB51306;gbkey=CDS;gene=Apid73;product=apidaecins type 22;protein_id=XP_006572762.1
+NW_003383179.1	.	intron	784	959	.	+	.	Parent=mRNA21730
+NW_003383179.1	Gnomon	CDS	960	968	.	+	0	ID=CDS20886;Parent=mRNA21730;Name=XP_006572762.1;Dbxref=GeneID:406115,Genbank:XP_006572762.1,BEEBASE:GB51306;gbkey=CDS;gene=Apid73;product=apidaecins type 22;protein_id=XP_006572762.1
+NW_003383179.1	Gnomon	exon	960	1065	.	+	.	Parent=mRNA21730;Dbxref=GeneID:406115,Genbank:XM_006572699.1,BEEBASE:GB51306;gbkey=mRNA;gene=Apid73;product=apidaecin;transcript_id=XM_006572699.1
+NW_003383179.1	.	stop_codon	966	968	.	+	.	Parent=mRNA21730
+NW_003383179.1	.	three_prime_UTR	969	1065	.	+	.	Parent=mRNA21730
+##sequence-region   NW_003383359.1 12091 14906
+##sequence-region   NW_003383135.1 9 4300
+NW_003383135.1	Gnomon	gene	9	4300	.	+	.	ID=gene13385;Name=LOC551697;Dbxref=BEEBASE:GB42136,GeneID:551697;gbkey=Gene;gene=LOC551697;partial=true
+NW_003383135.1	Gnomon	mRNA	9	4300	.	+	.	ID=mRNA21724;Parent=gene13385;Name=XM_006572694.1;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	.	start_codon	9	11	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	9	38	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	9	38	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	39	196	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	197	364	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	197	364	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	365	439	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	440	673	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	440	673	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	674	839	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	840	1019	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	840	1019	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	1020	1081	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	1082	1312	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	1082	1312	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	1313	1700	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	1701	1848	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	1701	1848	.	+	0	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	1849	2361	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	2362	2713	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	2362	2713	.	+	2	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	2714	2777	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	2778	2909	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	2778	2909	.	+	1	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	2910	3046	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	exon	3047	3207	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	Gnomon	CDS	3047	3207	.	+	1	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	.	intron	3208	3289	.	+	.	Parent=mRNA21724
+NW_003383135.1	Gnomon	CDS	3290	3387	.	+	2	ID=CDS20884;Parent=mRNA21724;Name=XP_006572757.1;Dbxref=GeneID:551697,Genbank:XP_006572757.1,BEEBASE:GB42136;gbkey=CDS;gene=LOC551697;product=glutamate receptor ionotropic%2C delta-2-like;protein_id=XP_006572757.1
+NW_003383135.1	Gnomon	exon	3290	4300	.	+	.	Parent=mRNA21724;Dbxref=GeneID:551697,Genbank:XM_006572694.1,BEEBASE:GB42136;gbkey=mRNA;gene=LOC551697;product=ionotropic receptor 93a-like protein;transcript_id=XM_006572694.1
+NW_003383135.1	.	stop_codon	3385	3387	.	+	.	Parent=mRNA21724
+NW_003383135.1	.	three_prime_UTR	3388	4300	.	+	.	Parent=mRNA21724
+##sequence-region   NW_003383200.1 111 2084
+NW_003383200.1	Gnomon	gene	111	2084	.	+	.	ID=gene13396;Name=LOC102655834;Dbxref=GeneID:102655834;gbkey=Gene;gene=LOC102655834;partial=true
+NW_003383200.1	Gnomon	mRNA	111	2084	.	+	.	ID=mRNA21733;Parent=gene13396;Name=XM_006572700.1;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	.	start_codon	111	113	.	+	.	Parent=mRNA21733
+NW_003383200.1	Gnomon	exon	111	228	.	+	.	Parent=mRNA21733;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	Gnomon	CDS	111	228	.	+	0	ID=CDS20889;Parent=mRNA21733;Name=XP_006572763.1;Dbxref=GeneID:102655834,Genbank:XP_006572763.1;gbkey=CDS;gene=LOC102655834;product=uncharacterized protein LOC102655834;protein_id=XP_006572763.1
+NW_003383200.1	.	intron	229	849	.	+	.	Parent=mRNA21733
+NW_003383200.1	Gnomon	exon	850	1111	.	+	.	Parent=mRNA21733;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	Gnomon	CDS	850	1111	.	+	2	ID=CDS20889;Parent=mRNA21733;Name=XP_006572763.1;Dbxref=GeneID:102655834,Genbank:XP_006572763.1;gbkey=CDS;gene=LOC102655834;product=uncharacterized protein LOC102655834;protein_id=XP_006572763.1
+NW_003383200.1	.	intron	1112	1274	.	+	.	Parent=mRNA21733
+NW_003383200.1	Gnomon	exon	1275	1397	.	+	.	Parent=mRNA21733;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	Gnomon	CDS	1275	1397	.	+	1	ID=CDS20889;Parent=mRNA21733;Name=XP_006572763.1;Dbxref=GeneID:102655834,Genbank:XP_006572763.1;gbkey=CDS;gene=LOC102655834;product=uncharacterized protein LOC102655834;protein_id=XP_006572763.1
+NW_003383200.1	.	intron	1398	1481	.	+	.	Parent=mRNA21733
+NW_003383200.1	Gnomon	exon	1482	1572	.	+	.	Parent=mRNA21733;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	Gnomon	CDS	1482	1572	.	+	1	ID=CDS20889;Parent=mRNA21733;Name=XP_006572763.1;Dbxref=GeneID:102655834,Genbank:XP_006572763.1;gbkey=CDS;gene=LOC102655834;product=uncharacterized protein LOC102655834;protein_id=XP_006572763.1
+NW_003383200.1	.	intron	1573	1946	.	+	.	Parent=mRNA21733
+NW_003383200.1	Gnomon	exon	1947	2084	.	+	.	Parent=mRNA21733;Dbxref=GeneID:102655834,Genbank:XM_006572700.1;gbkey=mRNA;gene=LOC102655834;product=uncharacterized LOC102655834;transcript_id=XM_006572700.1
+NW_003383200.1	Gnomon	CDS	1947	2084	.	+	0	ID=CDS20889;Parent=mRNA21733;Name=XP_006572763.1;Dbxref=GeneID:102655834,Genbank:XP_006572763.1;gbkey=CDS;gene=LOC102655834;product=uncharacterized protein LOC102655834;protein_id=XP_006572763.1
+NW_003383200.1	.	stop_codon	2082	2084	.	+	.	Parent=mRNA21733
+##sequence-region   NW_003383234.1 1447 11846
+NW_003383234.1	Gnomon	gene	1447	11846	.	+	.	ID=gene13400;Name=LOC727159;Dbxref=BEEBASE:GB43039,GeneID:727159;gbkey=Gene;gene=LOC727159
+NW_003383234.1	Gnomon	mRNA	2704	11846	.	+	.	ID=mRNA21741;Parent=gene13400;Name=XM_006572704.1;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	exon	2704	2844	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	.	five_prime_UTR	2704	2844	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	intron	2845	3397	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	3398	3561	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	.	five_prime_UTR	3398	3561	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	intron	3562	4321	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	five_prime_UTR	4322	4509	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	4322	4711	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	.	start_codon	4510	4512	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	CDS	4510	4711	.	+	0	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	4712	7940	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	7941	8009	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	CDS	7941	8009	.	+	2	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	8010	9066	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	9067	9219	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	CDS	9067	9219	.	+	2	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	9220	9300	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	9301	9495	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	CDS	9301	9495	.	+	2	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	9496	10571	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	10572	10773	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	CDS	10572	10773	.	+	2	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	10774	11386	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	exon	11387	11606	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	Gnomon	CDS	11387	11606	.	+	1	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	.	intron	11607	11707	.	+	.	Parent=mRNA21741
+NW_003383234.1	Gnomon	CDS	11708	11734	.	+	0	ID=CDS20895;Parent=mRNA21741;Name=XP_006572767.1;Dbxref=GeneID:727159,Genbank:XP_006572767.1,BEEBASE:GB43039;gbkey=CDS;gene=LOC727159;product=restin homolog isoform X2;protein_id=XP_006572767.1
+NW_003383234.1	Gnomon	exon	11708	11846	.	+	.	Parent=mRNA21741;Dbxref=GeneID:727159,Genbank:XM_006572704.1,BEEBASE:GB43039;gbkey=mRNA;gene=LOC727159;product=restin homolog%2C transcript variant X2;transcript_id=XM_006572704.1
+NW_003383234.1	.	stop_codon	11732	11734	.	+	.	Parent=mRNA21741
+NW_003383234.1	.	three_prime_UTR	11735	11846	.	+	.	Parent=mRNA21741
+##sequence-region   NW_003383096.1 75 714
+NW_003383096.1	Gnomon	gene	75	714	.	+	.	ID=gene13382;Name=LOC727601;Dbxref=BEEBASE:GB49713,GeneID:727601;gbkey=Gene;gene=LOC727601;partial=true
+NW_003383096.1	Gnomon	mRNA	75	714	.	+	.	ID=mRNA21721;Parent=gene13382;Name=XM_001123309.3;Dbxref=GeneID:727601,Genbank:XM_001123309.3,BEEBASE:GB49713;gbkey=mRNA;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;transcript_id=XM_001123309.3
+NW_003383096.1	.	five_prime_UTR	75	124	.	+	.	Parent=mRNA21721
+NW_003383096.1	Gnomon	exon	75	265	.	+	.	Parent=mRNA21721;Dbxref=GeneID:727601,Genbank:XM_001123309.3,BEEBASE:GB49713;gbkey=mRNA;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;transcript_id=XM_001123309.3
+NW_003383096.1	.	start_codon	125	127	.	+	.	Parent=mRNA21721
+NW_003383096.1	Gnomon	CDS	125	265	.	+	0	ID=CDS20882;Parent=mRNA21721;Name=XP_001123309.3;Dbxref=GeneID:727601,Genbank:XP_001123309.3,BEEBASE:GB49713;gbkey=CDS;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;protein_id=XP_001123309.3
+NW_003383096.1	.	intron	266	339	.	+	.	Parent=mRNA21721
+NW_003383096.1	Gnomon	exon	340	592	.	+	.	Parent=mRNA21721;Dbxref=GeneID:727601,Genbank:XM_001123309.3,BEEBASE:GB49713;gbkey=mRNA;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;transcript_id=XM_001123309.3
+NW_003383096.1	Gnomon	CDS	340	592	.	+	0	ID=CDS20882;Parent=mRNA21721;Name=XP_001123309.3;Dbxref=GeneID:727601,Genbank:XP_001123309.3,BEEBASE:GB49713;gbkey=CDS;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;protein_id=XP_001123309.3
+NW_003383096.1	.	intron	593	679	.	+	.	Parent=mRNA21721
+NW_003383096.1	Gnomon	exon	680	714	.	+	.	Parent=mRNA21721;Dbxref=GeneID:727601,Genbank:XM_001123309.3,BEEBASE:GB49713;gbkey=mRNA;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;transcript_id=XM_001123309.3
+NW_003383096.1	Gnomon	CDS	680	714	.	+	2	ID=CDS20882;Parent=mRNA21721;Name=XP_001123309.3;Dbxref=GeneID:727601,Genbank:XP_001123309.3,BEEBASE:GB49713;gbkey=CDS;gene=LOC727601;product=coiled-coil domain-containing protein 65-like;protein_id=XP_001123309.3
+NW_003383096.1	.	stop_codon	712	714	.	+	.	Parent=mRNA21721
+##sequence-region   NW_003383484.1 6 957
+NW_003383484.1	Gnomon	gene	6	957	.	+	.	ID=gene13426;Name=LOC725843;Dbxref=GeneID:725843;gbkey=Gene;gene=LOC725843;partial=true
+NW_003383484.1	Gnomon	mRNA	6	957	.	+	.	ID=mRNA21764;Parent=gene13426;Name=XM_001121646.3;Dbxref=GeneID:725843,Genbank:XM_001121646.3;gbkey=mRNA;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;transcript_id=XM_001121646.3
+NW_003383484.1	.	start_codon	6	8	.	+	.	Parent=mRNA21764
+NW_003383484.1	Gnomon	exon	6	27	.	+	.	Parent=mRNA21764;Dbxref=GeneID:725843,Genbank:XM_001121646.3;gbkey=mRNA;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;transcript_id=XM_001121646.3
+NW_003383484.1	Gnomon	CDS	6	27	.	+	0	ID=CDS20907;Parent=mRNA21764;Name=XP_001121646.3;Dbxref=GeneID:725843,Genbank:XP_001121646.3;gbkey=CDS;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;protein_id=XP_001121646.3
+NW_003383484.1	.	intron	28	187	.	+	.	Parent=mRNA21764
+NW_003383484.1	Gnomon	exon	188	261	.	+	.	Parent=mRNA21764;Dbxref=GeneID:725843,Genbank:XM_001121646.3;gbkey=mRNA;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;transcript_id=XM_001121646.3
+NW_003383484.1	Gnomon	CDS	188	261	.	+	2	ID=CDS20907;Parent=mRNA21764;Name=XP_001121646.3;Dbxref=GeneID:725843,Genbank:XP_001121646.3;gbkey=CDS;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;protein_id=XP_001121646.3
+NW_003383484.1	.	intron	262	788	.	+	.	Parent=mRNA21764
+NW_003383484.1	Gnomon	exon	789	957	.	+	.	Parent=mRNA21764;Dbxref=GeneID:725843,Genbank:XM_001121646.3;gbkey=mRNA;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;transcript_id=XM_001121646.3
+NW_003383484.1	Gnomon	CDS	789	957	.	+	0	ID=CDS20907;Parent=mRNA21764;Name=XP_001121646.3;Dbxref=GeneID:725843,Genbank:XP_001121646.3;gbkey=CDS;gene=LOC725843;product=cytochrome c oxidase subunit 5B%2C mitochondrial-like;protein_id=XP_001121646.3
+NW_003383484.1	.	stop_codon	955	957	.	+	.	Parent=mRNA21764
+##sequence-region   NW_003383386.1 6170 7355
+NW_003383386.1	Gnomon	gene	6170	7355	.	+	.	ID=gene13420;Name=LOC551937;Dbxref=BEEBASE:GB42343,GeneID:551937;gbkey=Gene;gene=LOC551937
+NW_003383386.1	Gnomon	mRNA	6170	7355	.	+	.	ID=mRNA21760;Parent=gene13420;Name=XM_006572722.1;Dbxref=GeneID:551937,Genbank:XM_006572722.1,BEEBASE:GB42343;gbkey=mRNA;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;transcript_id=XM_006572722.1
+NW_003383386.1	.	five_prime_UTR	6170	6396	.	+	.	Parent=mRNA21760
+NW_003383386.1	Gnomon	exon	6170	6521	.	+	.	Parent=mRNA21760;Dbxref=GeneID:551937,Genbank:XM_006572722.1,BEEBASE:GB42343;gbkey=mRNA;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;transcript_id=XM_006572722.1
+NW_003383386.1	.	start_codon	6397	6399	.	+	.	Parent=mRNA21760
+NW_003383386.1	Gnomon	CDS	6397	6521	.	+	0	ID=CDS20904;Parent=mRNA21760;Name=XP_006572785.1;Dbxref=GeneID:551937,Genbank:XP_006572785.1,BEEBASE:GB42343;gbkey=CDS;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;protein_id=XP_006572785.1
+NW_003383386.1	.	intron	6522	6601	.	+	.	Parent=mRNA21760
+NW_003383386.1	Gnomon	exon	6602	6720	.	+	.	Parent=mRNA21760;Dbxref=GeneID:551937,Genbank:XM_006572722.1,BEEBASE:GB42343;gbkey=mRNA;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;transcript_id=XM_006572722.1
+NW_003383386.1	Gnomon	CDS	6602	6720	.	+	1	ID=CDS20904;Parent=mRNA21760;Name=XP_006572785.1;Dbxref=GeneID:551937,Genbank:XP_006572785.1,BEEBASE:GB42343;gbkey=CDS;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;protein_id=XP_006572785.1
+NW_003383386.1	.	intron	6721	7040	.	+	.	Parent=mRNA21760
+NW_003383386.1	Gnomon	CDS	7041	7279	.	+	2	ID=CDS20904;Parent=mRNA21760;Name=XP_006572785.1;Dbxref=GeneID:551937,Genbank:XP_006572785.1,BEEBASE:GB42343;gbkey=CDS;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;protein_id=XP_006572785.1
+NW_003383386.1	Gnomon	exon	7041	7355	.	+	.	Parent=mRNA21760;Dbxref=GeneID:551937,Genbank:XM_006572722.1,BEEBASE:GB42343;gbkey=mRNA;gene=LOC551937;product=alanine--glyoxylate aminotransferase 2-like;transcript_id=XM_006572722.1
+NW_003383386.1	.	stop_codon	7277	7279	.	+	.	Parent=mRNA21760
+NW_003383386.1	.	three_prime_UTR	7280	7355	.	+	.	Parent=mRNA21760
+##sequence-region   NW_003383479.1 1 921
+##sequence-region   NW_003383226.1 28 875
+NW_003383226.1	Gnomon	gene	28	875	.	-	.	ID=gene13398;Name=LOC102655911;Dbxref=GeneID:102655911;gbkey=Gene;gene=LOC102655911
+NW_003383226.1	Gnomon	mRNA	28	875	.	-	.	ID=mRNA21735;Parent=gene13398;Name=XM_006572702.1;Dbxref=GeneID:102655911,Genbank:XM_006572702.1;gbkey=mRNA;gene=LOC102655911;product=uncharacterized LOC102655911;transcript_id=XM_006572702.1
+NW_003383226.1	.	stop_codon	28	30	.	-	.	Parent=mRNA21735
+NW_003383226.1	Gnomon	CDS	28	390	.	-	0	Parent=mRNA21735;Name=XP_006572765.1;Dbxref=GeneID:102655911,Genbank:XP_006572765.1;gbkey=CDS;gene=LOC102655911;product=uncharacterized protein LOC102655911;protein_id=XP_006572765.1
+NW_003383226.1	Gnomon	exon	28	471	.	-	.	Parent=mRNA21735;Dbxref=GeneID:102655911,Genbank:XM_006572702.1;gbkey=mRNA;gene=LOC102655911;product=uncharacterized LOC102655911;transcript_id=XM_006572702.1
+NW_003383226.1	.	start_codon	388	390	.	-	.	Parent=mRNA21735
+NW_003383226.1	.	five_prime_UTR	391	471	.	-	.	Parent=mRNA21735
+NW_003383226.1	.	intron	472	582	.	-	.	Parent=mRNA21735
+NW_003383226.1	Gnomon	exon	583	875	.	-	.	Parent=mRNA21735;Dbxref=GeneID:102655911,Genbank:XM_006572702.1;gbkey=mRNA;gene=LOC102655911;product=uncharacterized LOC102655911;transcript_id=XM_006572702.1
+NW_003383226.1	.	five_prime_UTR	583	875	.	-	.	Parent=mRNA21735
+##sequence-region   NW_003383343.1 235 2005
+NW_003383343.1	Gnomon	gene	1162	2005	.	+	.	ID=gene13414;Name=LOC100577399;Dbxref=BEEBASE:GB40710,GeneID:100577399;gbkey=Gene;gene=LOC100577399;partial=true
+NW_003383343.1	Gnomon	mRNA	1162	2005	.	+	.	ID=mRNA21756;Parent=gene13414;Name=XM_006572719.1;Dbxref=GeneID:100577399,Genbank:XM_006572719.1,BEEBASE:GB40710;gbkey=mRNA;gene=LOC100577399;product=uncharacterized LOC100577399;transcript_id=XM_006572719.1
+NW_003383343.1	.	five_prime_UTR	1162	1263	.	+	.	Parent=mRNA21756
+NW_003383343.1	Gnomon	exon	1162	1917	.	+	.	Parent=mRNA21756;Dbxref=GeneID:100577399,Genbank:XM_006572719.1,BEEBASE:GB40710;gbkey=mRNA;gene=LOC100577399;product=uncharacterized LOC100577399;transcript_id=XM_006572719.1
+NW_003383343.1	.	start_codon	1264	1266	.	+	.	Parent=mRNA21756
+NW_003383343.1	Gnomon	CDS	1264	1917	.	+	0	ID=CDS20902;Parent=mRNA21756;Name=XP_006572782.1;Dbxref=GeneID:100577399,Genbank:XP_006572782.1,BEEBASE:GB40710;gbkey=CDS;gene=LOC100577399;product=uncharacterized protein LOC100577399;protein_id=XP_006572782.1
+NW_003383343.1	.	intron	1918	1993	.	+	.	Parent=mRNA21756
+NW_003383343.1	Gnomon	exon	1994	2005	.	+	.	Parent=mRNA21756;Dbxref=GeneID:100577399,Genbank:XM_006572719.1,BEEBASE:GB40710;gbkey=mRNA;gene=LOC100577399;product=uncharacterized LOC100577399;transcript_id=XM_006572719.1
+NW_003383343.1	Gnomon	CDS	1994	2005	.	+	0	ID=CDS20902;Parent=mRNA21756;Name=XP_006572782.1;Dbxref=GeneID:100577399,Genbank:XP_006572782.1,BEEBASE:GB40710;gbkey=CDS;gene=LOC100577399;product=uncharacterized protein LOC100577399;protein_id=XP_006572782.1
+NW_003383343.1	.	stop_codon	2003	2005	.	+	.	Parent=mRNA21756
