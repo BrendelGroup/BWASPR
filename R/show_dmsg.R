@@ -13,7 +13,7 @@
 #' @importFrom gplots heatmap.2 greenred
 #' @importFrom utils write.table capture.output
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr group_by
+#' @importFrom dplyr group_by %in%
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
