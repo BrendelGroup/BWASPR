@@ -6,24 +6,24 @@
 #' @param min.sites minimal number of msites per genes
 #' @param query.genes A list of gene IDs 
 #' 
-#' @return
+#' @return MISSING - PROBABLY SHOULD RETURN data frame
 #' 
 #' @importFrom methylKit percMethylation reorganize unite
 #' @importFrom GenomicRanges findOverlaps
 #' @importFrom gplots heatmap.2 greenred
 #' @importFrom utils write.table capture.output
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr group_by %in%
+#' @importFrom dplyr group_by
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
-#'                        type="CpGhsm" mincov=1,assembly="Amel-4.5")
+#'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
 #'   meth_diff <- det_dmsg(AmHE,genome_ann,
-#'                         threshold=0.25,qvalue=0.05,mc.cores=4,
+#'                         threshold=0.25,qvalue=0.25,mc.cores=4,
 #'                         outfile1="AmHE-dmsites.txt", 
 #'                         outfile2="AmHE-dmgenes.txt")
 #'   show_dmsg(AmHE,'AmHE-dmgenes.txt')
@@ -56,7 +56,7 @@ show_dmsg <- function(mrobj,dmgenes.file,min.nsites=2,query.genes=''){
         # parse the mrobj with interested samples and calc meth level
         #
         pair_mrobj      <- reorganize(mrobj,
-                                      sample.id=list(sample1,sample2),
+                                      sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
         pair_meth       <- unite(pair_mrobj)
         p_meth          <- round(percMethylation(pair_meth,
@@ -99,7 +99,7 @@ show_dmsg <- function(mrobj,dmgenes.file,min.nsites=2,query.genes=''){
             }else{
             plot <- i[,c(sample1,sample2)]
             heatmap.2(as.matrix(plot), 
-                      margin=c(10,10),
+                      margins=c(10,10),
                       dendrogram='none',
                       Rowv=FALSE,
                       col=greenred(10),

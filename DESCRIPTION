@@ -17,6 +17,7 @@ Imports:
    dplyr,
    genomation,
    GenomicRanges,
+   gplots,
    grDevices,
    IRanges,
    methods,
