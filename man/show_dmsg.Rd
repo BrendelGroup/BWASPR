@@ -12,9 +12,9 @@ show_dmsg(mrobj, dmgenes.file, min.nsites = 2, query.genes = "")
 
 \item{dmgenes.file}{A tab delimited file stores genes with differential methylated sites}
 
-\item{query.genes}{A list of gene IDs}
+\item{min.nsites}{minimal number of msites per genes}
 
-\item{min.sites}{minimal number of msites per genes}
+\item{query.genes}{A list of gene IDs}
 }
 \value{
 MISSING - PROBABLY SHOULD RETURN data frame
