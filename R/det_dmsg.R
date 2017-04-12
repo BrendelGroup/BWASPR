@@ -31,7 +31,7 @@
 #'
 #' @export
 
-det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
+det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
                      outfile1="methyl_dmsites.txt",
                      outfile2="methyl_dmgenes.txt"){
     sample_list <- getSampleID(mrobj)
