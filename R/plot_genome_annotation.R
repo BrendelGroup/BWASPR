@@ -9,7 +9,7 @@
 #'
 #' @return A data frame that store the genome annotation data
 #'
-#' @import methods utils
+## @import methods utils
 #' @import ComplexHeatmap
 #' @importFrom ComplexHeatmap draw
 #' @import circlize

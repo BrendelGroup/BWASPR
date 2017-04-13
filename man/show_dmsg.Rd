@@ -12,12 +12,12 @@ show_dmsg(mrobj, dmgenes.file, min.nsites = 2, query.genes = "")
 
 \item{dmgenes.file}{A tab delimited file stores genes with differential methylated sites}
 
-\item{query.genes}{A list of gene IDs}
+\item{min.nsites}{minimal number of msites per genes}
 
-\item{min.sites}{minimal number of msites per genes}
+\item{query.genes}{A list of gene IDs}
 }
 \value{
-
+MISSING - PROBABLY SHOULD RETURN data frame
 }
 \description{
 show_dmsg() 
@@ -28,10 +28,10 @@ This function will plot heatmap of methylation level of isites in dmgenes
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
-                       type="CpGhsm" mincov=1,assembly="Amel-4.5")
+                       type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
   meth_diff <- det_dmsg(AmHE,genome_ann,
-                        threshold=0.25,qvalue=0.05,mc.cores=4,
+                        threshold=0.25,qvalue=0.25,mc.cores=4,
                         outfile1="AmHE-dmsites.txt", 
                         outfile2="AmHE-dmgenes.txt")
   show_dmsg(AmHE,'AmHE-dmgenes.txt')

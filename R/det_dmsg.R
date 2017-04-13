@@ -15,6 +15,7 @@
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
 #' @importFrom IRanges subsetByOverlaps
+#' @import BiocGenerics
 #' @importFrom S4Vectors mcols
 #'
 #' @examples
@@ -30,7 +31,7 @@
 #'
 #' @export
 
-det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
+det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
                      outfile1="methyl_dmsites.txt",
                      outfile2="methyl_dmgenes.txt"){
     sample_list <- getSampleID(mrobj)
@@ -59,7 +60,9 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
         pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
         difsites <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
         gr <- as(difsites,"GRanges")
-        S4Vectors::mcols(gr)$comparison <- pairname
+        if (length(gr) > 0) {
+            S4Vectors::mcols(gr)$comparison <- pairname
+        }
         return(gr)
        }
        )
@@ -67,28 +70,36 @@ det_dmsg <- function(mrobj,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=1,
         message("No differentially methylated sites are found.")
         return(list('dmgenes' = GRanges(),
                     'dmsites' = GRanges()))
-
     }
-    dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
+    if (outfile1 != '') {
+        dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
+        dmsites$qvalue <- round(dmsites$qvalue,3)
+        dmsites$meth.diff <- round(dmsites$meth.diff,2)
+        dmsites.df <- BiocGenerics::as.data.frame(dmsites)
+        write.table(dmsites.df,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
+    }
 
     dmgenes.gr <- lapply(seq_along(pairs), function(i) {
         gr <- subsetByOverlaps(genes,dmsites.gr[[i]])
         pairname <- paste(sample_list[pairs[[i]][1]+1],
                           sample_list[pairs[[i]][2]+1],sep=".vs.")
-        S4Vectors::mcols(gr)$comparison <- pairname
+        if (length(gr) > 0) {
+            S4Vectors::mcols(gr)$comparison <- pairname
+        }
         return(gr)
        }
        )
-    dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
-    
-    if (outfile1 != ''){
-        dmsites$qvalue <- round(dmsites$qvalue,3)
-        dmsites$meth.diff <- round(dmsites$meth.diff,2)
-        write.table(dmsites,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
+    if (length(dmgenes.gr) == 0) {
+        message("No differentially methylated genes are found.")
+        return(list('dmgenes' = GRanges(),
+                    'dmsites' = dmsites.gr))
     }
     if (outfile2 != ''){
-        write.table(dmgenes,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
+        dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
+        dmgenes.df <- BiocGenerics::as.data.frame(dmgenes)
+        write.table(dmgenes.df,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
     }
+
     return(list('dmgenes' = dmgenes.gr,
                 'dmsites' = dmsites.gr))
 }

@@ -20,11 +20,9 @@ Imports:
    gplots,
    grDevices,
    IRanges,
-   methods,
    methylKit,
    sqldf,
-   S4Vectors,
-   utils
+   S4Vectors
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
