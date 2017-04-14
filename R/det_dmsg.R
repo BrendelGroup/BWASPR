@@ -25,7 +25,7 @@
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
 #'                        mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- det_dmsg(AmHE,genome_ann,threshold=0.25,qvalue=0.05,mc.cores=4,
+#'   meth_diff <- det_dmsg(AmHE,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=4,
 #'                         outfile1="AmHE-dmsites.txt", 
 #'                         outfile2="AmHE-dmgenes.txt") 
 #'

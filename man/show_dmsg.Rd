@@ -3,25 +3,23 @@
 \name{show_dmsg}
 \alias{show_dmsg}
 \title{show_dmsg() 
-This function will plot heatmap of methylation level of isites in dmgenes}
+This function will plot heatmap of methylation level of sites in dmgenes}
 \usage{
-show_dmsg(mrobj, dmgenes.file, min.nsites = 2, query.genes = "")
+show_dmsg(mrobj, dmsg, min.nsites = 2)
 }
 \arguments{
 \item{mrobj}{A methyRaw object or a methyRawList object}
 
-\item{dmgenes.file}{A tab delimited file stores genes with differential methylated sites}
+\item{dmsg}{A list contains dmsites and dmgenes returned by det_dmsg()}
 
 \item{min.nsites}{minimal number of msites per genes}
-
-\item{query.genes}{A list of gene IDs}
 }
 \value{
 MISSING - PROBABLY SHOULD RETURN data frame
 }
 \description{
 show_dmsg() 
-This function will plot heatmap of methylation level of isites in dmgenes
+This function will plot heatmap of methylation level of sites in dmgenes
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -31,9 +29,9 @@ This function will plot heatmap of methylation level of isites in dmgenes
                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
   meth_diff <- det_dmsg(AmHE,genome_ann,
-                        threshold=0.25,qvalue=0.25,mc.cores=4,
+                        threshold=25.0,qvalue=0.01,mc.cores=4,
                         outfile1="AmHE-dmsites.txt", 
                         outfile2="AmHE-dmgenes.txt")
-  show_dmsg(AmHE,'AmHE-dmgenes.txt')
+  show_dmsg <- show_dmsg(AmHE,meth_diff)
 
 }
