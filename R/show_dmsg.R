@@ -110,8 +110,8 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
         }
         dev.off()
 	return(meth_dmg_comb)
-    }
-    )
+    })
+    names(show_dmsg.df) = sample_match_list
     return(show_dmsg.df)
     message('... show_dmsg() finished ...')
 }
