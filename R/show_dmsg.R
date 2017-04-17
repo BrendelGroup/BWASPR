@@ -48,7 +48,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
-        pair_meth       <- unite(pair_mrobj)
+        pair_meth       <- unite(pair_mrobj,destrand=TRUE)
         # calc methylation level
 	#
         p_meth          <- round(percMethylation(pair_meth,rowids=FALSE,
@@ -112,6 +112,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
 	return(meth_dmg_comb)
     })
     names(show_dmsg.df) = sample_match_list
-    return(show_dmsg.df)
+
     message('... show_dmsg() finished ...')
+    return(show_dmsg.df)
 }
