@@ -1,11 +1,12 @@
 #' show_dmsg() 
-#' This function will plot heatmap of methylation level of sites in dmgenes
+#'   This function generates will plot heatmaps of methylation level of sites in dmgenes
 #'
 #' @param mrobj A methyRaw object or a methyRawList object
-#' @param dmsg A list contains dmsites and dmgenes returned by det_dmsg()
-#' @param min.nsites minimal number of msites per genes
+#' @param dmsg A list containing GRanges objects dmsites and dmgenes returned by
+#'   det_dmsg()
+#' @param min.nsites Minimal number of msites per genes
 #' 
-#' @return MISSING - PROBABLY SHOULD RETURN data frame
+#' @return A data frame
 #' 
 #' @importFrom methylKit percMethylation reorganize unite
 #' @importFrom GenomicRanges findOverlaps values
@@ -32,31 +33,31 @@
 show_dmsg <- function(mrobj,dmsg,min.nsites=2){
     message('... show_dmsg() ...')
     # load dmsites and dmgenes and sample_match_list
-    dmsites.gr          <- dmsg$dmsites
-    dmgenes.gr          <- dmsg$dmgenes
+    dmsites.gr          <- do.call("c", dmsg$dmsites)
+    dmgenes.gr          <- do.call("c", dmsg$dmgenes)
     sample_match_list   <- as.list(unique(as.character(dmgenes.gr$comparison)))
     # analyze each sample_match    
     show_dmsg.df <- lapply(sample_match_list, function(sample_match){
         sample1         <- unlist(strsplit(sample_match,'\\.'))[1]
         sample2         <- unlist(strsplit(sample_match,'\\.'))[3]
+        message(paste('... comparing ',sample1,' & ',sample2,' ...',sep=''))
         # subset the dmsites.gr & dmgenes.gr with this sample_match
         #
         pair_dmsites.gr <- dmsites.gr[GenomicRanges::values(dmsites.gr)$comparison%in%sample_match]
         pair_dmgenes.gr <- dmgenes.gr[GenomicRanges::values(dmgenes.gr)$comparison%in%sample_match]
-        message(paste('... comparing ',sample1,' & ',sample2,' ...',sep=''))
         # subset the mrobj with current sample_match 
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
         pair_meth       <- unite(pair_mrobj,destrand=TRUE)
         # calc methylation level
-	#
+        #
         p_meth          <- round(percMethylation(pair_meth,rowids=FALSE,
                                                  save.txt=FALSE),2)
         pair_p_meth     <- cbind(pair_meth,p_meth)
         pair_p_meth.gr  <- as(pair_p_meth,'GRanges')
         # identify scd sites in each gene
-	#
+        #
         match                 <- findOverlaps(pair_dmgenes.gr,pair_p_meth.gr)
         sub_pair_p_meth.gr    <- pair_p_meth.gr[subjectHits(match)]
         sub_pair_dmgenes.gr   <- pair_dmgenes.gr[queryHits(match)]
@@ -77,15 +78,15 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
         meth_dmg_comb['is.dm']                    <- FALSE
         meth_dmg_comb[pair_dmsites_index,'is.dm'] <- TRUE
         # save
-	#
-	meth_dmg_comb<- meth_dmg_comb[colSums(! is.na(meth_dmg_comb))>0]
+        #
+        meth_dmg_comb <- meth_dmg_comb[colSums(! is.na(meth_dmg_comb))>0]
         write.table(meth_dmg_comb,
                     file=(paste(sample_match,'show_dmsg.txt',sep='_')),
-                    sep='\t',row.names=FALSE)
+                    sep='\t',row.names=FALSE,quote=FALSE)
         # split the dataframe
-	#
-	splitter     <- c('gene_Dbxref','gene_ID','gene_Name','gene_gene')
-	splitter     <- splitter[splitter%in%names(meth_dmg_comb)][1]
+        #
+        splitter     <- c('gene_ID','gene_Name','gene_gene')
+        splitter     <- splitter[splitter%in%names(meth_dmg_comb)][1]
         grouped      <- meth_dmg_comb%>%group_by_(.dots=splitter)
         out          <- split(grouped,grouped[splitter])
         # plot heatmap for each dmgene
@@ -109,10 +110,9 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
             }
         }
         dev.off()
-	return(meth_dmg_comb)
+        return(meth_dmg_comb)
     })
-    names(show_dmsg.df) = sample_match_list
-
+    names(show_dmsg.df) <- sample_match_list
     message('... show_dmsg() finished ...')
     return(show_dmsg.df)
 }

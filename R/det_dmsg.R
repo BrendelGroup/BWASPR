@@ -1,10 +1,11 @@
 #' det_dmsg()
-#' This function will get a list of genes with diff methylated CpG sites
+#'   This function generates list of differentially methylated CpG sites and the
+#'   corresponding genes, as determined by application of methylKit functions.
 #'
 #' @param mrobj A methylRaw object or a methylRawList object.
 #' @param genome_ann Genome annotation returned by get_genome_annotation()
-#' @param threshold cutoff for percent methylation difference, default threshold = 0.25
-#' @param qvalue cutoff for q-value, defualt q-value = 0.05
+#' @param threshold Cutoff for percent methylation difference, default threshold = 25.0
+#' @param qvalue Cutoff for q-value, defualt q-value = 0.01
 #' @param mc.cores Integer denoting how many cores should be used for parallel
 #'   diffential methylation calculations
 #' @param outfile1 File name to which diff sites are written
