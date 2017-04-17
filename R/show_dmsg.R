@@ -5,6 +5,8 @@
 #' @param dmsg A list containing GRanges objects dmsites and dmgenes returned by
 #'   det_dmsg()
 #' @param min.nsites Minimal number of msites per genes
+#' @param destrand methylKit::unite() parameter; default: FALSE.
+#'   destrand=TRUE combines CpG methylation calls from both strands
 #' 
 #' @return A data frame
 #' 
@@ -30,7 +32,7 @@
 #'
 #' @export
 
-show_dmsg <- function(mrobj,dmsg,min.nsites=2){
+show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=TRUE){
     message('... show_dmsg() ...')
     # load dmsites and dmgenes and sample_match_list
     dmsites.gr          <- do.call("c", dmsg$dmsites)
@@ -49,7 +51,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2){
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
-        pair_meth       <- unite(pair_mrobj,destrand=TRUE)
+        pair_meth       <- unite(pair_mrobj,destrand=destrand)
         # calc methylation level
         #
         p_meth          <- round(percMethylation(pair_meth,rowids=FALSE,
