@@ -3,23 +3,27 @@
 \name{show_dmsg}
 \alias{show_dmsg}
 \title{show_dmsg() 
-This function will plot heatmap of methylation level of sites in dmgenes}
+  This function generates will plot heatmaps of methylation level of sites in dmgenes}
 \usage{
-show_dmsg(mrobj, dmsg, min.nsites = 2)
+show_dmsg(mrobj, dmsg, min.nsites = 2, destrand = TRUE)
 }
 \arguments{
 \item{mrobj}{A methyRaw object or a methyRawList object}
 
-\item{dmsg}{A list contains dmsites and dmgenes returned by det_dmsg()}
+\item{dmsg}{A list containing GRanges objects dmsites and dmgenes returned by
+det_dmsg()}
 
-\item{min.nsites}{minimal number of msites per genes}
+\item{min.nsites}{Minimal number of msites per genes}
+
+\item{destrand}{methylKit::unite() parameter; default: FALSE.
+destrand=TRUE combines CpG methylation calls from both strands}
 }
 \value{
-MISSING - PROBABLY SHOULD RETURN data frame
+A data frame
 }
 \description{
 show_dmsg() 
-This function will plot heatmap of methylation level of sites in dmgenes
+  This function generates will plot heatmaps of methylation level of sites in dmgenes
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

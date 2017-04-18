@@ -3,22 +3,27 @@
 \name{det_dmsg}
 \alias{det_dmsg}
 \title{det_dmsg()
-This function will get a list of genes with diff methylated CpG sites}
+  This function generates list of differentially methylated CpG sites and the
+  corresponding genes, as determined by application of methylKit functions.}
 \usage{
 det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01, mc.cores = 1,
-  outfile1 = "methyl_dmsites.txt", outfile2 = "methyl_dmgenes.txt")
+  destrand = TRUE, outfile1 = "methyl_dmsites.txt",
+  outfile2 = "methyl_dmgenes.txt")
 }
 \arguments{
 \item{mrobj}{A methylRaw object or a methylRawList object.}
 
 \item{genome_ann}{Genome annotation returned by get_genome_annotation()}
 
-\item{threshold}{cutoff for percent methylation difference, default threshold = 0.25}
+\item{threshold}{Cutoff for percent methylation difference, default threshold = 25.0}
 
-\item{qvalue}{cutoff for q-value, defualt q-value = 0.05}
+\item{qvalue}{Cutoff for q-value, defualt q-value = 0.01}
 
 \item{mc.cores}{Integer denoting how many cores should be used for parallel
 diffential methylation calculations}
+
+\item{destrand}{methylKit::unite() parameter; default: FALSE.
+destrand=TRUE combines CpG methylation calls from both strands.}
 
 \item{outfile1}{File name to which diff sites are written}
 
@@ -29,7 +34,8 @@ A Granges object that contains a list of genes that have diff methylated C sites
 }
 \description{
 det_dmsg()
-This function will get a list of genes with diff methylated CpG sites
+  This function generates list of differentially methylated CpG sites and the
+  corresponding genes, as determined by application of methylKit functions.
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

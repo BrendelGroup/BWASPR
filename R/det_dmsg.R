@@ -8,6 +8,8 @@
 #' @param qvalue Cutoff for q-value, defualt q-value = 0.01
 #' @param mc.cores Integer denoting how many cores should be used for parallel
 #'   diffential methylation calculations
+#' @param destrand methylKit::unite() parameter; default: FALSE.
+#'   destrand=TRUE combines CpG methylation calls from both strands.
 #' @param outfile1 File name to which diff sites are written
 #' @param outfile2 File name to which diff genes are written
 #'
@@ -33,6 +35,7 @@
 #' @export
 
 det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
+                     destrand=TRUE,
                      outfile1="methyl_dmsites.txt",
                      outfile2="methyl_dmgenes.txt"){
     sample_list <- getSampleID(mrobj)
@@ -54,7 +57,7 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
                                  sample.ids=pair_samples,
                                  treatment=pair_treatments
                                 )
-        meth <- unite(pair_mrobj,destrand=TRUE)
+        meth <- unite(pair_mrobj,destrand=destrand)
         meth@treatment=c(0,1)
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
