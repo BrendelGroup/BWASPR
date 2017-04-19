@@ -99,7 +99,8 @@ explore_dmsg <- function(mrobj,genome_ann,show_dmsg){
 	# order the genes by diff_meth_10kb
         summary <- summary[order(- summary$diff_meth_10kb),]
         write.table(summary, 
-                    paste(comparison,'explore_dmsg.txt',sep='_'),sep='\t')
+                    paste(comparison,'explore_dmsg.txt',sep='_'),sep='\t',
+                          quote=FALSE)
     })
     message('... explore_dmsg finished ...')
 }

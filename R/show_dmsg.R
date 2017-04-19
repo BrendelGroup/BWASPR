@@ -13,7 +13,7 @@
 #' @importFrom methylKit percMethylation reorganize unite
 #' @importFrom GenomicRanges findOverlaps values
 #' @importFrom gplots heatmap.2 greenred
-#' @importFrom utils write.table 
+#  @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
 #' @importFrom dplyr group_by_ %>%
 #'
@@ -21,18 +21,21 @@
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+#'   samplelist <- list("forager","nurse")
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
+#'                        sample=samplelist,replicate=c(0),
 #'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- det_dmsg(AmHE,genome_ann,
-#'                         threshold=25.0,qvalue=0.01,mc.cores=4,
-#'                         outfile1="AmHE-dmsites.txt", 
-#'                         outfile2="AmHE-dmgenes.txt")
-#'   show_dmsg <- show_dmsg(AmHE,meth_diff)
+#'   dmsgList <- det_dmsg(AmHE,genome_ann,
+#'                        threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
+#'                        outfile1="AmHE-dmsites.txt", 
+#'                        outfile2="AmHE-dmgenes.txt")
+#'   show_dmsg <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
+#'                          outflabel="Am_HE")
 #'
 #' @export
 
-show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=TRUE){
+show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
     message('... show_dmsg() ...')
     # load dmsites and dmgenes and sample_match_list
     dmsites.gr          <- do.call("c", dmsg$dmsites)
@@ -82,9 +85,11 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=TRUE){
         # save
         #
         meth_dmg_comb <- meth_dmg_comb[colSums(! is.na(meth_dmg_comb))>0]
-        write.table(meth_dmg_comb,
-                    file=(paste(sample_match,'show_dmsg.txt',sep='_')),
-                    sep='\t',row.names=FALSE,quote=FALSE)
+        outfile <- paste("dmg",outflabel,sep="-")
+        outfile <- paste(outfile,sample_match,sep="_")
+        wtoutfile <- paste(outfile,"details.txt",sep="_")
+        write.table(meth_dmg_comb, file=wtoutfile,
+                    sep="\t", row.names=FALSE, quote=FALSE)
         # split the dataframe
         #
         splitter     <- c('gene_ID','gene_Name','gene_gene')
@@ -93,11 +98,13 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=TRUE){
         out          <- split(grouped,grouped[splitter])
         # plot heatmap for each dmgene
         #
-        pdf(paste(sample_match,'.pdf',sep=''))
+        phoutfile <- paste(outfile,"heatmaps.pdf",sep="_")
+        ##pdf(paste(sample_match,'.pdf',sep=''))
+        pdf(phoutfile)
         for (i in out) {
             if (dim(i)[1] >= min.nsites) {
                 plot <- as.matrix(i[,c(sample1,sample2)])
-                # make sure that there are difference to show in the heatmap:
+                # make sure that there are differences to show in the heatmap:
                 if (! all(plot[1] == plot)) {
                     heatmap.2(plot, 
                               margins=c(10,10),
@@ -105,7 +112,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=TRUE){
                               Rowv=FALSE,
                               col=greenred(10),
                               trace='none',
-                              main=paste('msites@gene',unique(i[splitter]),sep=''),
+                              main=paste("Common sites",unique(i[splitter]),sep=" "),
                               srtCol=45,
                               RowSideColors=as.character(as.numeric(i$is.dm)))
                 }

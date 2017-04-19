@@ -5,7 +5,7 @@
 \title{show_dmsg() 
   This function generates will plot heatmaps of methylation level of sites in dmgenes}
 \usage{
-show_dmsg(mrobj, dmsg, min.nsites = 2, destrand = TRUE)
+show_dmsg(mrobj, dmsg, min.nsites = 2, destrand = FALSE, outflabel = "")
 }
 \arguments{
 \item{mrobj}{A methyRaw object or a methyRawList object}
@@ -29,13 +29,16 @@ show_dmsg()
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
+  samplelist <- list("forager","nurse")
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
+                       sample=samplelist,replicate=c(0),
                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
-  meth_diff <- det_dmsg(AmHE,genome_ann,
-                        threshold=25.0,qvalue=0.01,mc.cores=4,
-                        outfile1="AmHE-dmsites.txt", 
-                        outfile2="AmHE-dmgenes.txt")
-  show_dmsg <- show_dmsg(AmHE,meth_diff)
+  dmsgList <- det_dmsg(AmHE,genome_ann,
+                       threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
+                       outfile1="AmHE-dmsites.txt", 
+                       outfile2="AmHE-dmgenes.txt")
+  show_dmsg <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
+                         outflabel="Am_HE")
 
 }

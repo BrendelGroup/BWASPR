@@ -26,7 +26,7 @@
 
 
 annotate_methylome <- function(mrobj,
-                               genome_ann,destrand=TRUE,
+                               genome_ann,destrand=FALSE,
                                outfile="methylome_ann.txt"
                               ){
     # ... unite all the methlRawList object into a methylBase object and calculate

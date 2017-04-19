@@ -12,8 +12,6 @@ Description: The BWASP workflow for BS-seq data analysis produces methylation
 Depends: R (>= 3.3.2)
 Imports:
    BiocGenerics,
-   circlize,
-   ComplexHeatmap,
    dplyr,
    genomation,
    GenomicRanges,
