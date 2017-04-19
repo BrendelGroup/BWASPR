@@ -5,7 +5,7 @@
 \title{annotate_methylome()
 This function annotates the methylome with different genomic features (e.g. genes, exon, promoter, etc.)}
 \usage{
-annotate_methylome(mrobj, genome_ann, destrand = TRUE,
+annotate_methylome(mrobj, genome_ann, destrand = FALSE,
   outfile = "methylome_ann.txt")
 }
 \arguments{
