@@ -17,6 +17,8 @@ det_dmsg()}
 
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands}
+
+\item{outflabel}{A string to identify the study in the output file}
 }
 \value{
 A data frame
