@@ -38,7 +38,7 @@ show_dmsg()
                        threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
                        outfile1="AmHE-dmsites.txt", 
                        outfile2="AmHE-dmgenes.txt")
-  show_dmsg <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
-                         outflabel="Am_HE")
+  dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
+                      outflabel="Am_HE")
 
 }
