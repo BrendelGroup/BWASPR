@@ -30,8 +30,8 @@
 #'                        threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
 #'                        outfile1="AmHE-dmsites.txt", 
 #'                        outfile2="AmHE-dmgenes.txt")
-#'   show_dmsg <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
-#'                          outflabel="Am_HE")
+#'   dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
+#'                       outflabel="Am_HE")
 #'
 #' @export
 
@@ -42,7 +42,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
     dmgenes.gr          <- do.call("c", dmsg$dmgenes)
     sample_match_list   <- as.list(unique(as.character(dmgenes.gr$comparison)))
     # analyze each sample_match    
-    show_dmsg.df <- lapply(sample_match_list, function(sample_match){
+    dmgprp <- lapply(sample_match_list, function(sample_match){
         sample1         <- unlist(strsplit(sample_match,'\\.'))[1]
         sample2         <- unlist(strsplit(sample_match,'\\.'))[3]
         message(paste('... comparing ',sample1,' & ',sample2,' ...',sep=''))
@@ -121,7 +121,8 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
         dev.off()
         return(meth_dmg_comb)
     })
-    names(show_dmsg.df) <- sample_match_list
+    names(dmgprp) <- sample_match_list
+
     message('... show_dmsg() finished ...')
-    return(show_dmsg.df)
+    return(dmgprp)
 }
