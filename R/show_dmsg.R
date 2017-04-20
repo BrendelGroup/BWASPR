@@ -7,6 +7,7 @@
 #' @param min.nsites Minimal number of msites per genes
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands
+#' @param outflabel A string to identify the study in the output file
 #' 
 #' @return A data frame
 #' 
