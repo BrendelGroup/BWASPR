@@ -67,7 +67,9 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,outflabel="") {
         # calc a set of parameters for each gene
         #
         summary <- sites_gene %>% group_by(gene_ID) %>%
-            summarise(gwidth = round(mean(gene_width),2),
+            summarise(glink = paste("https://www.ncbi.nlm.nih.gov/gene/?term",
+                                    unique(gene_Name),sep="="),
+                      gwidth = round(mean(gene_width),2),
                       nbrsites = n(),
                       nbrper10kb = round((nbrsites/gwidth)*10000,2),
                       pmsum = round(sum(perc_meth),2),
@@ -78,7 +80,8 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,outflabel="") {
         #
         summary <- summary[order(- summary$pmpernucl),]
         summary <- subset(summary, select = -c(pmsum))
-        colnames(summary) <- c("gene_ID","gwidth","#Sites","#per10Kb","%perSite","%pNucl")
+        colnames(summary) <- c("gene_ID","gene_link","gwidth",
+                               "#Sites","#per10Kb","%perSite","%pNucl")
         outfile <- paste("ogl",outflabel,sep="-")
         outfile <- paste(outfile,sample,sep="_")
         wtoutfile <- paste(outfile,"txt",sep=".")
@@ -99,7 +102,9 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,outflabel="") {
         sites['sample2'] <- sites[sample2]
         # calc a set of parameters for each gene
         summary <- sites %>% group_by(gene_ID) %>%
-            summarise(gwidth = round(mean(gene_width),2),
+            summarise(glink = paste("https://www.ncbi.nlm.nih.gov/gene/?term",
+                                    unique(gene_Name),sep="="),
+                      gwidth = round(mean(gene_width),2),
                       nbrsites = n(),
                       nbrper10kb = round((nbrsites/gwidth)*10000,2),
                       nbrdmsites = sum(is.dm),
@@ -110,7 +115,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,outflabel="") {
                      )
         # order the genes by admpernucl
         summary <- summary[order(- summary$admpernucl),]
-        colnames(summary) <- c("gene_ID","gwidth","#Sites","#per10Kb",
+        colnames(summary) <- c("gene_ID","gene_link","gwidth","#Sites","#per10Kb",
                                "#dmSites","#dmsp10kb","%dmSites","ADMpSite","ADMpNucl")
         outfile <- paste("ogl",outflabel,sep="-")
         outfile <- paste(outfile,comparison,sep="_")
