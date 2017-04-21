@@ -43,7 +43,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
     dmgenes.gr          <- do.call("c", dmsg$dmgenes)
     sample_match_list   <- as.list(unique(as.character(dmgenes.gr$comparison)))
     # analyze each sample_match    
-    dmgprp <- lapply(sample_match_list, function(sample_match){
+    dmgprp <- lapply(sample_match_list, function(sample_match) {
         sample1         <- unlist(strsplit(sample_match,'\\.'))[1]
         sample2         <- unlist(strsplit(sample_match,'\\.'))[3]
         message(paste('... comparing ',sample1,' & ',sample2,' ...',sep=''))

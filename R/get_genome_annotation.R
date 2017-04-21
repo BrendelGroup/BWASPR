@@ -21,7 +21,7 @@
 #' @export
 
 
-get_genome_annotation <- function(inputdf){
+get_genome_annotation <- function(inputdf) {
     # read the directory of genome info from inputdf
     GFF3DIR               <- inputdf[inputdf$Variable == 'SPECIESGFF3DIR', "Value"]
     genelist              <- paste(GFF3DIR,inputdf[inputdf$Variable == 'GENELISTGFF3', "Value"],sep="/")

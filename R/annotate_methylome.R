@@ -28,7 +28,7 @@
 annotate_methylome <- function(mrobj,
                                genome_ann,destrand=FALSE,
                                outfile="methylome_ann.txt"
-                              ){
+                              ) {
     # ... unite all the methlRawList object into a methylBase object and calculate
     #   the percentage methylation scores:
     #
@@ -38,7 +38,7 @@ annotate_methylome <- function(mrobj,
     # ... annotate the methylome with generic genome features as provided by
     #   genome_ann and add respective columns to meth@.Data:
     #
-    for (feature in names(genome_ann)){
+    for (feature in names(genome_ann)) {
         vname <- paste(feature,"ann",sep="_")
         assign(vname,
                annotateWithFeature(as(meth,'GRanges'),
@@ -57,7 +57,7 @@ annotate_methylome <- function(mrobj,
                          select=c('chr','start','end','strand',names(genome_ann))
                         )
     methylome_ann <- cbind(perc_meth,slctddata)
-    if (outfile != ""){
+    if (outfile != "") {
         write.table(methylome_ann,file=outfile,sep='\t',row.names=FALSE,
                     quote=FALSE)
     }
