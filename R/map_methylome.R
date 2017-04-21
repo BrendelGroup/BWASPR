@@ -42,7 +42,7 @@
 ################################################################################
 map_methylome <- function(studymk,slabel,studymc,clabel,
                           genome_ann,species,gnmsize,UTRflag,
-                          outfile=""){
+                          outfile="") {
 
     if (outfile != "") {
         sink(outfile)
@@ -199,7 +199,7 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     slabel.SitesInExonRegions.number             <- length(slabel.exonoverlap.gr)
     slabel.SitesInNcExonRegions.number           <- length(slabel.ncexonoverlap.gr)
     slabel.SitesInCDSRegions.number              <- length(slabel.CDSoverlap.gr)
-    if (UTRflag == 1){
+    if (UTRflag == 1) {
         slabel.SitesInfiveprimeUTRRegions.number     <- length(slabel.fiveprimeUTRoverlap.gr)
         slabel.SitesInthreeprimeUTRRegions.number    <- length(slabel.threeprimeUTRoverlap.gr)
     }

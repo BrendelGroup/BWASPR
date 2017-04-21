@@ -22,7 +22,7 @@
 #'
 #' @export
 
-setup_BWASPR <- function(datafile,parfile){
+setup_BWASPR <- function(datafile,parfile) {
     message("... setting up BWASPR based on your data and parameter files ...")
 
     dfiles <- read.csv(datafile, sep="\t", skip=0, header=FALSE,

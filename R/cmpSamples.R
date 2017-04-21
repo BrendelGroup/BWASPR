@@ -26,7 +26,7 @@
 #'
 #' @export
 
-cmpSamples <- function(mrobj,destrand=FALSE,plotfile=""){
+cmpSamples <- function(mrobj,destrand=FALSE,plotfile="") {
     message("... comparing samples ..")
 
     mbobj <- unite(mrobj,destrand=destrand)

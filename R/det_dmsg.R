@@ -37,7 +37,8 @@
 det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
                      destrand=FALSE,
                      outfile1="methyl_dmsites.txt",
-                     outfile2="methyl_dmgenes.txt"){
+                     outfile2="methyl_dmgenes.txt") {
+    message('... det_dmsg() ...')
     sample_list <- getSampleID(mrobj)
     treatment_list <- getTreatment(mrobj)
     genes <- genome_ann$gene
@@ -61,12 +62,14 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         meth@treatment=c(0,1)
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
+        message(paste("... comparison: ",pairname," ...",sep=""))
         pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
         difsites <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
         gr <- as(difsites,"GRanges")
         if (length(gr) > 0) {
             S4Vectors::mcols(gr)$comparison <- pairname
         }
+        message("... done ...")
         return(gr)
        }
        )
@@ -98,12 +101,13 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         return(list('dmgenes' = GRanges(),
                     'dmsites' = dmsites.gr))
     }
-    if (outfile2 != ''){
+    if (outfile2 != '') {
         dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
         dmgenes.df <- BiocGenerics::as.data.frame(dmgenes)
         write.table(dmgenes.df,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
     }
 
+    message('... det_dmsg() finished ...')
     return(list('dmgenes' = dmgenes.gr,
                 'dmsites' = dmsites.gr))
 }

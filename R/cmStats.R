@@ -24,7 +24,7 @@
 #'
 #' @export
 
-cmStats <- function(mrobj,covlist=c(10),outfile="",plotfile=""){
+cmStats <- function(mrobj,covlist=c(10),outfile="",plotfile="") {
     message("... calculating sample-wide coverage and methylation statistics ...")
 
     if (outfile != "") {

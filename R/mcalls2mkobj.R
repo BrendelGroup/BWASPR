@@ -36,7 +36,7 @@
 
 mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
                          replicate=c(1:20),type="CpGhsm",mincov=1,
-                         assembly="unknown"){
+                         assembly="unknown") {
     message("... loading mc objects ..")
 
     if (species != "all") {
