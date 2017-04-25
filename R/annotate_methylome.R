@@ -5,6 +5,8 @@
 #' @param genome_ann A list of GRanges objects that contain genome annotation. 
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands
+#' @param mc.cores Integer denoting how many cores should be used for parallel
+#'   diffential methylation calculations
 #' @param outfile If specified as other than "", the result is saved in the
 #'   specified file. 
 #'
@@ -20,19 +22,20 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles)
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
-#'   annotate_methylome(AmHE,genome_ann,outfile="AmHE_methylome_ann.txt")
+#'   annotate_methylome(AmHE,genome_ann,mc.cores=4,
+#'                      outfile="AmHE_methylome_ann.txt")
 #'
 #' @export
 
 
 annotate_methylome <- function(mrobj,
-                               genome_ann,destrand=FALSE,
+                               genome_ann,destrand=FALSE,mc.cores=mc.cores,
                                outfile="methylome_ann.txt"
                               ) {
     # ... unite all the methlRawList object into a methylBase object and calculate
     #   the percentage methylation scores:
     #
-    meth      <- unite(mrobj,destrand=destrand)
+    meth      <- unite(mrobj,destrand=destrand,mc.cores=mc.cores)
     perc_meth <- round(percMethylation(meth,rowids=FALSE,save.txt=FALSE),2)
 
     # ... annotate the methylome with generic genome features as provided by

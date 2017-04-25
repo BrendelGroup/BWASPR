@@ -6,13 +6,16 @@
 This function will methylKit::unite() input samples and compare
 them using methylKit::getCorrelation() and methylKit::PCASamples.}
 \usage{
-cmpSamples(mrobj, destrand = FALSE, plotfile = "")
+cmpSamples(mrobj, destrand = FALSE, mc.cores = 1, plotfile = "")
 }
 \arguments{
 \item{mrobj}{A methylRaw object as returned by methylKit::unite()}
 
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands.}
+
+\item{mc.cores}{Integer denoting how many cores should be used for parallel
+diffential methylation calculations}
 
 \item{plotfile}{If specified other than the default "", then plots
 are saved in PDF file "plotfile".pdf; otherwise either no plots are
@@ -34,6 +37,6 @@ them using methylKit::getCorrelation() and methylKit::PCASamples.
                        sample="all",replicate=c(0),
                        type="CpGhsm", mincov=1,
                        assembly="Amel-4.5")
-  cmpSamples(AmHE,destrand=TRUE,plotfile="myplots")
+  cmpSamples(AmHE,destrand=TRUE,mc.cores=4,plotfile="myplots")
 
 }

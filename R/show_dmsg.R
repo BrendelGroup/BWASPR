@@ -4,9 +4,16 @@
 #' @param mrobj A methyRaw object or a methyRawList object
 #' @param dmsg A list containing GRanges objects dmsites and dmgenes returned by
 #'   det_dmsg()
-#' @param min.nsites Minimal number of msites per genes
+#' @param min.nsites Required minimal number of msites in a gene for the gene
+#'   to be displayed in the heatmap pdf
+#' @param max.nsites Required maximal number of msites in a gene for the gene
+#'   to be displayed in the heatmap pdf
+#' @param min.pdmsites Required minimal percent of dmsites among the msites in
+#'   a gene for the gene to be displayed in the heatmap pdf
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands
+#' @param mc.cores Integer denoting how many cores should be used for parallel
+#'   diffential methylation calculations
 #' @param outflabel A string to identify the study in the output file
 #' 
 #' @return A data frame
@@ -31,12 +38,14 @@
 #'                        threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
 #'                        outfile1="AmHE-dmsites.txt", 
 #'                        outfile2="AmHE-dmgenes.txt")
-#'   dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
-#'                       outflabel="Am_HE")
+#'   dmgprp <- show_dmsg(AmHE,dmsgList,destrand=TRUE,
+#'                       min.nsites=2,max.nsites=60,min.pdmsites=10,
+#'                       mc.cores=4,outflabel="Am_HE")
 #'
 #' @export
 
-show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
+show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
+                      min.pdmsites=10,mc.cores=1,outflabel="") {
     message('... show_dmsg() ...')
     # load dmsites and dmgenes and sample_match_list
     dmsites.gr          <- do.call("c", dmsg$dmsites)
@@ -55,7 +64,7 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
-        pair_meth       <- unite(pair_mrobj,destrand=destrand)
+        pair_meth       <- unite(pair_mrobj,destrand=destrand,mc.cores=mc.cores)
         # calc methylation level
         #
         p_meth          <- round(percMethylation(pair_meth,rowids=FALSE,
@@ -102,9 +111,11 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
         phoutfile <- paste(outfile,"heatmaps.pdf",sep="_")
         ##pdf(paste(sample_match,'.pdf',sep=''))
         pdf(phoutfile)
-        for (i in out) {
-            if (dim(i)[1] >= min.nsites) {
-                plot <- as.matrix(i[,c(sample1,sample2)])
+        lapply(out,function(g) {
+            nsites <- dim(g)[1]
+            pdmsites <- 100 * sum(g$is.dm,na.rm=TRUE) / nsites
+            if (nsites >= min.nsites  &  nsites <= max.nsites  &  pdmsites >= min.pdmsites) {
+                plot <- as.matrix(g[,c(sample1,sample2)])
                 # make sure that there are differences to show in the heatmap:
                 if (! all(plot[1] == plot)) {
                     heatmap.2(plot, 
@@ -113,12 +124,12 @@ show_dmsg <- function(mrobj,dmsg,min.nsites=2,destrand=FALSE,outflabel="") {
                               Rowv=FALSE,
                               col=greenred(10),
                               trace='none',
-                              main=paste("Common sites",unique(i[splitter]),sep=" "),
+                              main=paste("Common sites",unique(g[splitter]),sep=" "),
                               srtCol=45,
-                              RowSideColors=as.character(as.numeric(i$is.dm)))
+                              RowSideColors=as.character(as.numeric(g$is.dm)))
                 }
             }
-        }
+        })
         dev.off()
         return(meth_dmg_comb)
     })

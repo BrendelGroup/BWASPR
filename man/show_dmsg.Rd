@@ -5,7 +5,8 @@
 \title{show_dmsg() 
   This function generates will plot heatmaps of methylation level of sites in dmgenes}
 \usage{
-show_dmsg(mrobj, dmsg, min.nsites = 2, destrand = FALSE, outflabel = "")
+show_dmsg(mrobj, dmsg, destrand = FALSE, min.nsites = 2, max.nsites = 60,
+  min.pdmsites = 10, mc.cores = 1, outflabel = "")
 }
 \arguments{
 \item{mrobj}{A methyRaw object or a methyRawList object}
@@ -13,10 +14,20 @@ show_dmsg(mrobj, dmsg, min.nsites = 2, destrand = FALSE, outflabel = "")
 \item{dmsg}{A list containing GRanges objects dmsites and dmgenes returned by
 det_dmsg()}
 
-\item{min.nsites}{Minimal number of msites per genes}
-
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands}
+
+\item{min.nsites}{Required minimal number of msites in a gene for the gene
+to be displayed in the heatmap pdf}
+
+\item{max.nsites}{Required maximal number of msites in a gene for the gene
+to be displayed in the heatmap pdf}
+
+\item{min.pdmsites}{Required minimal percent of dmsites among the msites in
+a gene for the gene to be displayed in the heatmap pdf}
+
+\item{mc.cores}{Integer denoting how many cores should be used for parallel
+diffential methylation calculations}
 
 \item{outflabel}{A string to identify the study in the output file}
 }
@@ -40,7 +51,8 @@ show_dmsg()
                        threshold=25.0,qvalue=0.01,mc.cores=4,destrand=TRUE,
                        outfile1="AmHE-dmsites.txt", 
                        outfile2="AmHE-dmgenes.txt")
-  dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=2,destrand=TRUE,
-                      outflabel="Am_HE")
+  dmgprp <- show_dmsg(AmHE,dmsgList,destrand=TRUE,
+                      min.nsites=2,max.nsites=60,min.pdmsites=10,
+                      mc.cores=4,outflabel="Am_HE")
 
 }
