@@ -5,7 +5,7 @@
 \title{annotate_methylome()
 This function annotates the methylome with different genomic features (e.g. genes, exon, promoter, etc.)}
 \usage{
-annotate_methylome(mrobj, genome_ann, destrand = FALSE,
+annotate_methylome(mrobj, genome_ann, destrand = FALSE, mc.cores = mc.cores,
   outfile = "methylome_ann.txt")
 }
 \arguments{
@@ -15,6 +15,9 @@ annotate_methylome(mrobj, genome_ann, destrand = FALSE,
 
 \item{destrand}{methylKit::unite() parameter; default: FALSE.
 destrand=TRUE combines CpG methylation calls from both strands}
+
+\item{mc.cores}{Integer denoting how many cores should be used for parallel
+diffential methylation calculations}
 
 \item{outfile}{If specified as other than "", the result is saved in the
 specified file.}
@@ -32,6 +35,7 @@ This function annotates the methylome with different genomic features (e.g. gene
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles)
   genome_ann <- get_genome_annotation(myfiles$parameters)
-  annotate_methylome(AmHE,genome_ann,outfile="AmHE_methylome_ann.txt")
+  annotate_methylome(AmHE,genome_ann,mc.cores=4,
+                     outfile="AmHE_methylome_ann.txt")
 
 }
