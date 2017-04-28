@@ -10,7 +10,7 @@
 #'   fiveprimeUTRunique,threeprimeUTRnotCDS,threeprimeUTRunique,ncexon
 #'
 #' @importFrom genomation gffToGRanges
-#' @importFrom GenomicRanges setdiff
+#' @importFrom GenomicRanges setdiff GRanges
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -74,6 +74,13 @@ get_genome_annotation <- function(inputdf) {
         } else {
             threeprimeUTRunique.gr <- threeprimeUTRnotCDS.gr;
         }
+    }
+    else {	# return empty GRanges if there are no UTR annotations ..,
+        fiveprimeUTR.gr  <- GRanges()
+        threeprimeUTR.gr <- GRanges()
+        fiveprimeUTRunique.gr <- GRanges()
+        threeprimeUTRnotCDS.gr <- GRanges()
+        threeprimeUTRunique.gr <- GRanges()
     }
 
     # Calculate the non-coding regions of the exons
