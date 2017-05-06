@@ -30,7 +30,7 @@ cmStats <- function(mrobj,covlist=c(10),outfile="",plotfile="") {
     }
     sampledata <- getData(mrobj)
     slabel <- mrobj@sample.id
-    message("... calculating sample-wide coverage and methylation statistics for" ,slabel," ...")
+    message("... calculating sample-wide coverage and methylation statistics for " ,slabel," ...")
     sampledata$PrcntM <- 100.*sampledata$numCs/sampledata$coverage
 
     cat( sprintf( "methylKit output for \"%s\"\t- ", slabel ) )
