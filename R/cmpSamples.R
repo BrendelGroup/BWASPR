@@ -29,7 +29,7 @@
 #' @export
 
 cmpSamples <- function(mrobj,destrand=FALSE,mc.cores=1,plotfile="") {
-    message("... comparing samples ..")
+    message("... comparing samples ...")
 
     mbobj <- unite(mrobj,destrand=destrand,mc.cores=mc.cores)
     data <- getData(mbobj)
@@ -45,6 +45,6 @@ cmpSamples <- function(mrobj,destrand=FALSE,mc.cores=1,plotfile="") {
         PCASamples(mbobj, adj.lim=c(2, 2))
     }
 
-    message("... done ..")
+    message("... done ...")
     return(data)
 }

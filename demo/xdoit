@@ -1,0 +1,4 @@
+#!/bin/bash
+study=$1
+
+Rscript --default-packages=methods,datasets,utils,grDevices,graphics,stats  ../Rscript.BWASPR ${study}    2> err-${study}    > output-${study}

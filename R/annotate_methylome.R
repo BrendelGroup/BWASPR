@@ -32,6 +32,7 @@ annotate_methylome <- function(mrobj,
                                genome_ann,destrand=FALSE,mc.cores=mc.cores,
                                outfile="methylome_ann.txt"
                               ) {
+    message("... annotating the methylome ...")
     # ... unite all the methlRawList object into a methylBase object and calculate
     #   the percentage methylation scores:
     #
@@ -64,5 +65,6 @@ annotate_methylome <- function(mrobj,
         write.table(methylome_ann,file=outfile,sep='\t',row.names=FALSE,
                     quote=FALSE)
     }
+    message("... done ...")
     return(methylome_ann)
 }

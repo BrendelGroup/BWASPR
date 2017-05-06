@@ -37,7 +37,7 @@
 mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
                          replicate=c(1:20),type="CpGhsm",mincov=1,
                          assembly="unknown") {
-    message("... loading mc objects ..")
+    message("... reading *.mcalls files into methylRaw objects ...")
 
     if (species != "all") {
         inputdf <- inputdf[inputdf$Species == species,]
@@ -95,6 +95,6 @@ mcalls2mkobj <- function(inputdf,species="all",study="all",sample="all",
                       treatment = treatmentvec,
                       mincov = mincov
                      )
-    message("... done ..")
+    message("... done ...")
     return(mrobj)
 }
