@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	May 6, 2017
+#Version:	May 7, 2017
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -51,9 +51,12 @@ if (RUNload) {
 #
   speciesstudy <- paste(species,study,sep="_")
   rdatafile <- paste(speciesstudy,"RData",sep=".")
-  message(". loading previously stored image ", rdatafile, " ...")
+  message(".. loading previously stored image ", rdatafile, " ...")
   load(rdatafile)
-  message(". done ...")
+#Read the configuration file again so that the load command does not overwrite
+#  intended current settings.
+  source(configfile)
+  message(".. done ...")
 } else {
 #Create the methylKit raw objects:
 #
@@ -80,7 +83,7 @@ if (RUNcms) {
                                       cmStats(x,covlist,outfile=outfile,plotfile=plotfile)
                                      }
                 )
-  message(". done ...")
+  message(".. done ...")
 }
 ################################################################################
 
