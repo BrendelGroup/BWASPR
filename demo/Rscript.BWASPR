@@ -1,0 +1,321 @@
+#Rscript.BWASPR
+#Version:	May 6, 2017
+#Contact:	Volker Brendel (vbrendel@indiana.edu)
+#Documentation:	https://github.com/brendelgroup/BWASPR
+
+#Load required libraries and set options:
+#
+library("BWASPR")
+library("parallel")
+
+options(width=240)
+options(max.print=1000000)
+options(digits=3)
+
+
+#Read the required BWASPR .conf file to set parameters.
+#Usage example: Rscript Rscript.BWASPR Am_HE
+#  would read the configuration files Am_HE.conf
+#
+args       <- commandArgs(trailingOnly = TRUE)
+configfile <- paste(args[1],"conf",sep=".")
+source(configfile)
+
+
+#Based on the configuration file, set sum basic parameters ...
+#
+stype <- paste(type,"hsm",sep="")
+ctype <- paste(type,"scd",sep="")
+
+#... and pull out the assembly version, number of potential (CpG or RBBS) methylation
+#  sites, genome size, and status of UTR annotation (from the parameter file):
+#
+asmblv     <- infiles$parameters[infiles$parameters$Variable == "ASSEMBLYVERSION",2]
+nbrpms     <- as.numeric(infiles$parameters[infiles$parameters$Variable == "TOTALNBRPMSITES",2])
+gnmsize    <- as.numeric(infiles$parameters[infiles$parameters$Variable == "GENOMESIZE",2])
+UTRFLAGSET <- as.numeric(infiles$parameters[infiles$parameters$Variable == "UTRFLAGSET",2])
+
+
+#The RUN* logicals in the configuration file determine which parts of the
+#  workflow should be run.
+#
+
+
+### Section: Load necessary data to proceed.
+##
+#
+if (RUNload) {
+#Either read data from a previously saved workflow run or call mcalls2mkobj() to
+#  produce the required methylRawList objects. studymk contains the data for the
+#  hsm sites, while studymc contains the data for all scd sites.
+#
+  speciesstudy <- paste(species,study,sep="_")
+  rdatafile <- paste(speciesstudy,"RData",sep=".")
+  message(". loading previously stored image ", rdatafile, " ...")
+  load(rdatafile)
+  message(". done ...")
+} else {
+#Create the methylKit raw objects:
+#
+  studymk <- mcalls2mkobj(infiles$datafiles,species=species,study=study,sample=samplelist,
+                          replicate=c(0),type=stype,mincov=1,assembly=asmblv)
+  studymc <- mcalls2mkobj(infiles$datafiles,species=species,study=study,sample=samplelist,
+                          replicate=c(0),type=ctype,mincov=1,assembly=asmblv)
+}
+################################################################################
+
+
+
+### Section: Coverage and methylation statistics.
+##
+#
+if (RUNcms) {
+#Produce cms*txt and cms*.pdf files reporting on coverage and methylation statistics.
+#
+  plotfile <- paste("cms",species,sep="-")
+  plotfile <- paste(plotfile,studyLabel,sep="_")
+  message("\n.. coverage and methylation statistics for aggregat samples ...")
+  tmpN <- lapply(studymk,function(x) {plotfile <- paste(plotfile,x@sample.id,sep="_");
+                                      outfile  <- paste(plotfile,"txt",sep=".");
+                                      cmStats(x,covlist,outfile=outfile,plotfile=plotfile)
+                                     }
+                )
+  message(". done ...")
+}
+################################################################################
+
+
+
+### Section: Comparisons between replicates and samples
+##
+#
+
+if (hasreplicates & (RUNrepcms | RUNrepcrl)) {
+#Compare replicates for all samples.
+#
+  mymessage <- sprintf("\n\n  Comparison of replicates for all samples in %s study %s.\n",species,studyLabel)
+  message(mymessage)
+
+  csR <- lapply(samplelist,function(x) {
+           mkdf <- mcalls2mkobj(infiles$datafiles,species,study,sample=x,
+                                replicate=c(1:10),type=stype,mincov=1,assembly=asmblv
+                               )
+           if (is.null(mkdf)) {	# ... return if there are no replicates for a particular sample
+               return(NULL)
+           }
+
+if (RUNrepcms) {
+#Produce cms*txt and cms*.pdf files reporting on coverage and methylation statistics for
+#  all sample replicates separately.
+#
+           rplotfile <- paste("cms",species,sep="-")
+           rplotfile <- paste(rplotfile,studyLabel,sep="_")
+           message("\n.. coverage and methylation statistics for replicates ...")
+           tmpN <- lapply(mkdf,function(y) {rplotfile <- paste(rplotfile,y@sample.id,sep="_")
+                     routfile <- paste(rplotfile,"txt",sep=".")
+                     cmStats(y,covlist,outfile=routfile,plotfile=rplotfile)
+                     }
+                   )
+           message(".. done ...")
+}
+
+if (RUNrepcrl) {
+#Produce correlations between methylation levels in common sites of replicates.
+#  Output will be in crl*txt and crl*pdf files.
+#
+           outfile <- paste("crl",species,sep="-")
+           outfile <- paste(outfile,studyLabel,"rep",x,sep="_")
+           outfile <- paste(outfile,"txt",sep=".")
+           sink(outfile)
+           mymessage <- sprintf("\n.. comparing replicates of sample %s ...\n",x)
+           message(mymessage)
+           plotfile <- paste("crl",species,sep="-")
+           plotfile <- paste(plotfile,studyLabel,"rep",x,sep="_")
+           mkData <- cmpSamples(mkdf,destrand=destrand,plotfile=plotfile)
+           cat(sprintf("\nThe number of conserved sites is %6d.\n\n",dim(mkData)[1]))
+           sink()
+           message(".. done ...")
+  
+           return(mkData)
+} else {
+           return(NULL)
+}
+           }
+         )
+#csR is a list of methylRaw objects, each representing the methylKit::unite() set of
+#  sites common to all replicates of a particular sample.
+#  For details, see the *.txt output files of the above code section.
+} ### end if (hasreplicates & (RUNrepcms | RUNrepcrl))
+################################################################################
+
+
+
+### Section: Comparing aggregate data among samples
+##
+#
+
+if (RUNpwc) {
+#First, produced pairwise sample site comparisons and save the output in files
+#  pwc* (done in parallel).
+#
+  v <- c(1:length(studymk@treatment))
+  numprcINcl <- dim(combn(v,2))[2]
+  if (numprcINcl > numprc) {numprcINcl <- numprc}
+  cl <- makeCluster(numprcINcl,type="FORK",outfile="")
+  message("\n.. running pairwise comparisons ...")
+  
+  cusData <- parApply(cl, combn(v,2), 2, function (x) {
+      sample1hsm <- methylKit::getData(studymk[[x[1]]])
+      sample1scd <- methylKit::getData(studymc[[x[1]]])
+      s1l <- sampleLabels[[x[1]]]
+      sample2hsm <- methylKit::getData(studymk[[x[2]]])
+      sample2scd <- methylKit::getData(studymc[[x[2]]])
+      s2l <- sampleLabels[[x[2]]]
+      outf1 <- "pwc" 
+      outf2<- paste(s1l,s2l,sep=".vs.")
+      outfile <- paste(outf1,outf2,sep="-")
+      outfile <- paste(outfile,"txt",sep=".")
+      sink(outfile)
+      message("... comparing ", s1l, " versus ", s2l, " ...")
+      cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms)
+      sink()
+      return(cuSlist)
+    })
+  #cusData is a list of lists.  The outer list contains data for each pairwise
+  #  comparison.  These data are in the form of lists of data frames as returned
+  #  by cmpSites(): for each comparions, the data frames are
+  #    commonHSM, unique1HSM, unique2HSM,
+  #    commonSCD, unique1SCD, unique2SCD,
+  #    hsm1cSCD, unique1HSMn2SCD,
+  #    hsm2cSCD, unique2HSMn1SCD,
+  #    unique1HSM2SCD, unique2HSM1SCD.
+  #  For details, see the *.txt output files of the above code section.
+  message(".. done ...")
+}
+
+
+if (RUNagscrl) {
+#Second, produce correlations between methylation levels in common sites of
+#  ggregate samples.
+#  Output will be in crl*txt and crl*pdf files.
+#
+  plotfile <- paste("crl",species,sep="-")
+  plotfile <- paste(plotfile,studyLabel,sep="_")
+  outfile <- paste(plotfile,"txt",sep=".")
+  sink(outfile)
+  message("\n.. running aggregate sample pairwise correlations ...")
+  mymessage <- sprintf("\n... comparing aggregate type %s data for all %s samples (destrand=%s) ...",type,studyLabel,destrand)
+  message(mymessage)
+  studyData <- cmpSamples(studymk,destrand=destrand,plotfile=plotfile)
+  cat(sprintf("\nThe number of conserved sites is %6d.\n\n",dim(studyData)[1]))
+  sink()
+message(".. done ...")
+}
+################################################################################
+
+
+
+### Section: Evaluating differential methylation patterns
+##
+#
+
+if (RUNacs) {
+#Show methylation / annotation connections for sites common to all studymk
+#  samples.
+#  Output will be in acs* files.
+#
+  library(methods)
+  library(utils)
+  message("\n.. annotating conserved sites ...")
+  genome_ann <- get_genome_annotation(infiles$parameters)
+  outfile <- paste("acs",species,sep="-")
+  outfile <- paste(outfile,studyLabel,sep="_")
+  outfile <- paste(outfile,"txt",sep=".")
+  methylome_ann <- annotate_methylome(studymk,genome_ann,destrand=destrand,
+                                      outfile=outfile)
+  message(".. done ...")
+}
+
+if (RUNmmp) {
+#Determine where the hsm sites fall relative to the genome annotation features
+#  (genes, exons, etc.).
+#  Output will be in mmp* files.
+#
+  message("\n.. generate methylation to annotation maps ...")
+  tmpN <- lapply(c(1:length(sampleLabels)),function(i) {
+    sampleL  <- paste(sampleLabels[i],"hsm",sep="_")
+    controlL <- paste(sampleLabels[i],"scd",sep="_")
+    outfile  <- paste("mmp",sampleLabels[i],sep="-")
+    outfile  <- paste(outfile,"txt",sep=".")
+    tmp <- map_methylome(studymk[[i]],sampleL,studymc[[i]],controlL,genome_ann,
+                         species,gnmsize,UTRflag=UTRFLAGSET,outfile)
+    }
+    )
+  message(".. done ...")
+}
+
+
+if (RUNdmsg) {
+#Determine differentially methylated sites and genes.
+#  Output will be in dms* and dmg* files.
+#
+  message("\n.. determining differentially methylated sites and genes ...")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
+  studyhc <- mcalls2mkobj(infiles$datafiles,species,study,
+                          sample=samplelist,replicate=c(0),type=ctype,
+                          mincov=highcoverage,assembly=asmblv)
+
+  outfile1 <- paste("dms",species,sep="-")
+  outfile1 <- paste(outfile1,studyLabel,sep="_")
+  outfile1 <- paste(outfile1,"txt",sep=".")
+  outfile2 <- paste("dmg",species,sep="-")
+  outfile2 <- paste(outfile2,studyLabel,sep="_")
+  outfile2 <- paste(outfile2,"txt",sep=".")
+  dmsgList <- det_dmsg(studyhc,genome_ann,threshold,qvalue,mc.cores=numprc,
+                       destrand,outfile1,outfile2)
+  message(".. done ...")
+}
+
+
+if (RUNdmgdtls) {
+#Provide details for differentially methylated genes.
+#  Output will be in file dmg*details.txt.
+#
+  if (!RUNload & !RUNdmsg) {
+    message("ERROR: missing input.  Set RUNload=TRUE or RUNdmsg=TRUE.")
+    q()
+  }
+  outflabel <- paste(species,studyLabel,sep="_")
+  message("\n.. deriving details for differentially methylated genes ...")
+  dmgprp <- show_dmsg(studyhc,dmsgList,destrand,minNsites,maxNsites,minPdmsites,
+                      mc.cores=numprc,outflabel)
+  message(".. done ...")
+}
+
+
+if (RUNogl) {
+#Print out ordered gene lists ordered gene lists with tabulated methylation
+#  properties (files ogl*).
+#
+  if (!RUNload & !(RUNdmsg & RUNdmgdtls)) {
+    message("ERROR: missing input.  Set RUNload=TRUE or RUNdmsg=RUNdmgdtls=TRUE.")
+    q()
+  }
+  outflabel <- paste(species,studyLabel,sep="_")
+  message("\n.. printing ordered gene lists ...")
+  summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,withglink=glink,
+                            outflabel)
+  message(".. done ...")
+}
+################################################################################
+
+
+
+if (RUNsave) {
+# Save everything ... (for later restart with the load command).
+#
+  rdatafile <- paste(outflabel,"RData",sep=".")
+  save.image(file=rdatafile)
+}

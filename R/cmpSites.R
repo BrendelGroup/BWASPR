@@ -152,7 +152,7 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
     cat( sprintf( "\n" ) )
     cat( sprintf( "\n" ) )
     
-    message("... done ..")
+    message("... done ...")
     return(list(commonHSM, unique1HSM, unique2HSM,
                 commonSCD, unique1SCD, unique2SCD,
                 hsm1cSCD, unique1HSMn2SCD,
