@@ -319,6 +319,7 @@ if (RUNogl) {
 if (RUNsave) {
 # Save everything ... (for later restart with the load command).
 #
+  outflabel <- paste(species,studyLabel,sep="_")
   rdatafile <- paste(outflabel,"RData",sep=".")
   save.image(file=rdatafile)
 }
