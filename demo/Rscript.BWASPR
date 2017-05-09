@@ -245,6 +245,9 @@ if (RUNmmp) {
 #  Output will be in mmp* files.
 #
   message("\n.. generate methylation to annotation maps ...")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
   tmpN <- lapply(c(1:length(sampleLabels)),function(i) {
     sampleL  <- paste(sampleLabels[i],"hsm",sep="_")
     controlL <- paste(sampleLabels[i],"scd",sep="_")
