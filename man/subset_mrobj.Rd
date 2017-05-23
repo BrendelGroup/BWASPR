@@ -4,7 +4,8 @@
 \alias{subset_mrobj}
 \title{subset_mrobj() 
 This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info}
+and returns a List of dataframes containing the msites info summries and
+save the dataframes as tab delimited files}
 \usage{
 subset_mrobj(mrobj, region.gr, outflabel = "")
 }
@@ -21,7 +22,8 @@ A list of data frames that contains the msites info within the GRanges the user 
 \description{
 subset_mrobj() 
 This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info
+and returns a List of dataframes containing the msites info summries and
+save the dataframes as tab delimited files
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
