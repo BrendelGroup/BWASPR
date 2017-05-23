@@ -1,6 +1,7 @@
 #' subset_mrobj() 
 #' This function subsets the mrobj by the GRanges that the user provides 
-#' and returns a List of dataframes containing the msites info
+#' and returns a List of dataframes containing the msites info summries and
+#' save the dataframes as tab delimited files
 #'
 #' @param mrobj A methyRaw/methRawList object or a methyRawList object
 #' @param region.gr A Granges object that the user provieds 
@@ -11,6 +12,7 @@
 #' @importFrom GenomicRanges findOverlaps
 #' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
+#' @importFrom dplyr group_by %>% summarise
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -27,6 +29,7 @@
 subset_mrobj <- function(mrobj,region.gr,
                          outflabel="") {
     message('... subset_mrobj ...')
+    message('... \'id\' is required in region.gr ...')
     # read basic information
     #
     sample_list     <- getSampleID(mrobj)
@@ -60,8 +63,30 @@ subset_mrobj <- function(mrobj,region.gr,
         wtoutfile <- paste(outflabel,sample,"txt",sep=".")
         write.table(sites_region, wtoutfile, sep='\t',
                     row.names=FALSE, quote=FALSE)
-        return(sites_region)
-        })
+      
+        # calc a set of parameters for each gene
+        #
+        ss_summary <- sites_region %>% group_by(region_ID) %>%
+                summarise(rwidth = round(mean(region_width),2),
+                          nbrsites = n(),
+                          nbrper10kb = round((nbrsites/rwidth)*10000,2),
+                          pmsum = round(sum(perc_meth),2),
+                          pmpersite = round(pmsum/nbrsites,2),
+                          pmpernucl = round(pmsum/rwidth,2)
+                          )
+        # order the regions by pmpernucl
+        #
+        ss_summary <- ss_summary[order(- ss_summary$pmpernucl),]
+        ss_summary <- subset(ss_summary, select = -c(pmsum))
+
+        outfile <- paste("ogl",outflabel,sep="-")
+        outfile <- paste(outfile,sample,sep="_")
+        wtoutfile <- paste(outfile,"txt",sep=".")
+        write.table(ss_summary, wtoutfile, sep='\t',
+                    row.names=FALSE, quote=FALSE)
+        return(ss_summary)
+     })
+ 
        
     message('... subset_mrobj finished ...')
     names(sr_summaries) = sample_list
