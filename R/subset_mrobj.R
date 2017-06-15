@@ -13,6 +13,7 @@
 #' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
 #' @importFrom dplyr group_by %>% summarise
+#' @importFrom ggplot2 ggplot aes geom_col
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -74,16 +75,22 @@ subset_mrobj <- function(mrobj,region.gr,
                           pmpersite = round(pmsum/nbrsites,2),
                           pmpernucl = round(pmsum/rwidth,2)
                           )
-        # order the regions by pmpernucl
+        # order the regions by nbrper10kb 
         #
-        ss_summary <- ss_summary[order(- ss_summary$pmpernucl),]
+        ss_summary <- ss_summary[order(- ss_summary$nbrper10kb),]
         ss_summary <- subset(ss_summary, select = -c(pmsum))
 
-        outfile <- paste("ogl",outflabel,sep="-")
+        outfile <- paste("rnk",outflabel,sep="-")
         outfile <- paste(outfile,sample,sep="_")
+        ptoutfile <- paste(outfile,"pdf",sep=".")
         wtoutfile <- paste(outfile,"txt",sep=".")
         write.table(ss_summary, wtoutfile, sep='\t',
                     row.names=FALSE, quote=FALSE)
+        pdf(ptoutfile)
+        ss_summary$region_ID <- factor(ss_summary$region_ID,
+                                       levels=unique(as.character(ss_summary$region_ID)))
+        print(ggplot(ss_summary, aes(x=region_ID,y=nbrper10kb)) + geom_col())
+        dev.off()
         return(ss_summary)
      })
  
