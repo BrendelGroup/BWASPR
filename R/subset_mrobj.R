@@ -90,6 +90,9 @@ subset_mrobj <- function(mrobj,region.gr,
         ss_summary$region_ID <- factor(ss_summary$region_ID,
                                        levels=unique(as.character(ss_summary$region_ID)))
         print(ggplot(ss_summary, aes(x=region_ID,y=nbrper10kb)) + geom_col())
+        print(ggplot(tail(ss_summary,50), aes(x=region_ID,y=nbrper10kb)) + geom_col())
+        print(ggplot(head(ss_summary,50), aes(x=region_ID,y=nbrper10kb)) + geom_col())
+
         dev.off()
         return(ss_summary)
      })
