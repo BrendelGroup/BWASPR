@@ -22,7 +22,7 @@ configfile <- paste(args[1],"conf",sep=".")
 source(configfile)
 
 
-#Based on the configuration file, set sum basic parameters ...
+#Based on the configuration file, set some basic parameters ...
 #
 stype <- paste(type,"hsm",sep="")
 ctype <- paste(type,"scd",sep="")
