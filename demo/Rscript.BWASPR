@@ -22,7 +22,7 @@ configfile <- paste(args[1],"conf",sep=".")
 source(configfile)
 
 
-#Based on the configuration file, set sum basic parameters ...
+#Based on the configuration file, set some basic parameters ...
 #
 stype <- paste(type,"hsm",sep="")
 ctype <- paste(type,"scd",sep="")
@@ -245,6 +245,9 @@ if (RUNmmp) {
 #  Output will be in mmp* files.
 #
   message("\n.. generate methylation to annotation maps ...")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
   tmpN <- lapply(c(1:length(sampleLabels)),function(i) {
     sampleL  <- paste(sampleLabels[i],"hsm",sep="_")
     controlL <- paste(sampleLabels[i],"scd",sep="_")
@@ -319,6 +322,7 @@ if (RUNogl) {
 if (RUNsave) {
 # Save everything ... (for later restart with the load command).
 #
+  outflabel <- paste(species,studyLabel,sep="_")
   rdatafile <- paste(outflabel,"RData",sep=".")
   save.image(file=rdatafile)
 }
