@@ -2,28 +2,20 @@
 % Please edit documentation in R/rank_dmg.R
 \name{rank_dmg}
 \alias{rank_dmg}
-\title{rank_dmg() 
-This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info summries and
-save the dataframes as tab delimited files}
+\title{rank_dmg()
+This function sorts genes by different parameters and plots bar graph for demonstration}
 \usage{
-rank_dmg(mrobj, region.gr, withglink = "NCBIgene", outflabel = "")
+rank_dmg(explore_dmsg_summaries)
 }
 \arguments{
-\item{mrobj}{A methyRaw/methRawList object or a methyRawList object}
-
-\item{region.gr}{A Granges object that the user provieds}
-
-\item{outflabel}{A string to identify the output dataframe}
+\item{explore_dmsg_summaries}{A list returned by explore_dmsg()}
 }
 \value{
-A list of data frames that contains the msites info within the GRanges the user provided
+A list of data frames summarizing genes sorted by ADMpNucl
 }
 \description{
-rank_dmg() 
-This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info summries and
-save the dataframes as tab delimited files
+rank_dmg()
+This function sorts genes by different parameters and plots bar graph for demonstration
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -32,7 +24,15 @@ save the dataframes as tab delimited files
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
-  summaries <- subset_mrobj(AmHE,region.gr=genome_ann$promoter,
-                            outflabel="Am_HE_promoter")
+  dmsgList <- det_dmsg(AmHE,genome_ann,
+                       threshold=25.0,qvalue=0.01,mc.cores=4,
+                       destrand=TRUE,
+                       outfile1="AmHE-dmsites.txt", 
+                       outfile2="AmHE-dmgenes.txt")
+  dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=10,destrand=TRUE,
+                      outflabel="Am_HE")
+  explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
+                            outflabel="Am_HE")
+  rnk_summaries <- rank_dmg(explore_dmsg_summaries)
 
 }
