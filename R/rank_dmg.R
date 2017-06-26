@@ -38,7 +38,7 @@ rank_dmg <- function(explore_dmsg_summaries){
     # and plot the distribution
     #
     rnk_summaries <- lapply(comparison_list, function(comparison){
-        datai     <- pw_summaries[[comparison]]
+        data     <- pw_summaries[[comparison]]
         wtoutfile <- paste("rnk_pw_",comparison,".txt",sep="")
         ## plot the distribution of ADMpNucl
         #
