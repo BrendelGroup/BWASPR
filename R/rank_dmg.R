@@ -1,5 +1,5 @@
 #' rank_dmg()
-#' This function sorts genes by different parameters and plots bar graph for demonstration 
+#' This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration 
 #'
 #' @param explore_dmsg_summaries A list returned by explore_dmsg()
 #' 
