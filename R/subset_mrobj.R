@@ -30,8 +30,8 @@
 
 subset_mrobj <- function(mrobj,region.gr,withglink="",
                          outflabel="") {
-    message('... rank_dmg ...')
-    message('... \'id\'& \'gene_name\' is required in region.gr ...')
+    message('... subset_mrobj ...')
+    message('... \'id\' is required in region.gr ...')
     # read basic information
     #
     sample_list     <- getSampleID(mrobj)
@@ -39,7 +39,7 @@ subset_mrobj <- function(mrobj,region.gr,withglink="",
     #
     message('   ... subset individual sample ...')
     sr_summaries <- lapply(sample_list, function(sample) {
-        message(paste('      ... rank ',sample,' in interested region...',sep=''))
+        message(paste('      ... subset',sample,' in interested region...',sep=''))
         # subset the mrobj
         #
         sites             <- reorganize(mrobj,
@@ -95,7 +95,7 @@ subset_mrobj <- function(mrobj,region.gr,withglink="",
         ss_summary <- ss_summary[order(- ss_summary$nbrper10kb),]
         ss_summary <- subset(ss_summary, select = -c(pmsum))
 
-        outfile <- paste("rnk",outflabel,sep="-")
+        outfile <- paste("sub",outflabel,sep="-")
         outfile <- paste(outfile,sample,sep="_")
         ptoutfile <- paste(outfile,"pdf",sep=".")
         wtoutfile <- paste(outfile,"txt",sep=".")
