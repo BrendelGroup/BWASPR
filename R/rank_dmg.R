@@ -24,7 +24,7 @@
 #'                       outflabel="Am_HE")
 #'   explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
 #'                             outflabel="Am_HE")
-#'   rnk_summaries <- rank_dmg(explore_dmsg_summaries)
+#'   rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries)
 #'
 #' @export
  

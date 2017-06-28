@@ -3,7 +3,7 @@
 \name{rank_dmg}
 \alias{rank_dmg}
 \title{rank_dmg()
-This function sorts genes by different parameters and plots bar graph for demonstration}
+This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration}
 \usage{
 rank_dmg(explore_dmsg_summaries)
 }
@@ -15,7 +15,7 @@ A list of data frames summarizing genes sorted by ADMpNucl
 }
 \description{
 rank_dmg()
-This function sorts genes by different parameters and plots bar graph for demonstration
+This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -33,6 +33,6 @@ This function sorts genes by different parameters and plots bar graph for demons
                       outflabel="Am_HE")
   explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
                             outflabel="Am_HE")
-  rnk_summaries <- rank_dmg(explore_dmsg_summaries)
+  rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries)
 
 }

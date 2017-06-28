@@ -7,14 +7,12 @@ This function subsets the mrobj by the GRanges that the user provides
 and returns a List of dataframes containing the msites info summries and
 save the dataframes as tab delimited files}
 \usage{
-subset_mrobj(mrobj, region.gr, withglink = "", outflabel = "")
+subset_mrobj(mrobj, region.gr, outflabel = "")
 }
 \arguments{
 \item{mrobj}{A methyRaw/methRawList object or a methyRawList object}
 
 \item{region.gr}{A Granges object that the user provieds}
-
-\item{withglink}{Either NCBIgene or "" to indicate inclusion of a gene link column in the output}
 
 \item{outflabel}{A string to identify the output dataframe}
 }
@@ -34,7 +32,7 @@ save the dataframes as tab delimited files
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
-  summaries <- subset_mrobj(AmHE,region.gr=genome_ann$promoter,
+  promoter_mrobj <- subset_mrobj(AmHE,region.gr=genome_ann$promoter,
                             outflabel="Am_HE_promoter")
 
 }
