@@ -20,6 +20,7 @@ Imports:
    grDevices,
    IRanges,
    methylKit,
+   pastecs,
    sqldf,
    S4Vectors
 License: GPL-3

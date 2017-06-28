@@ -18,7 +18,8 @@
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
 #' @importFrom IRanges subsetByOverlaps
-#' @import BiocGenerics
+#  @import BiocGenerics
+#' @importFrom BiocGenerics as.data.frame
 #' @importFrom S4Vectors mcols
 #'
 #' @examples
