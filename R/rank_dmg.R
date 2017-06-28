@@ -29,7 +29,7 @@
 #' @export
  
 rank_dmg <- function(explore_dmsg_summaries){
-    message('... rank_dmsg ...')
+    message('... rank_dmg ...')
     ## read explore_dmsg_summaries
     #
     pw_summaries    <- explore_dmsg_summaries[[2]] 
