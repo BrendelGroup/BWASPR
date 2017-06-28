@@ -30,7 +30,7 @@
 
 rank_meth_gene <- function(mrobj,region.gr,withglink="NCBIgene",
                          outflabel="") {
-    message('... rank_dmg ...')
+    message('... rank_meth_gene ...')
     message('... \'id\'& \'gene_name\' is required in region.gr ...')
     # read basic information
     #
