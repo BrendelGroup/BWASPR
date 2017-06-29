@@ -1,4 +1,4 @@
-#' rank_meth_gene() 
+#' rank_mg() 
 #' This function subsets the mrobj by the GRanges that the user provides 
 #' and returns a List of dataframes containing the msites info summries and
 #' save the dataframes as tab delimited files
@@ -23,14 +23,14 @@
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
-#'   summaries <- rank_meth_gene(AmHE,region.gr=genome_ann$promoter,
-#'                             outflabel="Am_HE_promoter")
+#'   summaries <- rank_mg(AmHE,region.gr=genome_ann$gene,
+#'                             outflabel="Am_HE_gene")
 #'
 #' @export
 
-rank_meth_gene <- function(mrobj,region.gr,withglink="NCBIgene",
+rank_mg <- function(mrobj,region.gr,withglink="NCBIgene",
                          outflabel="") {
-    message('... rank_meth_gene ...')
+    message('... rank_mg ...')
     message('... \'id\'& \'gene_name\' is required in region.gr ...')
     # read basic information
     #
