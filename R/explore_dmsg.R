@@ -175,6 +175,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         return(pw_summary)
     })
 
+    names(pw_summaries) <- comparison_list
     message('... explore_dmsg finished ...')
     return(list(ss_summaries,pw_summaries))
 }
