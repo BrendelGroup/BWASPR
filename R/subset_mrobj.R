@@ -22,7 +22,7 @@
 #'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
 #'   promoter_mrobj <- subset_mrobj(AmHE,region.gr=genome_ann$promoter,
-#'                             outflabel="Am_HE_promoter")
+#'                                  outflabel="Am_HE_promoter")
 #'
 #' @export
 

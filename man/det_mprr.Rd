@@ -3,30 +3,39 @@
 \name{det_mprr}
 \alias{det_mprr}
 \title{det_mprr()
-This function generates coverage and methylation statistics for the
-  input data set.}
+  This function determines methylation rich and poor regions based on clustering
+  of methylation (hsm sites). First, the ddstats() function is used to establish
+  the distribution of distances between d-nearest neighbors.  Short distances
+  indcate clustering of hsm sites, and long distances indicate regions relatively
+  devoid of hsm sites.}
 \usage{
-det_mprr(mrobj, ddset = c(1, 5), nr2d = 10L, outfstem = "",
-  plotfile = "")
+det_mprr(mrobj, sampleL, ddset = c(1, 5), outfile = "", nr2d = 10L,
+  doplots = TRUE)
 }
 \arguments{
-\item{mrobj}{A methylRaw object}
+\item{mrobj}{A methylRaw object.}
 
-\item{outfstem}{If specified then output is printed to the specified file.}
+\item{sampleL}{Label used in output to identify the sample.}
 
-\item{plotfile}{If specified other than the default "", then plots
-are saved in PDF file "plotfile".pdf; otherwise either no plots are
-generated or the R default plot outputs are used.}
+\item{ddset}{Vector of distances; d=1 is required to detect methylation-poor
+regions; default: c(1,5)}
 
-\item{covlist}{a vector of coverage threshols; default: c(10)}
+\item{outfile}{If specified, then output is saved in the specified file name.}
+
+\item{nr2d}{integer; number of regions to display}
+
+\item{doplots}{Logical; if true, then show plots of distances}
 }
 \value{
-the coverage count for the highest threshold in covlist
+List of two data frames, recording hsm rich and poor regions.
 }
 \description{
 det_mprr()
-This function generates coverage and methylation statistics for the
-  input data set.
+  This function determines methylation rich and poor regions based on clustering
+  of methylation (hsm sites). First, the ddstats() function is used to establish
+  the distribution of distances between d-nearest neighbors.  Short distances
+  indcate clustering of hsm sites, and long distances indicate regions relatively
+  devoid of hsm sites.
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -34,6 +43,6 @@ This function generates coverage and methylation statistics for the
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-  det_mprr(AmHE[[1]],ddset=c(1,5),nr2d=10L,outfstem="Am_HE-regions",plotfile="myplots")
+  det_mprr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
 
 }
