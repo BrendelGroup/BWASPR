@@ -26,8 +26,7 @@
 #'
 #' @export
 
-subset_mrobj <- function(mrobj,region.gr,
-                         outflabel="") {
+subset_mrobj <- function(mrobj,region.gr,outflabel="") {
     message('... subset_mrobj ...')
     message('... \'id\' is required in region.gr ...')
     # read basic information
@@ -37,7 +36,7 @@ subset_mrobj <- function(mrobj,region.gr,
     #
     message('   ... subset individual sample ...')
     sr_summaries <- lapply(sample_list, function(sample) {
-        message(paste('      ... subset  ',sample,' in interested region...',sep=''))
+        message(paste('      ... subset  ',sample,' in region of interest ...',sep=''))
         # subset the mrobj
         #
         sites             <- reorganize(mrobj,
@@ -85,10 +84,9 @@ subset_mrobj <- function(mrobj,region.gr,
         write.table(ss_summary, wtoutfile, sep='\t',
                     row.names=FALSE, quote=FALSE)
         return(ss_summary)
-     })
- 
-       
+    })
+
     message('... subset_mrobj finished ...')
-    names(sr_summaries) = sample_list
+    names(sr_summaries) <- sample_list
     return(sr_summaries)
 }
