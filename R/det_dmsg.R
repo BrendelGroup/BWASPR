@@ -18,7 +18,7 @@
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
 #' @importFrom IRanges subsetByOverlaps
-#' @import BiocGenerics
+#' @importFrom BiocGenerics as.data.frame
 #' @importFrom S4Vectors mcols
 #'
 #' @examples
@@ -98,8 +98,8 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
        )
     if (length(dmgenes.gr) == 0) {
         message("No differentially methylated genes are found.")
-        return(list('dmgenes' = GRanges(),
-                    'dmsites' = dmsites.gr))
+        return(list('dmsites' = dmsites.gr,
+		    'dmgenes' = GRanges()  ))
     }
     if (outfile2 != '') {
         dmgenes <- unlist(GRangesList(unlist(dmgenes.gr)))
@@ -108,6 +108,6 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
     }
 
     message('... det_dmsg() finished ...')
-    return(list('dmgenes' = dmgenes.gr,
-                'dmsites' = dmsites.gr))
+    return(list('dmsites' = dmsites.gr,
+                'dmgenes' = dmgenes.gr))
 }

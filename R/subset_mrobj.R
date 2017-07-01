@@ -22,12 +22,11 @@
 #'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
 #'   promoter_mrobj <- subset_mrobj(AmHE,region.gr=genome_ann$promoter,
-#'                             outflabel="Am_HE_promoter")
+#'                                  outflabel="Am_HE_promoter")
 #'
 #' @export
 
-subset_mrobj <- function(mrobj,region.gr,
-                         outflabel="") {
+subset_mrobj <- function(mrobj,region.gr,outflabel="") {
     message('... subset_mrobj ...')
     message('... \'id\' is required in region.gr ...')
     # read basic information
@@ -37,7 +36,7 @@ subset_mrobj <- function(mrobj,region.gr,
     #
     message('   ... subset individual sample ...')
     sr_summaries <- lapply(sample_list, function(sample) {
-        message(paste('      ... subset  ',sample,' in interested region...',sep=''))
+        message(paste('      ... subset  ',sample,' in region of interest ...',sep=''))
         # subset the mrobj
         #
         sites             <- reorganize(mrobj,
@@ -86,9 +85,7 @@ subset_mrobj <- function(mrobj,region.gr,
                     row.names=FALSE, quote=FALSE)
         return(ss_summary)
     })
-    
-    
     message('... subset_mrobj finished ...')
-    names(sr_summaries) = sample_list
+    names(sr_summaries) <- sample_list
     return(sr_summaries)
 }

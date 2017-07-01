@@ -18,8 +18,10 @@ Imports:
    ggplot2,
    gplots,
    grDevices,
+   gridExtra,
    IRanges,
    methylKit,
+   pastecs,
    sqldf,
    S4Vectors
 License: GPL-3

@@ -140,6 +140,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                           nbrdmsites = sum(is.dm),
                           nbrdmper10kb = round((nbrdmsites/gwidth)*10000,2),
                           prcntdm = round((nbrdmsites/nbrsites)*100,2),
+                          dmpersite = round((sum(sample1)-sum(sample2))/nbrsites,2),
                           admpersite = round(abs(sum(sample1)-sum(sample2))/nbrsites,2),
                           dmpernucl = round((sum(sample1)-sum(sample2))/gwidth,2),
                           admpernucl = round(abs(sum(sample1)-sum(sample2))/gwidth,2)
@@ -153,8 +154,9 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                           nbrdmsites = sum(is.dm),
                           nbrdmper10kb = round((nbrdmsites/gwidth)*10000,2),
                           prcntdm = round((nbrdmsites/nbrsites)*100,2),
-                          admpernucl = round((sum(sample1)-sum(sample2))/gwidth,2),
-                          dmpersite = round((sum(sample1)-sum(sample2))/gwidth,2),
+                          dmpersite = round((sum(sample1)-sum(sample2))/nbrsites,2),
+                          admpersite = round(abs(sum(sample1)-sum(sample2))/nbrsites,2),
+                          dmpernucl = round((sum(sample1)-sum(sample2))/gwidth,2),
                           admpernucl = round(abs(sum(sample1)-sum(sample2))/gwidth,2)
                          )
         }
@@ -163,12 +165,12 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         if (nchar(withglink) > 0) {
             colnames(pw_summary) <-
               c("gene_ID","gene_link","gwidth","#Sites","#per10Kb",
-                "#dmSites","#dmsp10kb","%dmSites","ADMpSite","DMpNucl","ADMpNucl")
+                "#dmSites","#dmsp10kb","%dmSites","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
         }
         else {
             colnames(pw_summary) <-
               c("gene_ID","gwidth","#Sites","#per10Kb",
-                "#dmSites","#dmsp10kb","%dmSites","ADMpSite","DMpNucl","ADMpNucl")
+                "#dmSites","#dmsp10kb","%dmSites","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
         }
         outfile <- paste("ogl",outflabel,sep="-")
         outfile <- paste(outfile,comparison,sep="_")
