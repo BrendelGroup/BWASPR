@@ -2,6 +2,7 @@
 #' This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration 
 #'
 #' @param explore_dmsg_summaries A list returned by explore_dmsg()
+#' @param outflabel A string to identify the study in the output file
 #' 
 #' @return A list of data frames summarizing genes sorted by ADMpNucl 
 #' 
@@ -24,11 +25,11 @@
 #'                       outflabel="Am_HE")
 #'   explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
 #'                             outflabel="Am_HE")
-#'   rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries)
+#'   rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries,outflabel="Am_HE")
 #'
 #' @export
  
-rank_dmg <- function(explore_dmsg_summaries){
+rank_dmg <- function(explore_dmsg_summaries,outflabel){
     message('... rank_dmg ...')
     ## read explore_dmsg_summaries
     #
@@ -39,18 +40,21 @@ rank_dmg <- function(explore_dmsg_summaries){
     #
     rnk_summaries <- lapply(comparison_list, function(comparison){
         data     <- pw_summaries[[comparison]]
-        wtoutfile <- paste("rnk_pw_",comparison,".txt",sep="")
-        ## plot the distribution of ADMpNucl
+        wtoutfile <- paste("rnk-dmg",outflabel,sep="-")
+        wtoutfile <- paste(wtoutfile,comparison,sep="_")
+        wtoutfile <- paste(wtoutfile,"txt",sep=".")
+        data <- data[order(- data$ADMpNucl),]
+        write.table(data,wtoutfile,sep="\t",row.names=FALSE,quote=FALSE)
+
+        ## plot the distribution of ADMpNucl ...
         #
-        message(paste('   ... sorted by ADMpNucl ...'))
-        pdf(paste("rnk_pw",comparison,'.pdf',sep=''))
+        message('   ... sorted by ADMpNucl ...')
+        pdf(paste("rnk_dmg_",comparison,'.pdf',sep=''))
         data$gene_ID <- factor(data$gene_ID,levels=data$gene_ID[order(data$ADMpNucl,decreasing=TRUE)])
         print(ggplot(data, aes(x=gene_ID,y=ADMpNucl)) + geom_col())
         print(ggplot(head(data,25), aes(x=gene_ID,y=ADMpNucl)) + geom_col())
         dev.off()
-        # save the dataframe after sorting 
-        #
-        write.table(data,wtoutfile,sep="\t",row.names=FALSE,quote=FALSE)
+
         return(data)
     })
     names(rnk_summaries) <- comparison_list

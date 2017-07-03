@@ -73,12 +73,12 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         pair_p_meth.gr  <- as(pair_p_meth,'GRanges')
         # identify scd sites in each gene
         #
-        match                 <- findOverlaps(pair_dmgenes.gr,pair_p_meth.gr)
+        match                 <- findOverlaps(pair_dmgenes.gr,pair_p_meth.gr,ignore.strand=TRUE)
         sub_pair_p_meth.gr    <- pair_p_meth.gr[subjectHits(match)]
         sub_pair_dmgenes.gr   <- pair_dmgenes.gr[queryHits(match)]
         # identify dmsites in scd sites
         #
-        match2                <- findOverlaps(sub_pair_p_meth.gr,pair_dmsites.gr)
+        match2                <- findOverlaps(sub_pair_p_meth.gr,pair_dmsites.gr,ignore.strand=TRUE)
         pair_dmsites_index    <- queryHits(match2)
         # transform GRanges objects to dataframes and combine them
         #
