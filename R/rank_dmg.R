@@ -40,7 +40,7 @@ rank_dmg <- function(explore_dmsg_summaries,outflabel){
     #
     rnk_summaries <- lapply(comparison_list, function(comparison){
         data     <- pw_summaries[[comparison]]
-        wtoutfile <- paste("rnk_dmg",outflabel,sep="-")
+        wtoutfile <- paste("rnk-dmg",outflabel,sep="-")
         wtoutfile <- paste(wtoutfile,comparison,sep="_")
         wtoutfile <- paste(wtoutfile,"txt",sep=".")
         data <- data[order(- data$ADMpNucl),]
