@@ -58,10 +58,8 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                                         sample.ids=list(sample),
                                         treatment=c(0))[[1]]
         sites.gr          <- as(sites,'GRanges')
-        # calc the methylation level in percentage
-        #
         sites.gr$perc_meth <- (sites.gr$numCs/sites.gr$coverage) * 100
-        # annotate the msites with genes
+        # annotate the msites with genes ....
         #
         match             <- findOverlaps(sites.gr,gene.gr,ignore.strand=TRUE)
         sites.gr          <- sites.gr[queryHits(match)]
@@ -72,7 +70,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         colnames(gene.df) <- lapply(colnames(gene.df),
                                     function(i) paste('gene',i,sep='_'))
         sites_gene        <- cbind(sites.df,gene.df)
-        # calc a set of parameters for each gene
+        # calculate site densities for each gene ...
         #
         if (withglink == "NCBIgene") {
             ss_summary <- sites_gene %>% group_by(gene_ID) %>%
@@ -97,7 +95,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                           pmpernucl = round(pmsum/gwidth,2)
                          )
         }
-        # order the genes by pmpernucl
+        # order the genes by pmpernucl ...
         #
         ss_summary <- ss_summary[order(- ss_summary$pmpernucl),]
         ss_summary <- subset(ss_summary, select = -c(pmsum))
@@ -117,7 +115,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         return(ss_summary)
     })
 
-    # for each comparison, return a list of genes sorted by meth_diff per 10kb
+    # for each comparison, return a list of ordered (ranked) genes ...
     #
     message('   ... explore comparisons ...')
     pw_summaries <- lapply(comparison_list, function(comparison) {
@@ -160,8 +158,8 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                           admpernucl = round(abs(sum(sample1)-sum(sample2))/gwidth,2)
                          )
         }
-        # order the genes by admpernucl
-        pw_summary <- pw_summary[order(- pw_summary$admpernucl),]
+        # order the genes by prcntdm ...
+        pw_summary <- pw_summary[order(- pw_summary$prcntdm),]
         if (nchar(withglink) > 0) {
             colnames(pw_summary) <-
               c("gene_ID","gene_link","gwidth","#Sites","#per10Kb",

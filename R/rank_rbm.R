@@ -1,15 +1,16 @@
 #' rank_rbm() 
-#' This function subsets the mrobj by the GRanges that the user provides 
-#' and returns a List of dataframes containing the msites info summries and
-#' save the dataframes as tab delimited files
+#'   This function subsets the provided MethylRaw objects by the specified GRange
+#'   and returns a list of dataframes containing the GRange regions ranked by
+#'   methylation site density.
 #'
-#' @param mrobj A methyRaw/methRawList object or a methyRawList object
-#' @param region.gr A Granges object that the user provieds 
+#' @param mrobj A methyRaw/methRawList object
+#' @param region.gr A GRanges object (typically based on the relevant genome annotation)
 #' @param rlabel A string to identify the type of region analyzed
 #' @param withglink Either NCBIgene or "" to indicate inculsion of a gene link column in the output
 #' @param outflabel A string to identify the output dataframe 
 #' 
-#' @return A list of data frames that contains the msites info within the GRanges the user provided
+#' @return A list of dataframes containing the GRange regions ranked by methylation
+#'   site density
 #' 
 #' @importFrom GenomicRanges findOverlaps
 #' @importFrom utils write.table 
@@ -25,22 +26,19 @@
 #'                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
 #'   summaries <- rank_rbm(AmHE,region.gr=genome_ann$gene,rlabel="sir",
-#'                        withglink="NCBIgene",outflabel="Am_HE_gene")
+#'                         withglink="NCBIgene",outflabel="Am_HE_gene")
 #'
 #' @export
 
 rank_rbm <- function(mrobj,region.gr,rlabel="sir",withglink="",outflabel="") {
     message('... rank_rbm ...')
-#   message('... \'id\'& \'gene_name\' is required in region.gr ...')
     # read basic information
     #
-    sample_list     <- getSampleID(mrobj)
-    # for each sample, subset the msites info within the region.gr
-    #
-    message('   ... subset individual sample ...')
+    sample_list <- getSampleID(mrobj)
+    message('   ... subset individual samples ...')
     rnk_summaries <- lapply(sample_list, function(sample) {
         message(paste('      ... rank ',sample,' regions of interest ...',sep=''))
-        # subset the mrobj
+        # subset the mrobj ...
         #
         sites             <- reorganize(mrobj,
                                         sample.ids=list(sample),
@@ -64,7 +62,7 @@ rank_rbm <- function(mrobj,region.gr,rlabel="sir",withglink="",outflabel="") {
         wtoutfile <- paste(wtoutfile,"txt",sep=".")
         write.table(sites_region, wtoutfile, sep='\t', row.names=FALSE, quote=FALSE)
       
-        # calc a set of parameters for each gene
+        # calculate site densities for each region ...
         #
         if (withglink == "NCBIgene"){
             ss_summary <- sites_region %>% group_by(region_ID) %>%
@@ -88,7 +86,7 @@ rank_rbm <- function(mrobj,region.gr,rlabel="sir",withglink="",outflabel="") {
                           pmpernucl = round(pmsum/rwidth,2)
                           )
         }
-        # order the regions by nbrper10kb 
+        # order the regions by nbrper10kb ...
         #
         ss_summary <- ss_summary[order(- ss_summary$nbrper10kb),]
         ss_summary <- subset(ss_summary, select = -c(pmsum))
@@ -110,7 +108,7 @@ rank_rbm <- function(mrobj,region.gr,rlabel="sir",withglink="",outflabel="") {
         return(ss_summary)
      })
 
-    message('... subset_mrobj finished ...')
+    message('... rank_rbm finished ...')
     names(rnk_summaries) = sample_list
     return(rnk_summaries)
 }

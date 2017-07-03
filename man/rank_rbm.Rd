@@ -3,16 +3,16 @@
 \name{rank_rbm}
 \alias{rank_rbm}
 \title{rank_rbm() 
-This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info summries and
-save the dataframes as tab delimited files}
+  This function subsets the provided MethylRaw objects by the specified GRange
+  and returns a list of dataframes containing the GRange regions ranked by
+  methylation site density.}
 \usage{
 rank_rbm(mrobj, region.gr, rlabel = "sir", withglink = "", outflabel = "")
 }
 \arguments{
-\item{mrobj}{A methyRaw/methRawList object or a methyRawList object}
+\item{mrobj}{A methyRaw/methRawList object}
 
-\item{region.gr}{A Granges object that the user provieds}
+\item{region.gr}{A GRanges object (typically based on the relevant genome annotation)}
 
 \item{rlabel}{A string to identify the type of region analyzed}
 
@@ -21,13 +21,14 @@ rank_rbm(mrobj, region.gr, rlabel = "sir", withglink = "", outflabel = "")
 \item{outflabel}{A string to identify the output dataframe}
 }
 \value{
-A list of data frames that contains the msites info within the GRanges the user provided
+A list of dataframes containing the GRange regions ranked by methylation
+  site density
 }
 \description{
 rank_rbm() 
-This function subsets the mrobj by the GRanges that the user provides 
-and returns a List of dataframes containing the msites info summries and
-save the dataframes as tab delimited files
+  This function subsets the provided MethylRaw objects by the specified GRange
+  and returns a list of dataframes containing the GRange regions ranked by
+  methylation site density.
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -37,6 +38,6 @@ save the dataframes as tab delimited files
                        type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
   summaries <- rank_rbm(AmHE,region.gr=genome_ann$gene,rlabel="sir",
-                       withglink="NCBIgene",outflabel="Am_HE_gene")
+                        withglink="NCBIgene",outflabel="Am_HE_gene")
 
 }
