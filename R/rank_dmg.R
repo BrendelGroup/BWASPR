@@ -49,7 +49,7 @@ rank_dmg <- function(explore_dmsg_summaries,outflabel){
         ## plot the distribution of ADMpNucl ...
         #
         message('   ... sorted by ADMpNucl ...')
-        pdf(paste("rnk_dmg_",comparison,'.pdf',sep=''))
+        pdf(paste("rnk-dmg-",outflabel,"_",comparison,'.pdf',sep=''))
         data$gene_ID <- factor(data$gene_ID,levels=data$gene_ID[order(data$ADMpNucl,decreasing=TRUE)])
         print(ggplot(data, aes(x=gene_ID,y=ADMpNucl)) + geom_col())
         print(ggplot(head(data,25), aes(x=gene_ID,y=ADMpNucl)) + geom_col())
