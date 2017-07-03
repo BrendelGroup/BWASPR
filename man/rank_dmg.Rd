@@ -5,10 +5,12 @@
 \title{rank_dmg()
 This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration}
 \usage{
-rank_dmg(explore_dmsg_summaries)
+rank_dmg(explore_dmsg_summaries, outflabel)
 }
 \arguments{
 \item{explore_dmsg_summaries}{A list returned by explore_dmsg()}
+
+\item{outflabel}{A string to identify the study in the output file}
 }
 \value{
 A list of data frames summarizing genes sorted by ADMpNucl
@@ -33,6 +35,6 @@ This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration
                       outflabel="Am_HE")
   explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
                             outflabel="Am_HE")
-  rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries)
+  rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries,outflabel="Am_HE")
 
 }

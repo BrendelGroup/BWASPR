@@ -48,7 +48,7 @@ subset_mrobj <- function(mrobj,region.gr,outflabel="") {
         sites.gr$perc_meth <- (sites.gr$numCs/sites.gr$coverage) * 100
         # annotate the msites with genes
         #
-        match              <- findOverlaps(sites.gr,region.gr)
+        match              <- findOverlaps(sites.gr,region.gr,ignore.strand=TRUE)
         sites.gr           <- sites.gr[queryHits(match)]
         region.gr          <- region.gr[subjectHits(match)]
         # combine

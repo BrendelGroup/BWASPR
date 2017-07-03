@@ -63,7 +63,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         sites.gr$perc_meth <- (sites.gr$numCs/sites.gr$coverage) * 100
         # annotate the msites with genes
         #
-        match             <- findOverlaps(sites.gr,gene.gr)
+        match             <- findOverlaps(sites.gr,gene.gr,ignore.strand=TRUE)
         sites.gr          <- sites.gr[queryHits(match)]
         gene.gr           <- gene.gr[subjectHits(match)]
         # combine

@@ -87,7 +87,7 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
     }
 
     dmgenes.gr <- lapply(seq_along(pairs), function(i) {
-        gr <- subsetByOverlaps(genes,dmsites.gr[[i]])
+        gr <- subsetByOverlaps(genes,dmsites.gr[[i]],ignore.strand=TRUE)
         pairname <- paste(sample_list[pairs[[i]][1]+1],
                           sample_list[pairs[[i]][2]+1],sep=".vs.")
         if (length(gr) > 0) {
