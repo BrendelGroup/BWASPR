@@ -5,7 +5,7 @@
 #' @param mrobj A methylRaw object or a methylRawList object.
 #' @param genome_ann Genome annotation returned by get_genome_annotation()
 #' @param threshold Cutoff for percent methylation difference, default threshold = 25.0
-#' @param qvalue Cutoff for q-value, defualt q-value = 0.01
+#' @param qvalue Cutoff for q-value, default q-value = 0.01
 #' @param mc.cores Integer denoting how many cores should be used for parallel
 #'   diffential methylation calculations
 #' @param destrand methylKit::unite() parameter; default: FALSE.

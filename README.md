@@ -46,7 +46,23 @@ The first file has columns for _species_ (here _Am_); _study_ (here _HE_);
 _sample_ (here _forager_ and _nurse_"); replicate number (here _0_, indicating
 single samples or, as in the case of this study, aggregates over replicates);
 and file locations (here for the _CpGhsm_ and _CpGscd_ \*.mcalls files).
+The second file species the genome assembly version, genome size (in base
+pairs), total number of potential methylation sites (CpGs), and file names
+for GFF3 annotation of various genomic features.
 
 A typical *BWASPR* workflow will read the specified \*.mcalls files and
 generate various output tables and plots, labeled in various ways with
 _species_\__study_\__sample_\__replicate_ labels.
+The [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) file shows a template
+workflow.
+Initial customization is done at the top of the file and most from
+inclusion of a configuration file such as
+[demo/sample.conf](./demo/sample.conf).
+The following table summarizes the successive workflow steps.
+You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
+[demo/sample.conf](./demo/sample.conf) in separate windows as a reference
+while viewing the table.
+
+| RUNflag | input   | parameters  | function | theme                               | output files |
+|---------|---------|-------------|----------|-------------------------------------|--------------:|
+| RUNcms  | studymc | sampleLabel | cms.R    | coverage and methylation statistics | cms-*.txt    |
