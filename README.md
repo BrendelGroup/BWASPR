@@ -63,6 +63,18 @@ You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
 [demo/sample.conf](./demo/sample.conf) in separate windows as a reference
 while viewing the table.
 
-| RUNflag | input   | parameters  | function | theme                               | output files |
-|---------|---------|-------------|----------|-------------------------------------|--------------:|
-| RUNcms  | studymc | sampleLabel | cms.R    | coverage and methylation statistics | cms-*.txt    |
+| RUNflag    | input                 | parameters                 | function                      | theme                                           | output files                                                           |
+|------------|-----------------------|----------------------------|-------------------------------|-------------------------------------------------|------------------------------------------------------------------------|
+| RUNcms     | studymk               | covlist                    | cmStats()                     | coverage and methylation statistics             | cms-\*.txt<br/>cms-\*.pdf                                              |
+| RUNrnk     | studymk               | genome_ann$*region*        | rank_rbm()                    | ranked genes and promoters                      | rnk-sig-\*.txt<br/>rnk-sip-\*.txt                                      |
+| RUNprr     | studymk               | ddset<br/>nr2d<br/>doplots | det_mprr()                    | methylation poor and rich regions               | dst-\*.txt<br/>1ds-\*.pdf<br/>5ds-\*.pdf<br/>mdr-\*.txt<br/>mdr-\*.bed |
+| RUNrepcms  | replicate \*.mcalls   | covlist                    | cmStats()                     | coverage and methylation statistics             | cms-\*.txt<br/>cms-\*.pdf                                              |
+| RUNrepcrl  | replicate \*.mcalls   | destrand                   | cmpSamples()                  | correlations between replicates                 | crl-\*.txt                                                             |
+| RUNpwc     | studymk<br/>studymc   | -                          | cmpSites()                    | pairwise sample comparisons                     | pwc-\*.txt                                                             |
+| RUNagscrl  | studymk               | destrand                   | cmpSamples()                  | correlations between aggregate samples          | crl-\*.txt                                                             |
+| RUNacs     | studymk               | destrand                   | annotate_methylome()          | annotation of common sites                      | acs-\*.txt                                                             |
+| RUNmmp     | studymk               | -                          | map_methylome()               | methylation to annotation maps                  | mmp-\*.txt                                                             |
+| RUNdmsg    | sample \*.mcalls<br/> | highcoverage               | det_dmsg()                    | differentially methylated sites and genes       | dms-\*.txt<br/>dmg-\*.txt                                              |
+| RUNdmgdtls | studyhc               | destrand                   | show_dmsg()                   | details for differentially methylated genes     | dmg-\*details\*.txt                                                    |
+| RUNogl     | studyhc               | -                          | explore_dmsg()<br/>rank_dmg() | ranked lists of differentially methylated genes | ogl-\*.txt<br/>rnk-dmg-\*.txt                                          |
+| RUNsave    | workflow output       | -                          | save.image()                  | save image of workflow output                   | \*.RData                                                               |
