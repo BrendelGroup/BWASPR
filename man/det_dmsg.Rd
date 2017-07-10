@@ -17,7 +17,7 @@ det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01, mc.cores = 1,
 
 \item{threshold}{Cutoff for percent methylation difference, default threshold = 25.0}
 
-\item{qvalue}{Cutoff for q-value, defualt q-value = 0.01}
+\item{qvalue}{Cutoff for q-value, default q-value = 0.01}
 
 \item{mc.cores}{Integer denoting how many cores should be used for parallel
 diffential methylation calculations}

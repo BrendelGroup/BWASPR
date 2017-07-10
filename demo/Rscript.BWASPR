@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	May 7, 2017
+#Version:	July 8, 2017
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -77,12 +77,69 @@ if (RUNcms) {
 #
   plotfile <- paste("cms",species,sep="-")
   plotfile <- paste(plotfile,studyLabel,sep="_")
-  message("\n.. coverage and methylation statistics for aggregat samples ...")
+  message("\n.. coverage and methylation statistics for aggregate samples ...")
   tmpN <- lapply(studymk,function(x) {plotfile <- paste(plotfile,x@sample.id,sep="_");
                                       outfile  <- paste(plotfile,"txt",sep=".");
                                       cmStats(x,covlist,outfile=outfile,plotfile=plotfile)
                                      }
                 )
+  message(".. done ...")
+}
+################################################################################
+
+
+### Section: Determination of methylation site poor and rich regions.
+##
+#
+if (RUNrnk) {
+#Produce rnk*txt and rnk*.pdf files showing methylation-density ranked annotated regions.
+#
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
+  speciesstudy <- paste(species,studyLabel,sep="_")
+  message("\n.. ranked genes for each sample ...")
+  rgL <- rank_rbm(studymk,region.gr=genome_ann$gene,rlabel="sig",
+                  withglink=glink,speciesstudy)
+  message(".. done ...")
+  message("\n.. ranked promoters for each sample ...")
+  rgL <- rank_rbm(studymk,region.gr=genome_ann$promoter,rlabel="sip",
+                  withglink=glink,speciesstudy)
+  message(".. done ...")
+}
+################################################################################
+
+
+if (RUNprr) {
+#Produce mpr*txt and mrr*.txt files reporting on methylation poor and rich regions.
+#Also: dst*.txt (distance statistics)
+#      1ds*.pdf 5ds*.pdf (distance histograms)
+#      mdr*.tab mdr*.bed (methylation dense regions)
+#
+  ddset <- c(1,5)
+  nr2d <- 10L
+  doplots <- TRUE
+  message("\n.. methylation poor and rich regions for aggregate samples ...")
+  hsmrList <- lapply(c(1:length(sampleLabels)),function(i) {
+    outfile  <- paste("dst",sampleLabels[i],sep="-")
+    outfile  <- paste(outfile,"txt",sep=".")
+    hsmrL <- det_mprr(studymk[[i]],sampleLabels[i],ddset,outfile,nr2d,doplots)
+    return(hsmrL)
+    }
+    )
+  message(".. done ...")
+
+  message("\n.. mapping of methylation poor and rich regions to genome features ...")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
+  gwrList <- lapply(c(1:length(sampleLabels)),function(i) {
+     outfile  <- paste("rmp",sampleLabels[i],sep="-")
+     outfile  <- paste(outfile,"txt",sep=".")
+     gwithrdf <- map_mprr(hsmrList[[i]],species=species,sampleLabels[i],
+                          genome_ann,gnmsize,UTRflag=UTRFLAGSET,outfile)
+     }
+     )
   message(".. done ...")
 }
 ################################################################################
@@ -199,7 +256,7 @@ if (RUNpwc) {
 
 if (RUNagscrl) {
 #Second, produce correlations between methylation levels in common sites of
-#  ggregate samples.
+#  aggregate samples.
 #  Output will be in crl*txt and crl*pdf files.
 #
   plotfile <- paste("crl",species,sep="-")
@@ -313,6 +370,7 @@ if (RUNogl) {
   message("\n.. printing ordered gene lists ...")
   summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,withglink=glink,
                             outflabel)
+  rnk_summaries <- rank_dmg(summaries,outflabel)
   message(".. done ...")
 }
 ################################################################################
