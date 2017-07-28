@@ -6,7 +6,7 @@
 This function compares (potential) methylation sites between two samples.}
 \usage{
 cmpSites(sample1hsm, sample1scd, sample1label, sample2hsm, sample2scd,
-  sample2label, nbrpms)
+  sample2label, nbrpms, plotfile, covlist)
 }
 \arguments{
 \item{sample1hsm}{A methylRaw object for hsm sites of sample 1.}
@@ -23,6 +23,10 @@ cmpSites(sample1hsm, sample1scd, sample1label, sample2hsm, sample2scd,
 
 \item{nbrpms}{Integer representing the number of potential methylation
 sites in the genome; typically derived from the input *.par file.}
+
+\item{plotfile}{If specified other than the default "", then plots
+are saved in PDF file "plotfile".pdf; otherwise either no plots are
+generated.}
 }
 \value{
 A list of data frames containing data on unique and common
@@ -46,6 +50,7 @@ This function compares (potential) methylation sites between two samples.
   s1scd <- methylKit::getData(AmHEscd[[1]])
   s2hsm <- methylKit::getData(AmHEhsm[[2]])
   s2scd <- methylKit::getData(AmHEscd[[2]])
-  mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms)
+  mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
+                       plotfile="pwc.pdf",covlist)
 
 }
