@@ -27,6 +27,10 @@ sites in the genome; typically derived from the input *.par file.}
 \item{plotfile}{If specified other than the default "", then plots
 are saved in PDF file "plotfile".pdf; otherwise either no plots are
 generated.}
+
+\item{covlist}{A vector listing the coverage (number of reads) values
+to be explored; e.g., c(6,8,10) would compare sites with minimum
+coverage 6, 8, and 10, successively}
 }
 \value{
 A list of data frames containing data on unique and common
@@ -51,6 +55,6 @@ This function compares (potential) methylation sites between two samples.
   s2hsm <- methylKit::getData(AmHEhsm[[2]])
   s2scd <- methylKit::getData(AmHEscd[[2]])
   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
-                       plotfile="pwc.pdf",covlist)
+                       plotfile="pwc.pdf",covlist=c(6,10,20))
 
 }

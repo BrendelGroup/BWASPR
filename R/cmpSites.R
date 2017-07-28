@@ -12,6 +12,9 @@
 #' @param plotfile If specified other than the default "", then plots
 #'   are saved in PDF file "plotfile".pdf; otherwise either no plots are
 #'   generated.
+#' @param covlist A vector listing the coverage (number of reads) values
+#'   to be explored; e.g., c(6,8,10) would compare sites with minimum
+#'   coverage 6, 8, and 10, successively
 #'
 #' @return A list of data frames containing data on unique and common
 #'   sites comparing the two samples.
@@ -38,7 +41,7 @@
 #'   s2hsm <- methylKit::getData(AmHEhsm[[2]])
 #'   s2scd <- methylKit::getData(AmHEscd[[2]])
 #'   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
-#'                        plotfile="pwc.pdf",covlist)
+#'                        plotfile="pwc.pdf",covlist=c(6,10,20))
 #'
 #' @export
 
