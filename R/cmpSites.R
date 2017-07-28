@@ -218,7 +218,6 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
         text(0.5,0.4,clabel)
       }
       cat( sprintf( "\n\n" ) )
-      graphics.off()
     }
 
     message("... done ...")
