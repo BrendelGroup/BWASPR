@@ -15,6 +15,7 @@
 #' @param covlist A vector listing the coverage (number of reads) values
 #'   to be explored; e.g., c(6,8,10) would compare sites with minimum
 #'   coverage 6, 8, and 10, successively
+#' @param hheight Histogram height for methylation level plot; default: 0.10
 #'
 #' @return A list of data frames containing data on unique and common
 #'   sites comparing the two samples.
@@ -41,13 +42,13 @@
 #'   s2hsm <- methylKit::getData(AmHEhsm[[2]])
 #'   s2scd <- methylKit::getData(AmHEscd[[2]])
 #'   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
-#'                        plotfile="pwc.pdf",covlist=c(6,10,20))
+#'                        plotfile="pwc.pdf",covlist=c(6,10,20),hheight=0.10)
 #'
 #' @export
 
 cmpSites <- function(sample1hsm,sample1scd,sample1label,
                      sample2hsm,sample2scd,sample2label,nbrpms,
-                     plotfile,covlist) {
+                     plotfile,covlist,hheight) {
     message("... calculating site statistics ...")
 
     # ... adding a unique key to the data frame rows:
@@ -184,18 +185,18 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
         cat( sprintf( "  number of \"%s\" sites with coverage >= %2d: %6d\n", label2hsm, n, cn2 ) )
         cat( sprintf( "  number of common sites with coverage >= %2d: %5d\n", n, dim(commonset)[1] ) )
       
-        plot1 <- ggplot(data = commonset, aes(x=s1PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",color="black",fill="white") + scale_y_continuous(limits=c(0,0.035))
-        plot2 <- ggplot(data = commonset, aes(x=s2PrcntM)) + scale_x_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",color="black",fill="white") + scale_y_continuous(limits=c(0,0.035))
+        plot1 <- ggplot(data = commonset, aes(x=s1PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",color="black",fill="white") + scale_y_continuous(limits=c(0,hheight))
+        plot2 <- ggplot(data = commonset, aes(x=s2PrcntM)) + scale_x_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",color="black",fill="white") + scale_y_continuous(limits=c(0,hheight))
       
         DF <- rbind(data.frame(dataset=label1hsm, obs=commonset[,"s1PrcntM"]),
                     data.frame(dataset=label2hsm, obs=commonset[,"s2PrcntM"]) )
         DF$dataset <- as.factor(DF$dataset)
       
-        plot3 <- ggplot(data = DF, aes(x=obs, fill=dataset)) + scale_x_continuous(sampleclabel,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",colour="black",position="dodge") + scale_y_continuous(limits=c(0,0.035)) + scale_fill_manual(name="Sample", breaks=c(label1hsm,label2hsm), labels=c(label1hsm,label2hsm), values=c("lightblue","coral")) + theme(legend.position=c(0.2,0.8))
+        plot3 <- ggplot(data = DF, aes(x=obs, fill=dataset)) + scale_x_continuous(sampleclabel,limits=c(0,100),breaks=seq(0,100,5)) + geom_histogram(aes(y=..density..),binwidth=5,center=2.5,closed="right",colour="black",position="dodge") + scale_y_continuous(limits=c(0,hheight)) + scale_fill_manual(name="Sample", breaks=c(label1hsm,label2hsm), labels=c(label1hsm,label2hsm), values=c("lightblue","coral")) + theme(legend.position=c(0.2,0.8))
       
 # Scatter plot of sample2 versus sample1 percent methylation:
 #
-        plot4 <- ggplot(data = commonset, aes(x=s1PrcntM,y=s2PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,10)) + scale_y_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,10)) + geom_point(shape=1) + geom_smooth(method=lm)
+        plot4 <- ggplot(data = commonset, aes(x=s1PrcntM,y=s2PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,10)) + scale_y_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,10)) + geom_point(shape=1) + geom_smooth(method="lm")
       
         tmp <- sprintf( "Methylation Levels in Common Sites (Coverage >= %2d)\n", n )
         mytitle=textGrob(tmp, gp=gpar(cex=1.0), just="top")
