@@ -23,7 +23,8 @@ Imports:
    methylKit,
    pastecs,
    sqldf,
-   S4Vectors
+   S4Vectors,
+   venneuler
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
