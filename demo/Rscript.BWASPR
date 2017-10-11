@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	July 8, 2017
+#Version:	October 11, 2017
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -215,8 +215,32 @@ if (RUNrepcrl) {
 #
 
 if (RUNpwc) {
-#First, produced pairwise sample site comparisons and save the output in files
+  l <- length(studymk@treatment)
+  if (l < 2) {
+    message("\n.. no pairs to compare ....")
+  } else if (l == 2) {
+#First, produce pairwise sample site comparisons and save the output in file
+#  pwc*.txt and plots in pwc*.pdf.
+#
+    sample1hsm <- methylKit::getData(studymk[[1]])
+    sample1scd <- methylKit::getData(studymc[[1]])
+    s1l <- sampleLabels[[1]]
+    sample2hsm <- methylKit::getData(studymk[[2]])
+    sample2scd <- methylKit::getData(studymc[[2]])
+    s2l <- sampleLabels[[2]]
+    outf1 <- "pwc" 
+    outf2<- paste(s1l,s2l,sep=".vs.")
+    outfile <- paste(outf1,outf2,sep="-")
+    plotfile <- paste(outfile,"pdf",sep=".")
+    outfile <- paste(outfile,"txt",sep=".")
+    sink(outfile)
+    message("... comparing ", s1l, " versus ", s2l, " ...")
+    cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms,plotfile,covlist,hheight)
+    sink()
+  } else {
+#First, produce pairwise sample site comparisons and save the output in files
 #  pwc* (done in parallel).
+#  Note: no plots are generated - for unclear reasons, venneuler stalls when invoked on a cluster ...
 #
   v <- c(1:length(studymk@treatment))
   numprcINcl <- dim(combn(v,2))[2]
@@ -237,7 +261,7 @@ if (RUNpwc) {
       outfile <- paste(outfile,"txt",sep=".")
       sink(outfile)
       message("... comparing ", s1l, " versus ", s2l, " ...")
-      cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms)
+      cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms,plotfile="",covlist)
       sink()
       return(cuSlist)
     })
@@ -250,6 +274,7 @@ if (RUNpwc) {
   #    hsm2cSCD, unique2HSMn1SCD,
   #    unique1HSM2SCD, unique2HSM1SCD.
   #  For details, see the *.txt output files of the above code section.
+  }
   message(".. done ...")
 }
 
