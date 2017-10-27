@@ -111,7 +111,7 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
     hsmrR.slices2      <- c(hsmrR.In.ExonRegions,hsmrR.In.IntronRegions,hsmrR.In.PromoterRegions,hsmrR.In.IntergenicRegions)
     hsmrR.pct2         <- round(100*hsmrR.slices2/sum(hsmrR.slices2),2)
 
-    cat( sprintf("Overlap of methylation rich and poor regions with genome features for %s sample %s\n\n", species, slabel) )
+    cat( sprintf("Overlap of methylation-rich and -poor regions with genome features for %s sample %s\n\n", species, slabel) )
     cat( sprintf("Total size of the methylation-rich regions of %s:                                  %9d bp (%5.1f%% of genome)\n",slabel,sum(width(hsmrR.gr)),hsmrR.pct) )      
     cat( sprintf("Size of overlap of methylation-rich regions of %s %s with genic regions:              %9d bp (%5.1f%% of total size)   (%5.2f O/E)\n",species,slabel,hsmrR.In.GenicRegions,hsmrR.pct1[1],hsmrR.pct1[1]/(100*gene.fraction)) )
     cat( sprintf("Size of overlap of methylation-rich regions of %s %s with   exon regions:               %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmrR.In.ExonRegions,hsmrR.pct2[1],hsmrR.pct2[2]/(100*exon.fraction)) )
