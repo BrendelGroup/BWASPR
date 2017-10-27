@@ -14,7 +14,7 @@ and two files specifying the data labels and \*.mcall file locations and certain
 parameters, respectively. Let's look at the example files in [inst/extdata](./inst/extdata):
 
 ```
-Am.dat
+AmHE.dat
 ================================================================================
 # Samples from Herb et al. (2012) Nature Neuroscience:
 #
@@ -25,7 +25,7 @@ Am      HE      nurse   0       CpGscd  ../inst/extdata/Amel-nurse.CpGscd.mcalls
 ```
 
 ```
-Am.par
+AmHE.par
 ================================================================================
 SPECIESNAME     Apis mellifera
 TOTALNBRPMSITES 20307353
@@ -64,6 +64,8 @@ The following table summarizes the successive workflow steps.
 You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
 [demo/sample.conf](./demo/sample.conf) in separate windows as a reference
 while viewing the table.
+Detail on running the workflow with the demo data are given in
+[demo/0README](./demo/0README).
 
 | RUNflag    | input                 | parameters                 | function                      | theme                                           | output files                                                                                                         |
 |------------|-----------------------|----------------------------|-------------------------------|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
