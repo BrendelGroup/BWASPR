@@ -48,7 +48,7 @@ rank_rbm <- function(mrobj,region.gr,rlabel="sir",withglink="",outflabel="") {
 
         # identify the msites within the specified regions ...
         #
-        match              <- findOverlaps(sites.gr,region.gr,ignore.strand=TRUE)
+        match              <- suppressWarnings(findOverlaps(sites.gr,region.gr,ignore.strand=TRUE))
         sites.gr           <- sites.gr[queryHits(match)]
         region.gr          <- region.gr[subjectHits(match)]
         sites.df            <- as.data.frame(sites.gr)

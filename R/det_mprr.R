@@ -1,5 +1,5 @@
 #' det_mprr()
-#'   This function determines methylation rich and poor regions based on clustering
+#'   This function determines methylation-rich and -poor regions based on clustering
 #'   of methylation (hsm sites). First, the ddstats() function is used to establish
 #'   the distribution of distances between d-nearest neighbors.  Short distances
 #'   indcate clustering of hsm sites, and long distances indicate regions relatively

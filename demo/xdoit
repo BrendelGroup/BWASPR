@@ -1,4 +1,8 @@
 #!/bin/bash
-study=$1
+#
+bindir=/projects/vbrendel/SIMETH/RWORK/Fe
 
-Rscript --default-packages=methods,datasets,utils,grDevices,graphics,stats  ../Rscript.BWASPR ${study}    2> err-${study}    > output-${study}
+study=$1
+outputdir=$2
+
+Rscript --default-packages=methods,datasets,utils,grDevices,graphics,stats  ${bindir}/Rscript.BWASPR ${study} ${outputdir}   2> err-${study}

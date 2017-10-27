@@ -3,7 +3,7 @@
 \name{det_mprr}
 \alias{det_mprr}
 \title{det_mprr()
-  This function determines methylation rich and poor regions based on clustering
+  This function determines methylation-rich and -poor regions based on clustering
   of methylation (hsm sites). First, the ddstats() function is used to establish
   the distribution of distances between d-nearest neighbors.  Short distances
   indcate clustering of hsm sites, and long distances indicate regions relatively
@@ -31,7 +31,7 @@ List of two data frames, recording hsm rich and poor regions.
 }
 \description{
 det_mprr()
-  This function determines methylation rich and poor regions based on clustering
+  This function determines methylation-rich and -poor regions based on clustering
   of methylation (hsm sites). First, the ddstats() function is used to establish
   the distribution of distances between d-nearest neighbors.  Short distances
   indcate clustering of hsm sites, and long distances indicate regions relatively

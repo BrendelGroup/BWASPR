@@ -1,16 +1,11 @@
 #!/bin/bash
 #
-bindir=/projects/vbrendel/SIMETH/RWORK
+bindir=/projects/vbrendel/SIMETH/RWORK/Fe
 
 study=$1
 
 \rm -rf NEW-${study}
-mkdir NEW-${study}
 
-time ${bindir}/xdoit ${study}
-
-mv acs-${study}.txt cms-${study}_* crl-${study}* dmg-${study}* dms-${study}* \
-   err-${study} mmp-${study}_*.txt ogl-${study}_*.txt output-${study} \
-   pwc-${study}_*   NEW-${study}/
+time ${bindir}/xdoit ${study} NEW-${study}
 
 diff -r NEW-${study} OUT-${study} | more
