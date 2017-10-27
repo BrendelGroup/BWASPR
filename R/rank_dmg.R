@@ -58,5 +58,6 @@ rank_dmg <- function(explore_dmsg_summaries,outflabel){
         return(data)
     })
     names(rnk_summaries) <- comparison_list
+    message('... rank_dmg finished ...')
     return(rnk_summaries)
 }

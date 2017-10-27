@@ -61,7 +61,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
         sites.gr$perc_meth <- (sites.gr$numCs/sites.gr$coverage) * 100
         # annotate the msites with genes ....
         #
-        match             <- findOverlaps(sites.gr,gene.gr,ignore.strand=TRUE)
+        match             <- suppressWarnings(findOverlaps(sites.gr,gene.gr,ignore.strand=TRUE))
         sites.gr          <- sites.gr[queryHits(match)]
         gene.gr           <- gene.gr[subjectHits(match)]
         # combine
@@ -159,7 +159,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,withglink="NCBIgene",
                          )
         }
         # order the genes by prcntdm ...
-        pw_summary <- pw_summary[order(- pw_summary$prcntdm),]
+        pw_summary <- pw_summary[order(- pw_summary$dmpersite),]
         if (nchar(withglink) > 0) {
             colnames(pw_summary) <-
               c("gene_ID","gene_link","gwidth","#Sites","#per10Kb",

@@ -6,8 +6,8 @@
 #'   The data frame contains the directories to specific generic features of DNA and the UTRflag.
 #'
 #' @return A list consisting of GRanges objects that describe generic features of DNA including:
-#'   gene,exon,pcexon,promoter,CDS,fiveprimeUTR,threeprimeUTR,
-#'   fiveprimeUTRunique,threeprimeUTRnotCDS,threeprimeUTRunique,ncexon
+#'   gene,exon,pcexon,promoter,CDS,fpUTR,tpUTR,
+#'   fpUTRnotCDS,tpUTRnotCDS,tpUTRunique,ncexon
 #'
 #' @importFrom genomation gffToGRanges
 #' @importFrom GenomicRanges setdiff GRanges
@@ -32,8 +32,8 @@ get_genome_annotation <- function(inputdf) {
     UTRflag               <- inputdf[inputdf$Variable == 'UTRFLAGSET', "Value"]
 
     if (UTRflag == 1) {
-        fiveprimeUTRlist  <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
-        threeprimeUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
+        fpUTRlist  <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
+        tpUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
     }
 
     gene.gr     <- gffToGRanges(genelist)
@@ -43,44 +43,44 @@ get_genome_annotation <- function(inputdf) {
     CDS.gr      <- gffToGRanges(cdslist)
 
     if (UTRflag == 1) {
-        fiveprimeUTR.gr  <- gffToGRanges(fiveprimeUTRlist)
-        threeprimeUTR.gr <- gffToGRanges(threeprimeUTRlist)
+        fpUTR.gr  <- gffToGRanges(fpUTRlist)
+        tpUTR.gr <- gffToGRanges(tpUTRlist)
         # To obtain the five-prime UTR that does not overlap with CDS
         #
-        if (length(fiveprimeUTR.gr) > 0) {
-            fiveprimeUTRunique.gr <- suppressWarnings(setdiff(fiveprimeUTR.gr,CDS.gr,
+        if (length(fpUTR.gr) > 0) {
+            fpUTRnotCDS.gr <- suppressWarnings(setdiff(fpUTR.gr,CDS.gr,
                                                                ignore.strand=TRUE
                                                               )
                                                       )
         } else {
-            fiveprimeUTRunique.gr <- fiveprimeUTR.gr;
+            fpUTRnotCDS.gr <- fpUTR.gr;
         }
         # To obtain the three-prime UTR that does not overlap with CDS
         #
-        if (length(threeprimeUTR.gr) > 0) {
-            threeprimeUTRnotCDS.gr <- suppressWarnings(setdiff(threeprimeUTR.gr,CDS.gr,
+        if (length(tpUTR.gr) > 0) {
+            tpUTRnotCDS.gr <- suppressWarnings(setdiff(tpUTR.gr,CDS.gr,
                                                                ignore.strand=TRUE
                                                               )
                                                       )
         } else {
-            threeprimeUTRnotCDS.gr <- threeprimeUTR.gr;
+            tpUTRnotCDS.gr <- tpUTR.gr;
         }
-        if (length(threeprimeUTRnotCDS.gr) > 0) {
-            threeprimeUTRunique.gr <- suppressWarnings(setdiff(threeprimeUTRnotCDS.gr,
-                                                                fiveprimeUTRunique.gr,
+        if (length(tpUTRnotCDS.gr) > 0) {
+            tpUTRunique.gr <- suppressWarnings(setdiff(tpUTRnotCDS.gr,
+                                                                fpUTRnotCDS.gr,
                                                                 ignore.strand=TRUE
                                                                )
                                                        )
         } else {
-            threeprimeUTRunique.gr <- threeprimeUTRnotCDS.gr;
+            tpUTRunique.gr <- tpUTRnotCDS.gr;
         }
     }
     else {	# return empty GRanges if there are no UTR annotations ..,
-        fiveprimeUTR.gr  <- GRanges()
-        threeprimeUTR.gr <- GRanges()
-        fiveprimeUTRunique.gr <- GRanges()
-        threeprimeUTRnotCDS.gr <- GRanges()
-        threeprimeUTRunique.gr <- GRanges()
+        fpUTR.gr  <- GRanges()
+        tpUTR.gr <- GRanges()
+        fpUTRnotCDS.gr <- GRanges()
+        tpUTRnotCDS.gr <- GRanges()
+        tpUTRunique.gr <- GRanges()
     }
 
     # Calculate the non-coding regions of the exons
@@ -95,11 +95,11 @@ get_genome_annotation <- function(inputdf) {
                 'pcexon' = pcexon.gr,
                 'promoter' = promoter.gr,
                 'CDS' = CDS.gr,
-                'fiveprimeUTR' = fiveprimeUTR.gr,
-                'threeprimeUTR' = threeprimeUTR.gr,
-                'fiveprimeUTRunique' = fiveprimeUTRunique.gr,
-                'threeprimeUTRnotCDS' = threeprimeUTRnotCDS.gr,
-                'threeprimeUTRunique' = threeprimeUTRunique.gr,
+                'fpUTR' = fpUTR.gr,
+                'tpUTR' = tpUTR.gr,
+                'fpUTRnotCDS' = fpUTRnotCDS.gr,
+                'tpUTRnotCDS' = tpUTRnotCDS.gr,
+                'tpUTRunique' = tpUTRunique.gr,
                 'ncexon' = ncexon.gr
                )
           )

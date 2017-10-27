@@ -3,7 +3,10 @@
 #'   input data set.
 #'
 #' @param mrobj A methylRaw object
-#' @param covlist a vector of coverage threshols; default: c(10)
+#' @param type The type should be CpGhsm or CpGscd, as per BWASP output.
+#' @param covlist A vector of coverage threshols; default: c(10)
+#' @param locount Low coverage threshold for statistics on a range of sites; default: c(100)
+#' @param hicount High coverage threshold for statistics on a range of sites; default: c(1000)
 #' @param outfile If specified then output is printed to the specified file.
 #' @param plotfile If specified other than the default "", then plots
 #'   are saved in PDF file "plotfile".pdf; otherwise either no plots are
@@ -20,46 +23,86 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-#'   cmStats(AmHE[[1]],covlist=c(10,20),outfile="Am_HE-statistics.txt",plotfile="myplots")
+#'   cmStats(AmHE[[1]],type="CpGhsm",covlist=c(10,20),locount=100,hicount=1000,
+#'           outfile="Am_HE-statistics.txt",plotfile="myplots")
 #'
 #' @export
 
-cmStats <- function(mrobj,covlist=c(10),outfile="",plotfile="") {
+cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,outfile="",plotfile="") {
     if (outfile != "") {
         sink(outfile)
     }
     sampledata <- getData(mrobj)
-    slabel <- mrobj@sample.id
-    message("... calculating sample-wide coverage and methylation statistics for " ,slabel," ...")
     sampledata$PrcntM <- 100.*sampledata$numCs/sampledata$coverage
-
-    cat( sprintf( "methylKit output for \"%s\"\t- ", slabel ) )
-    getCoverageStats(mrobj,plot=F,both.strands=F)
-    cat( sprintf( "methylKit output for \"%s\"\t- ", slabel ) )
-    getMethylationStats(mrobj,plot=F,both.strands=F)
-
-    if (plotfile!="") {
-      pdf(paste(plotfile,"pdf",sep="."))
-      getCoverageStats(mrobj,plot=T,both.strands=F,labels=FALSE,
-                       cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
-      getMethylationStats(mrobj,plot=T,both.strands=F,labels=FALSE,
-                          cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
-      dev.off()
-    }
+    slabel <- mrobj@sample.id
 
     cat( sprintf(
-      "Number of \"%s\" sites with minimal and higher level coverage\n",
-      slabel) )
+      "Number of \"%s\" %s-sites with minimal and higher level coverage:\n\n",
+      slabel,type) )
     cat( sprintf(
-      "  number of \"%s\" sites with coverage >= %2d: %6d\n",
-      slabel, min(sampledata$coverage), length(sampledata$coverage)) )
+      "  number of \"%s\" %s-sites with coverage >= %2d: %6d\n",
+      slabel, type, min(sampledata$coverage), length(sampledata$coverage)) )
     for (n in  covlist) {
       cn <- length(sampledata[["coverage"]][sampledata[["coverage"]] >= n])
       cat( sprintf(
-        "  number of \"%s\" sites with coverage >= %2d: %6d\n", slabel, n,cn) )
+        "  number of \"%s\" %s-sites with coverage >= %2d: %6d\n", slabel, type, n, cn) )
     }
-    cat( sprintf( "\n\n") )
+    cat( sprintf( "\n") )
 
+
+    if (plotfile!="") {
+      pdf(paste(plotfile,"pdf",sep="."))
+    }
+
+    message("... calculating sample-wide ",type," coverage and methylation statistics for " ,slabel," ...")
+    cat( sprintf(
+      "\nCoverage and methylation statistics for \"%s\" %s-sites at different levels of minimum coverage:\n",
+      slabel,type) )
+
+    covlist <- c(min(sampledata$coverage),covlist)
+    for (n in covlist) {
+      mrobjFiltered <- filterByCoverage(mrobj,lo.count=n,lo.perc=NULL,hi.count=NULL,hi.perc=NULL)
+      sampledata <- getData(mrobjFiltered)
+
+      cat( sprintf( "\n\nmethylKit::getCoverageStats output for \"%s\" %s-sites (#: %d) at minimum coverage %d\t- ",
+                    slabel,type,length(sampledata$coverage),n ) )
+      getCoverageStats(mrobjFiltered,plot=F,both.strands=F)
+      cat( sprintf( "methylKit::getMethylationStats output for \"%s\" %s-sites (#: %d) at minimum coverage %d\t- ",
+                    slabel,type,length(sampledata$coverage),n ) )
+      getMethylationStats(mrobjFiltered,plot=F,both.strands=F)
+
+      if (plotfile!="") {
+        subtitle <- paste(slabel,type,"with coverage at least",n,
+                          " (number of sites: ",length(sampledata$coverage),")",sep=" ")
+        getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
+                         cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+        getMethylationStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
+                            cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+      }
+    }
+
+    mrobjFiltered <- filterByCoverage(mrobj,lo.count=locount,lo.perc=NULL,hi.count=hicount,hi.perc=NULL)
+    sampledata <- getData(mrobjFiltered)
+
+    cat( sprintf( "\n\nmethylKit::getCoverageStats output for \"%s\" %s-sites (#: %d) in coverage range [%d-%d]\t- ",
+                  slabel,type,length(sampledata$coverage),locount,hicount ) )
+    getCoverageStats(mrobjFiltered,plot=F,both.strands=F)
+    cat( sprintf( "methylKit::getMethylationStats output for \"%s\" %s-sites (#: %d) in coverage range [%d-%d]\t- ",
+                  slabel,type,length(sampledata$coverage),locount,hicount ) )
+    getMethylationStats(mrobjFiltered,plot=F,both.strands=F)
+
+    if (plotfile!="") {
+      subtitle <- paste(slabel,type,"coverage range [",locount,"-",hicount,"]",
+                        " (number of sites: ",length(sampledata$coverage),")",sep=" ")
+      getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
+                       cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+      getMethylationStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
+                          cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+    }
+
+    if (plotfile!="") {
+      dev.off()
+    }
     if (outfile != "") {
         sink()
     }

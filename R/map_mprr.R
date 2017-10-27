@@ -47,10 +47,10 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
     pcexon.gr              <- genome_ann$pcexon
     promoter.gr            <- genome_ann$promoter
     CDS.gr                 <- genome_ann$CDS
-    fiveprimeUTR.gr        <- genome_ann$fiveprimeUTR
-    threeprimeUTR.gr       <- genome_ann$threeprimeUTR
-    fiveprimeUTRunique.gr  <- genome_ann$fiveprimeUTRunique
-    threeprimeUTRunique.gr <- genome_ann$threeprimeUTRunique
+    fiveprimeUTR.gr        <- genome_ann$fpUTR
+    threeprimeUTR.gr       <- genome_ann$tpUTR
+    fiveprimeUTRunique.gr  <- genome_ann$fpUTRnotCDS
+    threeprimeUTRunique.gr <- genome_ann$tpUTRunique
     ncexon.gr              <- genome_ann$ncexon
 
     # Calculate the fraction of genic and intergenic regions in the genome:
@@ -95,18 +95,15 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
     hsmrR.geneoverlap.gr           <- suppressWarnings((intersect(hsmrR.gr,gene.gr,ignore.strand=TRUE)))
     hsmrR.exonoverlap.gr           <- suppressWarnings((intersect(hsmrR.gr,exon.gr,ignore.strand=TRUE)))
     hsmrR.promoteroverlap.gr       <- suppressWarnings((intersect(hsmrR.gr,promoter.gr,ignore.strand=TRUE)))
-    if (length(hsmrR.geneoverlap.gr) > 0) {
-    hsmrR.genepromoteroverlap.gr   <- setdiff(hsmrR.geneoverlap.gr,hsmrR.promoteroverlap.gr,ignore.strand=TRUE)
-    } else {
-    hsmrR.genepromoteroverlap.gr   <- hsmrR.geneoverlap.gr
-    }
 
     hsmrR.In.GenicRegions          <- sum(width(hsmrR.geneoverlap.gr))
     hsmrR.In.ExonRegions           <- sum(width(hsmrR.exonoverlap.gr))
     hsmrR.In.IntronRegions         <- sum(width(hsmrR.geneoverlap.gr))-sum(width(hsmrR.exonoverlap.gr))
-    hsmrR.In.PromoterRegions       <- sum(width(hsmrR.promoteroverlap.gr))
-    hsmrR.In.IntergenicRegions     <- sum(width(hsmrR.gr)) - sum(width(hsmrR.genepromoteroverlap.gr))-sum(width(hsmrR.promoteroverlap.gr))
-    hsmrR.In.FullIntergenicRegions <- hsmrR.In.IntergenicRegions+hsmrR.In.PromoterRegions
+
+    hsmrR.In.FullIntergenicRegions <- sum(width(hsmrR.gr)) - sum(width(hsmrR.geneoverlap.gr))
+    hsmrR.promotergeneoverlap.gr   <- setdiff(hsmrR.promoteroverlap.gr,hsmrR.geneoverlap.gr,ignore.strand=TRUE)
+    hsmrR.In.PromoterRegions       <- sum(width(hsmrR.promotergeneoverlap.gr))
+    hsmrR.In.IntergenicRegions     <- hsmrR.In.FullIntergenicRegions - hsmrR.In.PromoterRegions
 
     hsmrR.pct          <- round(100*sum(width(hsmrR.gr))/gnmsize,2)
     hsmrR.slices1      <- c(hsmrR.In.GenicRegions,hsmrR.In.FullIntergenicRegions)
@@ -124,7 +121,7 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
     cat( sprintf("Size of overlap of methylation-rich regions of %s %s with   other intergenic regions:   %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmrR.In.IntergenicRegions,hsmrR.pct2[4],hsmrR.pct2[4]/(100*intergenicsanspromoter.fraction)) )
     cat( sprintf( "\n\n" ) )
 
-    hsmrRinGenes  <- findOverlaps(hsmrR.gr,gene.gr,ignore.strand=TRUE)
+    hsmrRinGenes  <- suppressWarnings(findOverlaps(hsmrR.gr,gene.gr,ignore.strand=TRUE))
     gwith    <- gene.gr[subjectHits(hsmrRinGenes)]
     rwith    <- hsmrR.gr[queryHits(hsmrRinGenes)]
 

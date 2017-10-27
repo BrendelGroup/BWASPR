@@ -47,8 +47,7 @@ annotate_methylome <- function(mrobj,
         assign(vname,
                annotateWithFeature(as(meth,'GRanges'),
                                    genome_ann[[feature]],
-                                   strand=TRUE,
-                                   intersect.chr=FALSE)
+                                   strand=FALSE)
               )
         meth[feature] <- get(vname)@members
     }
