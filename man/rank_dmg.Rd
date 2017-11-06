@@ -33,8 +33,9 @@ This function sorts dmgenes by ADMpNucl and plots bar graph for demonstration
                        outfile2="AmHE-dmgenes.txt")
   dmgprp <- show_dmsg(AmHE,dmsgList,min.nsites=10,destrand=TRUE,
                       outflabel="Am_HE")
-  explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,withglink="NCBIgene",
-                            outflabel="Am_HE")
+  explore_dmsg_summaries <- explore_dmsg(AmHE,genome_ann,dmgprp,maxgwidth=-1,
+                                         minnbrdmsites=1,withglink="NCBIgene",
+                                         outflabel="Am_HE")
   rnk_pwcomparison_summaries <- rank_dmg(explore_dmsg_summaries,outflabel="Am_HE")
 
 }

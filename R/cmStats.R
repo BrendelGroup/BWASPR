@@ -75,7 +75,7 @@ cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,o
         subtitle <- paste(slabel,type,"with coverage at least",n,
                           " (number of sites: ",length(sampledata$coverage),")",sep=" ")
         getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
-                         cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+                         cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5, breaks=20)
         getMethylationStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
                             cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
       }
@@ -95,7 +95,7 @@ cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,o
       subtitle <- paste(slabel,type,"coverage range [",locount,"-",hicount,"]",
                         " (number of sites: ",length(sampledata$coverage),")",sep=" ")
       getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
-                       cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
+                       cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5, breaks=20)
       getMethylationStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
                           cex.main=0.75, cex.sub=0.5, cex.axis=0.5, cex.lab=0.5)
     }
