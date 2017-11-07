@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	October 27, 2017
+#Version:	November 6, 2017
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -678,28 +678,42 @@ if (RUNogl) {
   }
   outflabel <- paste(species,studyLabel,sep="_")
   message("\n.. printing ordered gene lists ...")
-  summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,withglink=glink,
-                            outflabel)
+if (maxgwidth > 0  |  minnbrdmsites > 1) {
+  summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,-1,
+                            1,withglink=glink,outflabel)
   rnk_summaries <- rank_dmg(summaries,outflabel)
-  OGLdir <- paste(outputdir,"OGL",sep="/")
-  cmd <- paste("mkdir -p ",OGLdir,"; mv ogl* rnk-dmg* ",OGLdir,sep="")
+  OGLalldir <- paste(outputdir,"OGLall",sep="/")
+  cmd <- paste("mkdir -p ",OGLalldir,"; mv ogl* rnk-dmg* wrt-* ",OGLalldir,sep="")
 # message("\n.. now executing: ",cmd)
   system(cmd)
+}
+
+  summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,maxgwidth,
+                            minnbrdmsites,withglink=glink,outflabel)
+  rnk_summaries <- rank_dmg(summaries,outflabel)
+  OGLdir <- paste(outputdir,"OGL",sep="/")
+  cmd <- paste("mkdir -p ",OGLdir,"; mv ogl* rnk-dmg* wrt-* ",OGLdir,sep="")
+# message("\n.. now executing: ",cmd)
+  system(cmd)
+
   readme <- paste("OGL - Ordered gene lists.\n\n",
-                  "Input: studyhc annotation\n",
+                  "Input: studyhc annotation   maxgwidth minnbrdmsites\n",
                   "       dmgprp (= output of BWASPR:show_dmsg())\n\n",
                   "Output: files ogl-*.txt rnk-dmg-*.txt\n",
                   "         ogl-<study>_<sample>.txt ogl-<study>_<sample1>.vs.<sample2>.txt\n",
-                  "         rnk-dmg--<study>_<sample1>.vs.<sample2>.txt rnk-dmg--<study>_<sample1>.vs.<sample2>.pdf\n\n",
+                  "         rnk-dmg--<study>_<sample1>.vs.<sample2>.txt rnk-dmg--<study>_<sample1>.vs.<sample2>.pdf\n",
+                  "         wrt-<study>.txt\n\n",
                   "Notes: Output files ogl-<study>_<sample>.txt give tables for each sample with columns\n\n",
                   "        gene_ID gwidth #Sites #per10Kb %perSite %pNucl\n\n",
                   "       ordered by %pNucl.  If available, a link to an NCBI entry of gene_ID is inserted as second column.\n",
                   "       Abbreviations used: %perSite, percent methylation per site\n",
                   "                           %perNucl, percent methylation per nucleotide of the gene\n\n",
                   "       Output files ogl-<study>_<sample1>.vs.<sample2>.txt give tables for each comparison with columns\n\n",
-                  "        gene_ID gwidth #Sites #per10Kb #dmSites #dmsp10kb %dmSites DMpSite ADMpSite DMpNucl ADMpNucl\n\n",
+                  "        gene_ID gwidth #Sites #per10Kb #dmSites #dmsp10kb %dmSites %psite1 %psite2 DMpSite ADMpSite DMpNucl ADMpNucl\n\n",
                   "       ordered by DMpsite.  If available, a link to an NCBI entry of gene_ID is inserted as second column.\n",
                   "       Abbreviations used: %dmSites, percent sites that are differentially methylated\n",
+                  "                           %psite1, average per site % methylation for sample1\n",
+                  "                           %psite2, average per site % methylation for sample2\n",
                   "                           DMpsite, average per site difference in % methylation between sample1 and sample2\n",
                   "                           ADMpsite, absolute value of DMpsite\n",
                   "                           DMpNucl, gene\n",
@@ -709,7 +723,19 @@ if (RUNogl) {
                   "        ogl-<study>_<sample1>.vs.<sample2>.txt but ordered by ADMpNucl.\n",
                   "       Output files rnk-dmg-<study>_<sample1>.vs.<sample2>.pdf provide visualization of the distribution\n",
                   "        of ADMpNucl values.\n\n",
+                  "       Output file wrt-<study>.txt gives results of the Wilcoxon signed rank test comparing\n",
+                  "        the %psite1 and %psite2 vectors\n\n",
+                  "       In output directory OGL, tables are restricted to genes with gwidth <= maxgwidth and, for\n",
+                  "        pairwise comparisons, #dmSites >= minnbrdmsites\n\n",
+                  "       If either maxgwidth or minnbrdmsites is set, then output directory OGLall will show the full tables\n",
+                  "        with all genes (for reference).\n\n",
                   sep="")
+if (maxgwidth > 0  |  minnbrdmsites > 1) {
+  readmefile <- paste(OGLalldir,"0READMEogl",sep="/")
+  sink(readmefile)
+  cat(sprintf("%s",readme))
+  sink()
+}
   readmefile <- paste(OGLdir,"0READMEogl",sep="/")
   sink(readmefile)
   cat(sprintf("%s",readme))

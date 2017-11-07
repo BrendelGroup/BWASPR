@@ -139,7 +139,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
     sink(wcoxfile)
 
     pw_summaries <- lapply(comparison_list, function(comparison) {
-        message(paste('      ... explore ',comparison,'...',sep=''))
+        message(paste('      ... explore ',comparison,' ...',sep=''))
         sites            <- dmgprp[[comparison]]
         comparison       <- toString(comparison)
         sample1          <- unlist(strsplit(comparison,'\\.'))[1]
