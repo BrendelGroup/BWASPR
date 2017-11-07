@@ -1,4 +1,4 @@
-#RWORK 0README.  Last updated: October 27, 2017 (V. Brendel)
+#RWORK 0README.  Last updated: November 6, 2017 (V. Brendel)
 #
 Analyses in this directory are based on the BWASPR package, available on github:
 
@@ -23,7 +23,7 @@ Rscript.BWASPR, then run the workflow according to the specifications in arg1.co
 
 For convenience and testing, use
 
-	xcheck arg1
+	./xcheck arg1
 
 which will call the Rscript command and put output in a directory NEW-arg1 (and compare with an existing
 output directory OUT-arg1, if it exists, a useful check on updated code).
@@ -57,6 +57,6 @@ arg1.RData file from the current run, set RUNsave=TRUE.
 
 To check the mechanics of running BWASPR, you can use the small data set in ../inst/exdata.  Run
 
-	xdoit sample OUT-sample
+	./xdoit sample OUT-sample
 
 and take a look at the 0README files in the output directory and its subdirectories.

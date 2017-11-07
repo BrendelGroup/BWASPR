@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-bindir=/projects/vbrendel/SIMETH/RWORK/Fe
+bindir=./
 
 study=$1
 
