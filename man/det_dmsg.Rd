@@ -6,8 +6,8 @@
   This function generates list of differentially methylated CpG sites and the
   corresponding genes, as determined by application of methylKit functions.}
 \usage{
-det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01, mc.cores = 1,
-  destrand = FALSE, outfile1 = "methyl_dmsites.txt",
+det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01,
+  mc.cores = 1, destrand = FALSE, outfile1 = "methyl_dmsites.txt",
   outfile2 = "methyl_dmgenes.txt")
 }
 \arguments{

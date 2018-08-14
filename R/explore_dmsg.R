@@ -59,7 +59,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
     comparison_list <- names(dmgprp)
     # for each sample, return a list of genes sorted by meth level per 10kb
     #
-    message('   ... explore individual sample ...')
+    message('   ... explore individual samples ...')
     ss_summaries <- lapply(sample_list, function(sample) {
         message(paste('      ... explore ',sample,' ...',sep=''))
         # subset the mrobj
@@ -208,22 +208,23 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
 
         # ... comparing samples with the Wilcoxon signed rank test:
         #
+	nbrgenes <- length(pw_summary$`%psite1`)
         cat( paste('... comparing ',comparison,'...\n',sep=' ') )
         if (maxgwidth > 0) {
-	  cat( paste('\nNumber of genes <= ',maxgwidth,' and with #dmsites >= ',
-                     minnbrdmsites,': ',length(pw_summary$`%psite1`) ))
+	  cat( paste('\nNumber of genes <= ',maxgwidth,' and with #dmsites >= ', minnbrdmsites,': ',nbrgenes ))
         }
         else {
-	  cat( paste('\nNumber of genes with #dmsites >= ',minnbrdmsites,': ',
-                     length(pw_summary$`%psite1`),'\n') )
+	  cat( paste('\nNumber of genes with #dmsites >= ',minnbrdmsites,': ', nbrgenes,'\n') )
         }
-	cat( sprintf("\nsample1\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite1`),
-	             sum(pw_summary$`%psite1`)/length(pw_summary$`%psite1`) ) )
-	cat( sprintf(  "sample2\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite2`),
-	             sum(pw_summary$`%psite2`)/length(pw_summary$`%psite2`) ) )
-	cat( sprintf("\nsum difference: %8.2f\taverage difference: %8.4f\n",sum(pw_summary$DMpSite),
-	             sum(pw_summary$DMpSite)/length(pw_summary$DMpSite) ) )
-        print(wilcox.test(pw_summary$`%psite1`,pw_summary$`%psite2`,paired=T,exact=F))
+	if (nbrgenes > 1) {
+	  cat( sprintf("\nsample1\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite1`),
+	               sum(pw_summary$`%psite1`)/length(pw_summary$`%psite1`) ) )
+	  cat( sprintf(  "sample2\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite2`),
+	               sum(pw_summary$`%psite2`)/length(pw_summary$`%psite2`) ) )
+	  cat( sprintf("\nsum difference: %8.2f\taverage difference: %8.4f\n",sum(pw_summary$DMpSite),
+	               sum(pw_summary$DMpSite)/length(pw_summary$DMpSite) ) )
+          print(wilcox.test(pw_summary$`%psite1`,pw_summary$`%psite2`,paired=T,exact=F))
+	}
         cat( "\n\n" )
 
         return(pw_summary)

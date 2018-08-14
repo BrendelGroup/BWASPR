@@ -17,7 +17,7 @@
 #'
 #' @importFrom methylKit getData getCoverageStats getMethylationStats
 #' @importFrom pastecs stat.pen
-#' @import ggplot2
+#' @import ggplot2 R.devices
 #' @importFrom dplyr arrange
 #' @import gridExtra
 #'
@@ -242,7 +242,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
       if (doplots) {
         pdffile <- sprintf("%dds-%s.pdf",d,sampleL)
         mytitle <- sprintf( "\n%s\n%2d-distance distributions", sampleL, d)
-        ggsave(pdffile, do.call(marrangeGrob, list(grobs=plotme, nrow=1, ncol=2, top = mytitle)), width=7, height=7, units="in")
+        suppressGraphics(ggsave(pdffile, do.call(marrangeGrob, list(grobs=plotme, nrow=1, ncol=2, top = mytitle)), width=7, height=7, units="in"))
       }
     }
     
@@ -259,7 +259,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
 
     cat( sprintf( "\n\n" ) )
     sink()
-    message('... det_dmpr() finished ...')
+    message('... det_mprr() finished ...')
     return(list('hsmrR' = DFhsmrR,
                 'hsmrP' = DFhsmrP))
 }

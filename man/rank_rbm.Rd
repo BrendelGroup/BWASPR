@@ -7,7 +7,8 @@
   and returns a list of dataframes containing the GRange regions ranked by
   methylation site density.}
 \usage{
-rank_rbm(mrobj, region.gr, rlabel = "sir", withglink = "", outflabel = "")
+rank_rbm(mrobj, region.gr, rlabel = "sir", withglink = "",
+  outflabel = "")
 }
 \arguments{
 \item{mrobj}{A methyRaw/methRawList object}
