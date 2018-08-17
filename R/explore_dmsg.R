@@ -194,12 +194,12 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
         if (nchar(withglink) > 0) {
             colnames(pw_summary) <-
               c("gene_ID","gene_link","gwidth","#Sites","#per10Kb",
-                "#dmSites","#dmsp10kb","%dmSites","%psite1","%psite2","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
+                "#dmSites","#dmsp10kb","%dmSites","%pSite1","%pSite2","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
         }
         else {
             colnames(pw_summary) <-
               c("gene_ID","gwidth","#Sites","#per10Kb",
-                "#dmSites","#dmsp10kb","%dmSites","%psite1","%psite2","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
+                "#dmSites","#dmsp10kb","%dmSites","%pSite1","%pSite2","DMpSite","ADMpSite","DMpNucl","ADMpNucl")
         }
         outfile <- paste("ogl",outflabel,sep="-")
         outfile <- paste(outfile,comparison,sep="_")
@@ -224,6 +224,9 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
 	  cat( sprintf("\nsum difference: %8.2f\taverage difference: %8.4f\n",sum(pw_summary$DMpSite),
 	               sum(pw_summary$DMpSite)/length(pw_summary$DMpSite) ) )
           print(wilcox.test(pw_summary$`%psite1`,pw_summary$`%psite2`,paired=T,exact=F))
+	}
+	else {
+	  cat( paste('\nOnly 1 gene, so there is nothing to test here ...'\n') )
 	}
         cat( "\n\n" )
 
