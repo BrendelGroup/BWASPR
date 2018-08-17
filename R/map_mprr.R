@@ -11,7 +11,7 @@
 #' @param UTRflag Numerical, indicating whether or not the annotation included UTRs (1 or 0)
 #' @param outfile If specified, then the result is saved in the specified file name.
 #'
-#' @return Data frame describing genes overlapping with methylation-rich regions
+#' @return Data frames describing genes overlapping with methylation-rich and poor regions
 #'
 #' @import GenomicRanges
 #' @import IRanges
@@ -84,7 +84,8 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
       intergenicsanspromoter.fraction <- intergenicsanspromoter.width/gnmsize
     
     
-
+    #hsm-rich regions:
+    #
     tmpdf <- hsmrL$hsmrR
     hsmrR.gr <- with(tmpdf,{GRanges(tmpdf$SeqID,
                                     IRanges(tmpdf$From,tmpdf$To),
@@ -111,7 +112,7 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
     hsmrR.slices2      <- c(hsmrR.In.ExonRegions,hsmrR.In.IntronRegions,hsmrR.In.PromoterRegions,hsmrR.In.IntergenicRegions)
     hsmrR.pct2         <- round(100*hsmrR.slices2/sum(hsmrR.slices2),2)
 
-    cat( sprintf("Overlap of methylation-rich and -poor regions with genome features for %s sample %s\n\n", species, slabel) )
+    cat( sprintf("Overlap of methylation-rich regions with genome features for %s sample %s\n\n", species, slabel) )
     cat( sprintf("Total size of the methylation-rich regions of %s:                                  %9d bp (%5.1f%% of genome)\n",slabel,sum(width(hsmrR.gr)),hsmrR.pct) )      
     cat( sprintf("Size of overlap of methylation-rich regions of %s %s with genic regions:              %9d bp (%5.1f%% of total size)   (%5.2f O/E)\n",species,slabel,hsmrR.In.GenicRegions,hsmrR.pct1[1],hsmrR.pct1[1]/(100*gene.fraction)) )
     cat( sprintf("Size of overlap of methylation-rich regions of %s %s with   exon regions:               %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmrR.In.ExonRegions,hsmrR.pct2[1],hsmrR.pct2[2]/(100*exon.fraction)) )
@@ -127,14 +128,65 @@ map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
 
     gwithdf <- as.data.frame(gwith)
     rwithdf <- as.data.frame(rwith)
-    gwithrdf <- cbind(gwithdf,rwithdf)
+    gwithrRdf <- cbind(gwithdf,rwithdf)
     gwrfile <- paste("gwr",slabel,sep="-")
     gwrfile <- paste(gwrfile,"txt",sep=".")
-    write.table(gwithrdf, file=gwrfile, sep="\t", row.names=FALSE, quote=FALSE)
+    write.table(gwithrRdf, file=gwrfile, sep="\t", row.names=FALSE, quote=FALSE)
+
+
+    #hsm-poor regions:
+    #
+    tmpdf <- hsmrL$hsmrP
+    hsmpR.gr <- with(tmpdf,{GRanges(tmpdf$SeqID,
+                                    IRanges(tmpdf$From,tmpdf$To),
+                                    NbrSites=(tmpdf$NbrSites),                                               
+                                    Sdnsty=(tmpdf$Sdnsty))
+                           }
+                           )
+    hsmpR.geneoverlap.gr           <- suppressWarnings((intersect(hsmpR.gr,gene.gr,ignore.strand=TRUE)))
+    hsmpR.exonoverlap.gr           <- suppressWarnings((intersect(hsmpR.gr,exon.gr,ignore.strand=TRUE)))
+    hsmpR.promoteroverlap.gr       <- suppressWarnings((intersect(hsmpR.gr,promoter.gr,ignore.strand=TRUE)))
+
+    hsmpR.In.GenicRegions          <- sum(width(hsmpR.geneoverlap.gr))
+    hsmpR.In.ExonRegions           <- sum(width(hsmpR.exonoverlap.gr))
+    hsmpR.In.IntronRegions         <- sum(width(hsmpR.geneoverlap.gr))-sum(width(hsmpR.exonoverlap.gr))
+
+    hsmpR.In.FullIntergenicRegions <- sum(width(hsmpR.gr)) - sum(width(hsmpR.geneoverlap.gr))
+    hsmpR.promotergeneoverlap.gr   <- setdiff(hsmpR.promoteroverlap.gr,hsmpR.geneoverlap.gr,ignore.strand=TRUE)
+    hsmpR.In.PromoterRegions       <- sum(width(hsmpR.promotergeneoverlap.gr))
+    hsmpR.In.IntergenicRegions     <- hsmpR.In.FullIntergenicRegions - hsmpR.In.PromoterRegions
+
+    hsmpR.pct          <- round(100*sum(width(hsmpR.gr))/gnmsize,2)
+    hsmpR.slices1      <- c(hsmpR.In.GenicRegions,hsmpR.In.FullIntergenicRegions)
+    hsmpR.pct1         <- round(100*hsmpR.slices1/sum(hsmpR.slices1),2)
+    hsmpR.slices2      <- c(hsmpR.In.ExonRegions,hsmpR.In.IntronRegions,hsmpR.In.PromoterRegions,hsmpR.In.IntergenicRegions)
+    hsmpR.pct2         <- round(100*hsmpR.slices2/sum(hsmpR.slices2),2)
+
+    cat( sprintf("Overlap of methylation-poor regions with genome features for %s sample %s\n\n", species, slabel) )
+    cat( sprintf("Total size of the methylation-poor regions of %s:                                  %9d bp (%5.1f%% of genome)\n",slabel,sum(width(hsmpR.gr)),hsmpR.pct) )      
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with genic regions:              %9d bp (%5.1f%% of total size)   (%5.2f O/E)\n",species,slabel,hsmpR.In.GenicRegions,hsmpR.pct1[1],hsmpR.pct1[1]/(100*gene.fraction)) )
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with   exon regions:               %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmpR.In.ExonRegions,hsmpR.pct2[1],hsmpR.pct2[2]/(100*exon.fraction)) )
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with   intron regions:             %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmpR.In.IntronRegions,hsmpR.pct2[2],hsmpR.pct2[2]/(100*intron.fraction)) )
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with intergenic regions:         %9d bp (%5.1f%% of total size)   (%5.2f O/E)\n",species,slabel,hsmpR.In.FullIntergenicRegions,hsmpR.pct1[2],hsmpR.pct1[1]/(100*intergenic.fraction)) )
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with   promoter regions:           %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmpR.In.PromoterRegions,hsmpR.pct2[3],hsmpR.pct2[3]/(100*promoter.fraction)) )
+    cat( sprintf("Size of overlap of methylation-poor regions of %s %s with   other intergenic regions:   %9d bp (%5.1f%% of total size) (%5.2f O/E)\n",species,slabel,hsmpR.In.IntergenicRegions,hsmpR.pct2[4],hsmpR.pct2[4]/(100*intergenicsanspromoter.fraction)) )
+    cat( sprintf( "\n\n" ) )
+
+    hsmpRinGenes  <- suppressWarnings(findOverlaps(hsmpR.gr,gene.gr,ignore.strand=TRUE))
+    gwith    <- gene.gr[subjectHits(hsmpRinGenes)]
+    rwith    <- hsmpR.gr[queryHits(hsmpRinGenes)]
+
+    gwithdf <- as.data.frame(gwith)
+    rwithdf <- as.data.frame(rwith)
+    gwithpRdf <- cbind(gwithdf,rwithdf)
+    gwrfile <- paste("gwp",slabel,sep="-")
+    gwrfile <- paste(gwrfile,"txt",sep=".")
+    write.table(gwithpRdf, file=gwrfile, sep="\t", row.names=FALSE, quote=FALSE)
+
 
     cat( sprintf( "\n\n" ) )
     if (outfile != "") {
         sink()
     }
-    return(gwithrdf)
+    return(list(gwithrRdf,gwithpRdf))
 }
