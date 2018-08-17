@@ -226,7 +226,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
           print(wilcox.test(pw_summary$`%psite1`,pw_summary$`%psite2`,paired=T,exact=F))
 	}
 	else {
-	  cat( paste('\nOnly 1 gene, so there is nothing to test here ...'\n') )
+	  cat( '\nOnly 1 gene, so there is nothing to test here ...\n' )
 	}
         cat( "\n\n" )
 
