@@ -24,7 +24,7 @@ map_mprr(hsmrL, species, slabel, genome_ann, gnmsize, UTRflag, outfile)
 \item{outfile}{If specified, then the result is saved in the specified file name.}
 }
 \value{
-Data frame describing genes overlapping with methylation-rich regions
+Data frames describing genes overlapping with methylation-rich and poor regions
 }
 \description{
 map_mprr()
