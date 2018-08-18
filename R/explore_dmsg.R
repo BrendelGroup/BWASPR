@@ -208,7 +208,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
 
         # ... comparing samples with the Wilcoxon signed rank test:
         #
-	nbrgenes <- length(pw_summary$`%psite1`)
+	nbrgenes <- length(pw_summary$`%pSite1`)
         cat( paste('... comparing ',comparison,'...\n',sep=' ') )
         if (maxgwidth > 0) {
 	  cat( paste('\nNumber of genes <= ',maxgwidth,' and with #dmsites >= ', minnbrdmsites,': ',nbrgenes ))
@@ -217,13 +217,13 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
 	  cat( paste('\nNumber of genes with #dmsites >= ',minnbrdmsites,': ', nbrgenes,'\n') )
         }
 	if (nbrgenes > 1) {
-	  cat( sprintf("\nsample1\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite1`),
-	               sum(pw_summary$`%psite1`)/length(pw_summary$`%psite1`) ) )
-	  cat( sprintf(  "sample2\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%psite2`),
-	               sum(pw_summary$`%psite2`)/length(pw_summary$`%psite2`) ) )
+	  cat( sprintf("\nsample1\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%pSite1`),
+	               sum(pw_summary$`%pSite1`)/length(pw_summary$`%pSite1`) ) )
+	  cat( sprintf(  "sample2\tsum of percent methylation: %8.2f\taverage: %8.2f\n",sum(pw_summary$`%pSite2`),
+	               sum(pw_summary$`%pSite2`)/length(pw_summary$`%pSite2`) ) )
 	  cat( sprintf("\nsum difference: %8.2f\taverage difference: %8.4f\n",sum(pw_summary$DMpSite),
 	               sum(pw_summary$DMpSite)/length(pw_summary$DMpSite) ) )
-          print(wilcox.test(pw_summary$`%psite1`,pw_summary$`%psite2`,paired=T,exact=F))
+          print(wilcox.test(pw_summary$`%pSite1`,pw_summary$`%pSite2`,paired=T,exact=F))
 	}
 	else {
 	  cat( '\nOnly 1 gene, so there is nothing to test here ...\n' )
