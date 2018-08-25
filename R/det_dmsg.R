@@ -2,7 +2,7 @@
 #'   This function generates list of differentially methylated CpG sites and the
 #'   corresponding genes, as determined by application of methylKit functions.
 #'
-#' @param mrobj A methylRaw object or a methylRawList object.
+#' @param mrobj A methylKit methylRaw or methylRawList object
 #' @param genome_ann Genome annotation returned by get_genome_annotation()
 #' @param threshold Cutoff for percent methylation difference, default threshold = 25.0
 #' @param qvalue Cutoff for q-value, default q-value = 0.01

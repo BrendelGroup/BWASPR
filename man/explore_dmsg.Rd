@@ -12,7 +12,7 @@ explore_dmsg(mrobj, genome_ann, dmgprp, maxgwidth, minnbrdmsites,
   withglink = "NCBIgene", outflabel = "")
 }
 \arguments{
-\item{mrobj}{A methyRaw/methRawList object or a methyRawList object}
+\item{mrobj}{A methylKit methylRaw or methylRawList object}
 
 \item{genome_ann}{Genome annotation returned by get_genome_annotation()}
 

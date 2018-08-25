@@ -11,7 +11,7 @@ det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01,
   outfile2 = "methyl_dmgenes.txt")
 }
 \arguments{
-\item{mrobj}{A methylRaw object or a methylRawList object.}
+\item{mrobj}{A methylKit methylRaw or methylRawList object}
 
 \item{genome_ann}{Genome annotation returned by get_genome_annotation()}
 

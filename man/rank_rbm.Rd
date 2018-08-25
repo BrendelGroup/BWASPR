@@ -3,31 +3,35 @@
 \name{rank_rbm}
 \alias{rank_rbm}
 \title{rank_rbm() 
-  This function subsets the provided MethylRaw objects by the specified GRange
+  This function subsets the provided methylRaw objects by the specified GRange
   and returns a list of dataframes containing the GRange regions ranked by
   methylation site density.}
 \usage{
-rank_rbm(mrobj, region.gr, rlabel = "sir", withglink = "",
+rank_rbm(mrobjscd, mrobjhsm, region.gr, rlabel = "", withglink = "",
   outflabel = "")
 }
 \arguments{
-\item{mrobj}{A methyRaw/methRawList object}
+\item{mrobjscd}{A methylKit methylRaw or methylRawList object for scd sites}
+
+\item{mrobjhsm}{A methylKit methylRaw or methylRawList object for hsm sites}
 
 \item{region.gr}{A GRanges object (typically based on the relevant genome annotation)}
 
 \item{rlabel}{A string to identify the type of region analyzed}
 
-\item{withglink}{Either NCBIgene or "" to indicate inculsion of a gene link column in the output}
+\item{withglink}{Either NCBIgene or "" to indicate inclusion of a gene link column
+in the output if available}
 
 \item{outflabel}{A string to identify the output dataframe}
 }
 \value{
-A list of dataframes containing the GRange regions ranked by methylation
-  site density
+A list of lists of dataframes containing (for each sample) the GRange
+  regions ranked by overall methylation percentage (over all scd sites) or
+  methylation hsm site density
 }
 \description{
 rank_rbm() 
-  This function subsets the provided MethylRaw objects by the specified GRange
+  This function subsets the provided methylRaw objects by the specified GRange
   and returns a list of dataframes containing the GRange regions ranked by
   methylation site density.
 }
@@ -35,10 +39,12 @@ rank_rbm()
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
   myparf <- system.file("extdata","Am.par",package="BWASPR")
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-  AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
-                       type="CpGhsm",mincov=1,assembly="Amel-4.5")
+  AmHEscd <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
+                          type="CpGscd",mincov=1,assembly="Amel-4.5")
+  AmHEhsm <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
+                          type="CpGhsm",mincov=1,assembly="Amel-4.5")
   genome_ann <- get_genome_annotation(myfiles$parameters)
-  summaries <- rank_rbm(AmHE,region.gr=genome_ann$gene,rlabel="sir",
-                        withglink="NCBIgene",outflabel="Am_HE_gene")
+  rgL <- rank_rbm(AmHEscd,AmHEhsm,region.gr=genome_ann$gene,rlabel="genes",
+                  withglink="NCBIgene",outflabel="Am_HE")
 
 }
