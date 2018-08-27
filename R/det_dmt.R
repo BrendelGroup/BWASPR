@@ -1,20 +1,21 @@
-#' det_dmsg()
-#'   This function generates lists of differentially methylated CpG sites and the
+#' det_dmt()
+#'   This function generates list of differentially methylated CpG tiles and the
 #'   corresponding genes, as determined by application of methylKit functions.
 #'
 #' @param mrobj A methylKit methylRaw or methylRawList object
 #' @param genome_ann Genome annotation returned by get_genome_annotation()
+#' @param wsize The window size for the sliding windows (tiles), default wsize = 1000
+#' @param stepsize The step size for the sliding window starts, default stepsize = 1000
 #' @param threshold Cutoff for percent methylation difference, default threshold = 25.0
 #' @param qvalue Cutoff for q-value, default q-value = 0.01
 #' @param mc.cores Integer denoting how many cores should be used for parallel
 #'   diffential methylation calculations
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands.
-#' @param outfile1 File name to which diff sites are written
-#' @param outfile2 File name to which diff genes are written
+#' @param outfile1 File name to which differentially methylated tiles are written
+#' @param outfile2 File name to which differentially methylated genes are written
 #'
-#' @return A list of GRanges objects that contain data on differentially methylated
-#'   sites and genes with such sites
+#' @return A Granges object that contains a list of genes that have diff methylated C tiles
 #'
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
@@ -26,47 +27,51 @@
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
 #'   myparf <- system.file("extdata","Am.par",package="BWASPR")
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
-#'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGhsm",
+#'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",type="CpGscd",
 #'                        mincov=1,assembly="Amel-4.5")
 #'   genome_ann <- get_genome_annotation(myfiles$parameters)
-#'   meth_diff <- det_dmsg(AmHE,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=4,
-#'                         outfile1="AmHE-dmsites.txt", 
-#'                         outfile2="AmHE-dmgenes.txt") 
+#'   mTlist <- det_dmt(AmHE,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=4,
+#'                     outfile1="AmHE-dmtiles.txt", 
+#'                     outfile2="AmHE-dmgenes.txt") 
 #'
 #' @export
 
-det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
+det_dmt <- function(mrobj,genome_ann,wsize=1000,stepsize=1000,
+		     threshold=25.0,qvalue=0.01,mc.cores=1,
                      destrand=FALSE,
-                     outfile1="methyl_dmsites.txt",
-                     outfile2="methyl_dmgenes.txt") {
-    message('... det_dmsg() ...')
+                     outfile1="dmt.txt",
+                     outfile2="dmg.txt") {
+    message('... det_dmt() ...')
     sample_list <- getSampleID(mrobj)
     treatment_list <- getTreatment(mrobj)
     genes <- genome_ann$gene
     nbtreatments <- length(unique(treatment_list))
+
+    tiles <- tileMethylCounts(mrobj,win.size=1000,step.size=1000)
+
     if (nbtreatments < 2) {
-        stop("WARNING: det_dmsg() requires input data from at least two ",
-             "treatments.")
+ 	return(tiles)
     }
 
 # If mrobj consists of multiple treatments, compare corresponding samples:
     unique_treatment_list <- unique(treatment_list)
     pairs <- combn(unique_treatment_list, 2, simplify=FALSE)
-    dmsites.gr <- lapply(pairs, function(pair) {
+    dmtiles.gr <- lapply(pairs, function(pair) {
         pair_samples <- list(sample_list[pair[1]+1],sample_list[pair[2]+1])
         pair_treatments <- c(pair[1],pair[2])
-        pair_mrobj <- reorganize(mrobj,
+        pair_tiles <- reorganize(tiles,
                                  sample.ids=pair_samples,
                                  treatment=pair_treatments
                                 )
-        meth <- unite(pair_mrobj,destrand=destrand)
-        meth@treatment=c(0,1)
+        pair_tiles@treatment=c(0,1)
+        utiles <- unite(pair_tiles,destrand=destrand)
+#getMethylDiff(myDiff,difference=25,qvalue=0.01,type="hyper")
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
         message(paste("... comparison: ",pairname," ...",sep=""))
-        pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
-        difsites <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
-        gr <- as(difsites,"GRanges")
+        pairdiff <- calculateDiffMeth(utiles,mc.cores=mc.cores)
+        diftiles <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
+        gr <- as(diftiles,"GRanges")
         if (length(gr) > 0) {
             S4Vectors::mcols(gr)$comparison <- pairname
         }
@@ -74,21 +79,21 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         return(gr)
        }
        )
-    if (length(dmsites.gr) == 0) {
-        message("No differentially methylated sites are found.")
+    if (length(dmtiles.gr) == 0) {
+        message("No differentially methylated tiles are found.")
         return(list('dmgenes' = GRanges(),
-                    'dmsites' = GRanges()))
+                    'dmtiles' = GRanges()))
     }
     if (outfile1 != '') {
-        dmsites <- unlist(GRangesList(unlist(dmsites.gr)))
-        dmsites$qvalue <- round(dmsites$qvalue,3)
-        dmsites$meth.diff <- round(dmsites$meth.diff,2)
-        dmsites.df <- BiocGenerics::as.data.frame(dmsites)
-        write.table(dmsites.df,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
+        dmtiles <- unlist(GRangesList(unlist(dmtiles.gr)))
+        dmtiles$qvalue <- round(dmtiles$qvalue,3)
+        dmtiles$meth.diff <- round(dmtiles$meth.diff,2)
+        dmtiles.df <- BiocGenerics::as.data.frame(dmtiles)
+        write.table(dmtiles.df,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
     }
 
     dmgenes.gr <- lapply(seq_along(pairs), function(i) {
-        gr <- subsetByOverlaps(genes,dmsites.gr[[i]],ignore.strand=TRUE)
+        gr <- subsetByOverlaps(genes,dmtiles.gr[[i]],ignore.strand=TRUE)
         pairname <- paste(sample_list[pairs[[i]][1]+1],
                           sample_list[pairs[[i]][2]+1],sep=".vs.")
         if (length(gr) > 0) {
@@ -99,7 +104,7 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
        )
     if (length(dmgenes.gr) == 0) {
         message("No differentially methylated genes are found.")
-        return(list('dmsites' = dmsites.gr,
+        return(list('dmtiles' = dmtiles.gr,
 		    'dmgenes' = GRanges()  ))
     }
     if (outfile2 != '') {
@@ -108,7 +113,8 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         write.table(dmgenes.df,file=outfile2,sep='\t',row.names=FALSE,quote=FALSE)
     }
 
-    message('... det_dmsg() finished ...')
-    return(list('dmsites' = dmsites.gr,
+    message('... det_dmt() finished ...')
+    return(list('tiles'   = tiles,
+                'dmtiles' = dmtiles.gr,
                 'dmgenes' = dmgenes.gr))
 }

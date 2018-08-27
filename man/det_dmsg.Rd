@@ -3,7 +3,7 @@
 \name{det_dmsg}
 \alias{det_dmsg}
 \title{det_dmsg()
-  This function generates list of differentially methylated CpG sites and the
+  This function generates lists of differentially methylated CpG sites and the
   corresponding genes, as determined by application of methylKit functions.}
 \usage{
 det_dmsg(mrobj, genome_ann, threshold = 25, qvalue = 0.01,
@@ -30,11 +30,12 @@ destrand=TRUE combines CpG methylation calls from both strands.}
 \item{outfile2}{File name to which diff genes are written}
 }
 \value{
-A Granges object that contains a list of genes that have diff methylated C sites
+A list of GRanges objects that contain data on differentially methylated
+  sites and genes with such sites
 }
 \description{
 det_dmsg()
-  This function generates list of differentially methylated CpG sites and the
+  This function generates lists of differentially methylated CpG sites and the
   corresponding genes, as determined by application of methylKit functions.
 }
 \examples{
