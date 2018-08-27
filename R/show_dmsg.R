@@ -1,7 +1,7 @@
 #' show_dmsg() 
 #'   This function generates will plot heatmaps of methylation level of sites in dmgenes
 #'
-#' @param mrobj A methyRaw object or a methyRawList object
+#' @param mrobj A methylKit methylRaw or methylRawList object
 #' @param dmsg A list containing GRanges objects dmsites and dmgenes returned by
 #'   det_dmsg()
 #' @param min.nsites Required minimal number of msites in a gene for the gene

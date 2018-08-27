@@ -17,7 +17,7 @@
 #'
 #' @importFrom methylKit getData getCoverageStats getMethylationStats
 #' @importFrom pastecs stat.pen
-#' @import ggplot2
+#' @import ggplot2 R.devices
 #' @importFrom dplyr arrange
 #' @import gridExtra
 #'
@@ -137,10 +137,10 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
             dhsmr.endi <- gdendpnt[i]
             dhsmr.endpnt <- as.numeric(sampledata$start[gdendpnt[i]])
           } else {
-            hsmr.record <- data.frame( Rtype = "Rich", Sample = sampleID, SeqID = dhsmr.name, From = dhsmr.begpnt, To = dhsmr.endpnt, Rlgth = dhsmr.endpnt-dhsmr.begpnt+1, NbrSites = dhsmr.endi-dhsmr.begi+1, Sdnsty = 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt), Fsite = dhsmr.begi, Tsite = dhsmr.endi, Dvalue = d )
+            hsmr.record <- data.frame( Rtype = "Rich", Sample = sampleID, SeqID = dhsmr.name, From = dhsmr.begpnt, To = dhsmr.endpnt, Rlgth = dhsmr.endpnt-dhsmr.begpnt+1, NbrSites = dhsmr.endi-dhsmr.begi+1, Sdnsty = 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt+1), Fsite = dhsmr.begi, Tsite = dhsmr.endi, Dvalue = d )
             DFhsmr <- rbind(DFhsmr,hsmr.record)
             if (checkflag) {
-              cat( sprintf("Rich \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, dhsmr.name, dhsmr.begpnt, dhsmr.begi, dhsmr.endpnt, dhsmr.endi, d, dhsmr.endpnt-dhsmr.begpnt, dhsmr.endi-dhsmr.begi+1, 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt) ) )
+              cat( sprintf("Rich \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, dhsmr.name, dhsmr.begpnt, dhsmr.begi, dhsmr.endpnt, dhsmr.endi, d, dhsmr.endpnt-dhsmr.begpnt+1, dhsmr.endi-dhsmr.begi+1, 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt+1) ) )
               for ( j in dhsmr.begi:dhsmr.endi ) {
                 print( sampledata[j,] )
               }
@@ -168,10 +168,10 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
             phsmr.endi <- gdendpnt[i]
             phsmr.endpnt <- as.numeric(sampledata$start[gdendpnt[i]])
           } else {
-            hsmr.record <- data.frame( Rtype = "Poor", Sample = sampleID, SeqID = phsmr.name, From = phsmr.begpnt, To = phsmr.endpnt, Rlgth = phsmr.endpnt-phsmr.begpnt+1, NbrSites = phsmr.endi-phsmr.begi+1, Sdnsty = 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt), Fsite = phsmr.begi, Tsite = phsmr.endi, Dvalue = d )
+            hsmr.record <- data.frame( Rtype = "Poor", Sample = sampleID, SeqID = phsmr.name, From = phsmr.begpnt, To = phsmr.endpnt, Rlgth = phsmr.endpnt-phsmr.begpnt+1, NbrSites = phsmr.endi-phsmr.begi+1, Sdnsty = 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt+1), Fsite = phsmr.begi, Tsite = phsmr.endi, Dvalue = d )
             DFhsmr <- rbind(DFhsmr,hsmr.record)
             if (checkflag) {
-              cat( sprintf("Poor \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, phsmr.name, phsmr.begpnt, phsmr.begi, phsmr.endpnt, phsmr.endi, d, phsmr.endpnt-phsmr.begpnt, phsmr.endi-phsmr.begi+1, 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt) ) )
+              cat( sprintf("Poor \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, phsmr.name, phsmr.begpnt, phsmr.begi, phsmr.endpnt, phsmr.endi, d, phsmr.endpnt-phsmr.begpnt+1, phsmr.endi-phsmr.begi+1, 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt+1) ) )
               for ( j in phsmr.begi:phsmr.endi ) {
                 print( sampledata[j,] )
               }
@@ -183,7 +183,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
             phsmr.endpnt <- sampledata$start[gdendpnt[i]]
           }
           if (checkflag) {
-            cat( sprintf("Poor hsm region %s from %d to %d, %2d-distance:\t%6d\n",sampledata$chr[gdbegpnt[i]], sampledata$start[gdbegpnt[i]], sampledata$start[gdendpnt[i]], d, sampledata$start[gdendpnt[i]] - sampledata$start[gdbegpnt[i]] ) )
+            cat( sprintf("Poor hsm region %s from %d to %d, %2d-distance:\t%6d\n",sampledata$chr[gdbegpnt[i]], sampledata$start[gdbegpnt[i]], sampledata$start[gdendpnt[i]], d, sampledata$start[gdendpnt[i]]-sampledata$start[gdbegpnt[i]]+1) )
             for ( j in gdbegpnt[i]:gdendpnt[i] ) {
               print( sampledata[j,] )
             }
@@ -194,7 +194,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
         hsmr.record <- data.frame( Rtype = "Rich", Sample = sampleID, SeqID = dhsmr.name, From = dhsmr.begpnt, To = dhsmr.endpnt, Rlgth = dhsmr.endpnt-dhsmr.begpnt+1, NbrSites = dhsmr.endi-dhsmr.begi+1, Sdnsty = 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt), Fsite = dhsmr.begi, Tsite = dhsmr.endi, Dvalue = d )
         DFhsmr <- rbind(DFhsmr,hsmr.record)
         if (checkflag) {
-          cat( sprintf("Rich \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, dhsmr.name, dhsmr.begpnt, dhsmr.begi, dhsmr.endpnt, dhsmr.endi, d, dhsmr.endpnt-dhsmr.begpnt, dhsmr.endi-dhsmr.begi+1, 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt) ) )
+          cat( sprintf("Rich \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, dhsmr.name, dhsmr.begpnt, dhsmr.begi, dhsmr.endpnt, dhsmr.endi, d, dhsmr.endpnt-dhsmr.begpnt+1, dhsmr.endi-dhsmr.begi+1, 1000.*(dhsmr.endi-dhsmr.begi+1)/(dhsmr.endpnt-dhsmr.begpnt+1) ) )
           for ( j in dhsmr.begi:dhsmr.endi ) {
             print( sampledata[j,] )
           }
@@ -204,7 +204,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
         hsmr.record <- data.frame( Rtype = "Poor", Sample = sampleID, SeqID = phsmr.name, From = phsmr.begpnt, To = phsmr.endpnt, Rlgth = phsmr.endpnt-phsmr.begpnt+1, NbrSites = phsmr.endi-phsmr.begi+1, Sdnsty = 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt), Fsite = phsmr.begi, Tsite = phsmr.endi, Dvalue = d )
         DFhsmr <- rbind(DFhsmr,hsmr.record)
         if (checkflag) {
-          cat( sprintf("Poor \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, phsmr.name, phsmr.begpnt, phsmr.begi, phsmr.endpnt, phsmr.endi, d, phsmr.endpnt-phsmr.begpnt, phsmr.endi-phsmr.begi+1, 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt) ) )
+          cat( sprintf("Poor \"%s\"\thsm region %s\tfrom %8d (site %6d) to %8d (site %6d), (adjusted) %2d-distance:\t%6d\t:number of sites, %4d, per-kb-density: %6.2f\n", sampleL, phsmr.name, phsmr.begpnt, phsmr.begi, phsmr.endpnt, phsmr.endi, d, phsmr.endpnt-phsmr.begpnt+1, phsmr.endi-phsmr.begi+1, 1000.*(phsmr.endi-phsmr.begi+1)/(phsmr.endpnt-phsmr.begpnt+1) ) )
           for ( j in phsmr.begi:phsmr.endi ) {
             print( sampledata[j,] )
           }
@@ -242,7 +242,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
       if (doplots) {
         pdffile <- sprintf("%dds-%s.pdf",d,sampleL)
         mytitle <- sprintf( "\n%s\n%2d-distance distributions", sampleL, d)
-        ggsave(pdffile, do.call(marrangeGrob, list(grobs=plotme, nrow=1, ncol=2, top = mytitle)), width=7, height=7, units="in")
+        suppressGraphics(ggsave(pdffile, do.call(marrangeGrob, list(grobs=plotme, nrow=1, ncol=2, top = mytitle)), width=7, height=7, units="in"))
       }
     }
     
@@ -259,7 +259,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
 
     cat( sprintf( "\n\n" ) )
     sink()
-    message('... det_dmpr() finished ...')
+    message('... det_mprr() finished ...')
     return(list('hsmrR' = DFhsmrR,
                 'hsmrP' = DFhsmrP))
 }

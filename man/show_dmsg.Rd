@@ -5,11 +5,11 @@
 \title{show_dmsg() 
   This function generates will plot heatmaps of methylation level of sites in dmgenes}
 \usage{
-show_dmsg(mrobj, dmsg, destrand = FALSE, min.nsites = 2, max.nsites = 60,
-  min.pdmsites = 10, mc.cores = 1, outflabel = "")
+show_dmsg(mrobj, dmsg, destrand = FALSE, min.nsites = 2,
+  max.nsites = 60, min.pdmsites = 10, mc.cores = 1, outflabel = "")
 }
 \arguments{
-\item{mrobj}{A methyRaw object or a methyRawList object}
+\item{mrobj}{A methylKit methylRaw or methylRawList object}
 
 \item{dmsg}{A list containing GRanges objects dmsites and dmgenes returned by
 det_dmsg()}
