@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	September 5, 2018
+#Version:	September 7, 2018
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -673,7 +673,7 @@ if (RUNdmt) {
   outfile1 <- paste(outfile1,"txt",sep=".")
   outfile2 <- paste("dmg",speciesstudy,sep="-")
   outfile2 <- paste(outfile2,"txt",sep=".")
-  mtList   <- det_dmt(studymc,genome_ann,wsize=1000,stepsize=1000,
+  mtList   <- det_dmt(studymc,genome_ann,wsize=wsize,stepsize=stepsize,
                       threshold,qvalue,mc.cores=numprc,
                       destrand,outfile1,outfile2)
   cmd <- paste("mv",outfile1,outfile2,DMTdir,sep=" ")
