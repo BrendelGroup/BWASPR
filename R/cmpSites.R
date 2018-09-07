@@ -10,8 +10,7 @@
 #' @param nbrpms Integer representing the number of potential methylation
 #'   sites in the genome; typically derived from the input *.par file.
 #' @param plotfile If specified other than the default "", then plots
-#'   are saved in PDF file "plotfile".pdf; otherwise either no plots are
-#'   generated.
+#'   are saved in PDF file "plotfile".pdf; otherwise no plots are generated.
 #' @param covlist A vector listing the coverage (number of reads) values
 #'   to be explored; e.g., c(6,8,10) would compare sites with minimum
 #'   coverage 6, 8, and 10, successively

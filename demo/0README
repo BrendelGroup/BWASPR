@@ -1,4 +1,4 @@
-#RWORK 0README.  Last updated: November 6, 2017 (V. Brendel)
+#RWORK 0README.  Last updated: September 5, 2018 (V. Brendel)
 #
 Analyses in this directory are based on the BWASPR package, available on github:
 
@@ -42,8 +42,9 @@ What will be run is determined by the logicals RUNsomething in the *.conf file. 
 	RUNmmp     <- TRUE
 	RUNacs     <- TRUE
 	RUNrnk     <- TRUE
-	RUNmprr    <- TRUE
+	RUNmrpr    <- TRUE
 
+	RUNdmt     <- TRUE
 	RUNdmsg    <- TRUE
 	RUNdmgdtls <- TRUE
 	RUNogl     <- TRUE

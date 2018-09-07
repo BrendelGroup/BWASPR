@@ -1,4 +1,4 @@
-#' det_mprr()
+#' det_mrpr()
 #'   This function determines methylation-rich and -poor regions based on clustering
 #'   of methylation (hsm sites). First, the ddstats() function is used to establish
 #'   the distribution of distances between d-nearest neighbors.  Short distances
@@ -27,11 +27,11 @@
 #'   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
 #'   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
 #'                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-#'   det_mprr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
+#'   det_mrpr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
 #'
 #' @export
 
-det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE) {
+det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE) {
     message("... determining methylation site rich and poor regions for " ,sampleL," ...")
 # ... set checkflag=1 to print out loads of detail to stdout ...:
     checkflag <- 0
@@ -259,7 +259,7 @@ det_mprr <- function(mrobj,sampleL,ddset=c(1,5),outfile="",nr2d=10L,doplots=TRUE
 
     cat( sprintf( "\n\n" ) )
     sink()
-    message('... det_mprr() finished ...')
+    message('... det_mrpr() finished ...')
     return(list('hsmrR' = DFhsmrR,
                 'hsmrP' = DFhsmrP))
 }

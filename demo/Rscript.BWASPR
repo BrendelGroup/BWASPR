@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	November 6, 2017
+#Version:	September 7, 2018
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -32,7 +32,7 @@ source(configfile)
 
 message("Rscript.BWASPR is being run with .conf file ",configfile," and output directory ",outputdir,"\n\n")
 cmd <- paste("mkdir -p",outputdir,sep=" ")
-# message(".. now executing: ",cmd)
+message(".. now executing: ",cmd)
 system(cmd)
 readme <- paste("Rscript.BWASPR output for .conf file ",configfile,".\n\n",
                 "Data input are the specified *.mcalls files and parameters set in ",configfile,".\n",
@@ -41,8 +41,8 @@ readme <- paste("Rscript.BWASPR output for .conf file ",configfile,".\n\n",
                 "studymc - a methylKit methylRaw(List) object storing the CpGscd site data for all samples\n",
                 "studyhc - a methylKit methylRaw(List) object storing the CpGscd site data for all samples,\n",
                  "           restricted to sites with high coverage (here set to ",highcoverage,")\n",
-                "mkdf    - a methylKit methylRaw(List) object storing the CpGhsm site data for all\n",
-                "            replicates of a given sample\n\n",
+                "mkrd    - a methylKit methylRawList object storing the CpGhsm site data for all\n",
+                 "           replicates of a given sample\n\n",
                 "Output of the analysis is stored in the following subdirectories (if the corresponding\n",
                  " function calls were specified in ",configfile,"; please consult the 0README\n",
                  " files in the subdirectories for details on the output files):\n\n",
@@ -54,7 +54,7 @@ readme <- paste("Rscript.BWASPR output for .conf file ",configfile,".\n\n",
                 "MMP - Mapping of methylation sites on genome annotation\n",
                 "ACS - Annotation of conserved methylation sites\n",
                 "RNK - Genomic feature regions ranked by CpGhsm statistics\n",
-                "MPRR - Methylation-poor and -rich regions\n",
+                "MRPR - Methylation-rich and -poor regions\n",
                 "DMSG - Differentially methylateds sites and genes\n",
                 "OGL - Ordered gene lists\n",
                 sep="")
@@ -65,6 +65,7 @@ sink()
 
 #Based on the configuration file, set some basic parameters ...
 #
+speciesstudy <- paste(species,studyLabel,sep="_")
 stype <- paste(type,"hsm",sep="")
 ctype <- paste(type,"scd",sep="")
 
@@ -90,7 +91,6 @@ if (RUNload) {
 #  produce the required methylRawList objects. studymk contains the data for the
 #  hsm sites, while studymc contains the data for all scd sites.
 #
-  speciesstudy <- paste(species,study,sep="_")
   rdatafile <- paste(speciesstudy,"RData",sep=".")
   message(".. loading previously stored image ", rdatafile, " ...")
   load(rdatafile)
@@ -116,23 +116,26 @@ if (RUNload) {
 if (RUNcms) {
 #Produce cms-*txt and cms-*.pdf files reporting on coverage and methylation statistics.
 #
+  CMSdir <- paste(outputdir,"CMS",sep="/")
+  cmd <- paste("mkdir -p ",CMSdir,sep="")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   plotfile <- paste("cms",species,sep="-")
   plotfile <- paste(plotfile,studyLabel,sep="_")
   message("\n.. coverage and methylation statistics for aggregate samples ...")
   tmpN <- lapply(studymk,function(x) {plotfile <- paste(plotfile,x@sample.id,sep="_");
                                       outfile  <- paste(plotfile,"txt",sep=".");
                                       cmStats(x,stype,covlist,locount,hicount,outfile=outfile,plotfile=plotfile)
+                                      cmd <- paste("mv ",plotfile,".pdf ",outfile," ",CMSdir,sep="")
+                                      message("\n.. now executing: ",cmd)
+                                      system(cmd)
                                      }
                 )
-  CMSdir <- paste(outputdir,"CMS",sep="/")
-  cmd <- paste("mkdir -p ",CMSdir,"; mv cms-* ",CMSdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
   readme <- paste("CMS - Coverage and methylation statistics for aggregate samples.\n\n",
                   "Input: studymk, covlist, locount, hicount\n\n",
-                  "Output: files cms-*txt and cms-*pdf\n\n",
+                  "Output: files cms-*.txt and cms-*.pdf\n\n",
                   "Notes: The statistics are given for CpGhsm sites restricted to minimum or\n",
-                  "        higher level coverage.  At the minimum level, the number of sites will\n",
+                  "        higher level coverage.  At the minimum level, the number of sites will be\n",
                   "        the number of lines of the corresponding *CpGhsm.mcalls file minus one\n",
                   "        (consistency check).  The distribution of methylation levels is really only\n",
                   "        interesting for high coverage because at low coverage there will be a strong\n",
@@ -157,6 +160,12 @@ if (RUNcms) {
 #
 if (RUNpwc) {
   l <- length(studymk@treatment)
+  if (l > 1) {
+    PWCdir <- paste(outputdir,"PWC",sep="/")
+    cmd <- paste("mkdir -p",PWCdir,sep=" ")
+    message("\n.. now executing: ",cmd)
+    system(cmd)
+  }
   if (l < 2) {
     message("\n.. no pairs to compare ....")
   } else if (l == 2) {
@@ -178,6 +187,9 @@ if (RUNpwc) {
     message("... comparing ", s1l, " versus ", s2l, " ...")
     cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms,plotfile,covlist,hheight)
     sink()
+    cmd <- paste("mv",outfile,plotfile,PWCdir,sep=" ")
+    message("\n.. now executing: ",cmd)
+    system(cmd)
   } else {
 #First, produce pairwise sample site comparisons and save the output in files
 #  pwc-* (done in parallel).
@@ -186,7 +198,10 @@ if (RUNpwc) {
   v <- c(1:length(studymk@treatment))
   numprcINcl <- dim(combn(v,2))[2]
   if (numprcINcl > numprc) {numprcINcl <- numprc}
-  cl <- makeCluster(numprcINcl,type="FORK",outfile="")
+  cl <- makeCluster(numprcINcl,type="PSOCK",useXDR=FALSE,outfile="")
+  clusterExport(cl=cl, varlist=c("studymk", "studymc", "sampleLabels",
+                                 "nbrpms", "covlist", "PWCdir"), envir=environment())
+  clusterEvalQ(cl=cl,library(BWASPR))
   message("\n.. running pairwise comparisons ...")
   
   cusData <- parApply(cl, combn(v,2), 2, function (x) {
@@ -204,8 +219,12 @@ if (RUNpwc) {
       message("... comparing ", s1l, " versus ", s2l, " ...")
       cuSlist <- cmpSites(sample1hsm,sample1scd,s1l,sample2hsm,sample2scd,s2l,nbrpms,plotfile="",covlist)
       sink()
+      cmd <- paste("mv",outfile,PWCdir,sep=" ")
+      message("\n.. now executing: ",cmd)
+      system(cmd)
       return(cuSlist)
     })
+  stopCluster(cl)
   #cusData is a list of lists.  The outer list contains data for each pairwise
   #  comparison.  These data are in the form of lists of data frames as returned
   #  by cmpSites(): for each comparions, the data frames are
@@ -216,18 +235,14 @@ if (RUNpwc) {
   #    unique1HSM2SCD, unique2HSM1SCD.
   #  For details, see the *.txt output files of the above code section.
   }
-  PWCdir <- paste(outputdir,"PWC",sep="/")
-  cmd <- paste("mkdir -p ",PWCdir,"; mv pwc* ",PWCdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
   readme <- paste("PWC - Pairwise comparisons between all samples.\n\n",
-                  "Input: mkstudy, mcstudy, nbrpms\n\n",
+                  "Input: studymk, studymc, nbrpms\n\n",
                   "Output: files pwc-*.txt pwc-.*pdf\n\n",
                   "Notes: The output is generated by BWASPR::cmpSites(), which determines for each pairwise\n",
                   "        comparison the numbers of common and distinct sites.  The function also calculates\n",
                   "        the overlap index between the samples and estimates the size of the common pool of\n",
                   "        potential methylation sites.\n\n",
-                  "       The CpGscd data input (mcstudy) is necessary to determine sites that are detectable\n",
+                  "       The CpGscd data input (studymc) is necessary to determine sites that are detectable\n",
                   "        in both samples, and nbrpms (listed in the *.par file specified in the ",configfile,"\n",
                   "        configuration file as argument to TOTALNBRPMSITES) provides the total number of\n",
                   "        potential methylation sites (typically, all CpG sites), a necessary parameter for\n",
@@ -246,8 +261,11 @@ if (RUNcrl) {
 #  aggregate samples.
 #  Output will be in crl-*txt and crl-*pdf files.
 #
-  plotfile <- paste("crl",species,sep="-")
-  plotfile <- paste(plotfile,studyLabel,sep="_")
+  CRLdir <- paste(outputdir,"CRL",sep="/")
+  cmd <- paste("mkdir -p ",CRLdir,sep="")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
+  plotfile <- paste("crl",speciesstudy,sep="-")
   outfile <- paste(plotfile,"txt",sep=".")
   sink(outfile)
   message("\n.. running aggregate sample pairwise correlations ...")
@@ -257,9 +275,8 @@ if (RUNcrl) {
   cat(sprintf("\nThe number of conserved sites is %6d.\n\n",dim(studyData)[1]))
   sink()
 
-  CRLdir <- paste(outputdir,"CRL",sep="/")
-  cmd <- paste("mkdir -p ",CRLdir,"; mv crl* ",CRLdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mv ",outfile," ",plotfile,".pdf ",CRLdir,sep="")
+  message("\n.. now executing: ",cmd)
   system(cmd)
   readme <- paste("CRL - Correlations between aggregate samples.\n\n",
                   "Input: studymk\n\n",
@@ -290,11 +307,24 @@ if (hasreplicates & (RUNrepcms | RUNrepcrl)) {
   mymessage <- sprintf("\n\n  Comparison of replicates for all samples in %s study %s.\n",species,studyLabel)
   message(mymessage)
 
+  if (RUNrepcms) {
+      REPCMSdir <- paste(outputdir,"REPCMS",sep="/")
+      cmd <- paste("mkdir -p",REPCMSdir,sep=" ")
+      message("\n.. now executing: ",cmd)
+      system(cmd)
+  }
+  if (RUNrepcrl) {
+      REPCRLdir <- paste(outputdir,"REPCRL",sep="/")
+      cmd <- paste("mkdir -p",REPCRLdir,sep=" ")
+      message("\n.. now executing: ",cmd)
+      system(cmd)
+  }
+
   csR <- lapply(samplelist,function(x) {
-           mkdf <- mcalls2mkobj(infiles$datafiles,species,study,sample=x,
+           mkrd <- mcalls2mkobj(infiles$datafiles,species,study,sample=x,
                                 replicate=c(1:10),type=stype,mincov=1,assembly=asmblv
                                )
-           if (is.null(mkdf)) {	# ... return if there are no replicates for a particular sample
+           if (is.null(mkrd)) {	# ... return if there are no replicates for a particular sample
                return(NULL)
            }
 
@@ -303,13 +333,15 @@ if (RUNrepcms) {
 #Produce repcms-*txt and repcms-*.pdf files reporting on coverage and methylation statistics for
 #  all sample replicates separately.
 #
-           rplotfile <- paste("repcms",species,sep="-")
-           rplotfile <- paste(rplotfile,studyLabel,sep="_")
+           rplotfile <- paste("repcms",speciesstudy,sep="-")
            message("\n.. coverage and methylation statistics for replicates ...")
-           tmpN <- lapply(mkdf,function(y) {rplotfile <- paste(rplotfile,y@sample.id,sep="_")
+           tmpN <- lapply(mkrd,function(y) {rplotfile <- paste(rplotfile,y@sample.id,sep="_")
                      routfile <- paste(rplotfile,"txt",sep=".")
                      cmStats(y,stype,repcovlist,replocount,rephicount,outfile=routfile,plotfile=rplotfile)
-                     }
+	             cmd <- paste("mv ",routfile," ",rplotfile,".pdf ",REPCMSdir,sep="")
+	             message("\n.. now executing: ",cmd)
+	             system(cmd)
+                   }
                    )
            message(".. done ...")
 }
@@ -319,38 +351,37 @@ if (RUNrepcrl) {
 #Produce correlations between methylation levels in common sites of replicates.
 #  Output will be in repcrl-*txt and repcrl-*pdf files.
 #
-           outfile <- paste("repcrl",species,sep="-")
-           outfile <- paste(outfile,studyLabel,x,sep="_")
+           outfile <- paste("repcrl",speciesstudy,sep="-")
+           outfile <- paste(outfile,x,sep="_")
            outfile <- paste(outfile,"txt",sep=".")
            sink(outfile)
            mymessage <- sprintf("\n.. comparing replicates of sample %s ...\n",x)
            message(mymessage)
            plotfile <- paste("repcrl",species,sep="-")
            plotfile <- paste(plotfile,studyLabel,x,sep="_")
-           mkData <- cmpSamples(mkdf,destrand=destrand,plotfile=plotfile)
-           cat(sprintf("\nThe number of conserved sites is %6d.\n\n",dim(mkData)[1]))
+           mkurd <- cmpSamples(mkrd,destrand=destrand,plotfile=plotfile)
+           cat(sprintf("\nThe number of conserved sites is %6d.\n\n",dim(mkurd)[1]))
            sink()
+	   cmd <- paste("mv ",outfile," ",plotfile,".pdf ",REPCRLdir,sep="")
+	   message("\n.. now executing: ",cmd)
+	   system(cmd)
            message(".. done ...")
   
-           return(mkData)
+           return(mkurd)
 } else {
-           return(NULL)
+           return(mkrd)
 }
 
            }
-         )
+         ) # end lapply
 
 
 if (RUNrepcms) {
-  REPCMSdir <- paste(outputdir,"REPCMS",sep="/")
-  cmd <- paste("mkdir -p ",REPCMSdir,"; mv repcms* ",REPCMSdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
   readme <- paste("REPCMS - Coverage and methylation statistics for replicate samples.\n\n",
                   "Input: studymk, repcovlist, replocount, rephicount\n\n",
                   "Output: files repcms-*txt and repcms-*pdf\n\n",
                   "Notes: The statistics are given for CpGhsm sites restricted to minimum or\n",
-                  "        higher level coverage.  At the minimum level, the number of sites will\n",
+                  "        higher level coverage.  At the minimum level, the number of sites will be\n",
                   "        the number of lines of the corresponding *CpGhsm.mcalls file minus one\n",
                   "        (consistency check).  The distribution of methylation levels is really only\n",
                   "        interesting for high coverage because at low coverage there will be a strong\n",
@@ -369,12 +400,8 @@ if (RUNrepcms) {
 
 
 if (RUNrepcrl) {
-  REPCRLdir <- paste(outputdir,"REPCRL",sep="/")
-  cmd <- paste("mkdir -p ",REPCRLdir,"; mv repcrl-* ",REPCRLdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
   readme <- paste("REPCRL - Correlations between replicates.\n\n",
-                  "Input: mkdf\n\n",
+                  "Input: mkrd (methylKit methylRawList object of replicate data)\n\n",
                   "Output: files repcrl-*.txt repcrl-*.pdf\n\n",
                   "Notes: The output is generated by BWASPR::cmpSamples(), which uses methylKit::unite()\n",
                   "        to determine the sites common to all replicates and applies methylKit::getCorrelation()\n",
@@ -391,7 +418,8 @@ if (RUNrepcrl) {
 }
 
 #csR is a list of methylRaw objects, each representing the methylKit::unite() set of
-#  sites common to all replicates of a particular sample.
+#  sites common to all replicates of a particular sample in case RUNreprcl is set;
+#  otherwise the list has the individual (not united) replicate data.
 #  For details, see the *.txt output files of the above code section.
 } ### end if (hasreplicates & (RUNrepcms | RUNrepcrl))
 ################################################################################
@@ -406,6 +434,10 @@ if (RUNmmp) {
 #  (genes, exons, etc.).
 #  Output will be in mmp-* files.
 #
+  MMPdir <- paste(outputdir,"MMP",sep="/")
+  cmd <- paste("mkdir -p",MMPdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   message("\n.. generate methylation to annotation maps ...")
   if (!exists("genome_ann")) {
     genome_ann <- get_genome_annotation(infiles$parameters)
@@ -417,12 +449,11 @@ if (RUNmmp) {
     outfile  <- paste(outfile,"txt",sep=".")
     tmp <- map_methylome(studymk[[i]],sampleL,studymc[[i]],controlL,genome_ann,
                          species,gnmsize,UTRflag=UTRFLAGSET,outfile)
+    cmd <- paste("mv",outfile,MMPdir,sep=" ")
+    message("\n.. now executing: ",cmd)
+    system(cmd)
     }
     )
-  MMPdir <- paste(outputdir,"MMP",sep="/")
-  cmd <- paste("mkdir -p ",MMPdir,"; mv mmp-* ",MMPdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
   readme <- paste("MMP - Mapping of methylation sites on genome annotation.\n\n",
                   "Input: studymk, studymc, genome_ann (a list of GRanges objects providing annotated region labels\n",
                   "        and boundaries; output of BWASPR::get_genome_annotation())\n\n",
@@ -448,16 +479,20 @@ if (RUNacs) {
 #
   library(methods)
   library(utils)
+  ACSdir <- paste(outputdir,"ACS",sep="/")
+  cmd <- paste("mkdir -p",ACSdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   message("\n.. annotating conserved sites ...")
-  genome_ann <- get_genome_annotation(infiles$parameters)
-  outfile <- paste("acs",species,sep="-")
-  outfile <- paste(outfile,studyLabel,sep="_")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
+  outfile <- paste("acs",speciesstudy,sep="-")
   outfile <- paste(outfile,"txt",sep=".")
   methylome_ann <- annotate_methylome(studymk,genome_ann,destrand=destrand,
                                       outfile=outfile)
-  ACSdir <- paste(outputdir,"ACS",sep="/")
-  cmd <- paste("mkdir -p ",ACSdir,"; mv acs* ",ACSdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mv",outfile,ACSdir,sep=" ")
+  message("\n.. now executing: ",cmd)
   system(cmd)
   readme <- paste("ACS - Annotation of conserved methylation sites.\n\n",
                   "Input: studymk, genome_ann (a list of GRanges objects providing annotated region labels and bounds;\n",
@@ -480,47 +515,56 @@ if (RUNacs) {
 
 
 
-### Section: Determination of methylation site poor and rich regions.
+### Section: Determination of methylation site rich and poor regions.
 ##
 #
 if (RUNrnk) {
-#Produce rnk*txt and rnk*.pdf files showing methylation-density ranked annotated regions.
+#Produce ranked*.txt, sites*.txt, and plot*.pdf files showing methylation-percentage
+# and site density ranked annotated regions and exploritory plots comparing the
+# measures.
 #
+  RNKdir <- paste(outputdir,"RNK",sep="/")
+  cmd <- paste("mkdir -p",RNKdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   if (!exists("genome_ann")) {
     genome_ann <- get_genome_annotation(infiles$parameters)
   }
-  speciesstudy <- paste(species,studyLabel,sep="_")
   message("\n.. ranked genes for each sample ...")
-  rgL <- rank_rbm(studymk,region.gr=genome_ann$gene,rlabel="sig",
+  rgL <- rank_rbm(studymc,studymk,region.gr=genome_ann$gene,rlabel="genes",
                   withglink=glink,speciesstudy)
   message(".. done ...")
   message("\n.. ranked promoters for each sample ...")
-  rgL <- rank_rbm(studymk,region.gr=genome_ann$promoter,rlabel="sip",
+  rpL <- rank_rbm(studymc,studymk,region.gr=genome_ann$promoter,rlabel="promoters",
                   withglink=glink,speciesstudy)
-  RNKdir <- paste(outputdir,"RNK",sep="/")
-  cmd <- paste("mkdir -p ",RNKdir,"; mv rnk-* sig-* sip-* ",RNKdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mv ranked-*-",speciesstudy,"_*.txt sites-*",speciesstudy,"_*.txt plot-*",speciesstudy,"_*.pdf ",RNKdir,sep="")
+  message("\n.. now executing: ",cmd)
   system(cmd)
-  readme <- paste("RNK - Genomic feature regions ranked by CpGhsm statistics.\n\n",
-                  "Input: studymk, region.gr (GRanges object providing annotated region labels and bounds)\n\n",
-                  "Output: files rnk_sig-*.txt/pdf rnk_sip-*.txt/pdf sig-*.txt sip-*.txt\n\n",
-                  "Notes: The files rnk_sig-*.txt provide ranked lists of genes based on the occurrence of\n",
-                  "        CpGhsm sites within the annotated gene bounds.  The output columns are\n",
+  readme <- paste("RNK - Genomic feature regions ranked by CpG methylation and hsm statistics.\n\n",
+                  "Input: studymc, studymk, region.gr (GRanges object providing annotated region labels and bounds)\n\n",
+                  "Output: files ranked-genes-*.txt sites-in-genes-*.txt\n",
+                  "              ranked-promoters-*.txt sites-in-promoters-*.txt\n",
+                  "              plot*.pdf\n\n",
+                  "Notes: The output is generated by BWASPR::rank_rbm().\n",
+                  "       The files ranked-genes-*.txt provide ranked lists of genes based on\n",
+                  "        overall methylation percentage or the occurrence of CpGhms sites\n",
+                  "        within the annotated gene bounds.  The output columns include\n",
                   "          region_ID    (= region/gene name)\n",
                   "          rwidth       (= region/gene width)\n",
                   "          nbrsites     (= number of CpGhsm sites in the region/gene)\n",
                   "          nbrper10kb   (= number of CpGhsm sites in the region/gene normalized to 10kb width)\n",
                   "          pmrpersite   (= average % methylation per CpGhsm site in the region/gene)\n",
-                  "          pmrpernucl   (= average % CpGhsm methylation per nucleotide in the region/gene)\n\n",
-                  "        The table is sorted by nbper10kb in descending order.\n\n",
-                  "       The files rnk_sip-*.txt provide analogous tables for promoter regions.\n",
+                  "          pmrpernucl   (= average % CpGhsm methylation per nucleotide in the region/gene)\n",
+                  "          prcntM       (= overall % CpGhsm methylation in the region/gene)\n\n",
+                  "       The tables are sorted by prcntM (*byPrcntM* files) or by nbper10kb\n",
+                  "         (*bySiteDensity* files) in descending order.\n\n",
+                  "       The ranked-promoters-*.txt files provide analogous tables for promoter regions.\n",
                   "        If the promoter annotation was derived with BWASP, then these regions are simply\n",
                   "        defined here as 500 nucleotides upstream of the 5'-end of the gene (shorter if the\n",
                   "        scaffold ends before).\n\n",
-                  "       The files sig-*.txt and sip-*.txt provide details for the CpGhsm sites in the respective.\n",
-                  "        regions.\n\n",
-                  "       The files rnk-sig-*.pdf and rnk-sip-*.pdf show plots of the ordered nbper10kb values in\n",
-                  "        the respective regions for a simple visualization of the corresponding tables.\n",
+                  "       The files sites-*.txt provide details for the CpGhsm sites in the respective\n",
+                  "        regions.\n",
+                  "       The files plot-*.pdf explore concordance of the two methylation measures.\n\n",
                   sep="")
   readmefile <- paste(RNKdir,"0READMErnk",sep="/")
   sink(readmefile)
@@ -530,47 +574,60 @@ if (RUNrnk) {
 }
 
 
-if (RUNmprr) {
-#Produce mpr-*txt and mrr-*.txt files reporting on methylation-poor and -rich regions.
+if (RUNmrpr) {
+#Produce mrr-*txt and mpr-*.txt files reporting on methylation-rich and -poor regions.
 #Also: dst-*.txt (distance statistics)
 #      1ds-*.pdf 5ds-*.pdf (distance histograms)
 #      mdr-*.tab mdr-*.bed (methylation dense regions)
 #      gwr-*.txt (genes with methylation dense regions)
+#      gwp-*.txt (genes in methylation poor regions)
 #      rmp-*.txt (regions mapped to genome features)
 #
+  MRPRdir <- paste(outputdir,"MRPR",sep="/")
+  cmd <- paste("mkdir -p",MRPRdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   ddset <- c(1,5)
   nr2d <- 10L
   doplots <- TRUE
-  message("\n.. methylation-poor and -rich regions for aggregate samples ...")
+  message("\n.. methylation-rich and -poor regions for aggregate samples ...")
   hsmrList <- lapply(c(1:length(sampleLabels)),function(i) {
     outfile  <- paste("dst",sampleLabels[i],sep="-")
     outfile  <- paste(outfile,"txt",sep=".")
-    hsmrL <- det_mprr(studymk[[i]],sampleLabels[i],ddset,outfile,nr2d,doplots)
+    hsmrL <- det_mrpr(studymk[[i]],sampleLabels[i],ddset,outfile,nr2d,doplots)
+    cmd <- paste("mv ",outfile," m*r-",sampleLabels[i],".* ",MRPRdir,sep="")
+    message("\n.. now executing: ",cmd)
+    system(cmd)
+    if (doplots) {
+# The following cmd will get rid of empty first pages in the PDF files on a
+# Fedora Linux system.  Can be omitted or replaced as needed:
+      cmd <- paste("for fn in 1ds-",sampleLabels[i],".pdf 5ds-",sampleLabels[i],".pdf; do pdfseparate -f 2 $fn tmp-$fn; \\mv tmp-$fn $fn; mv $fn ",MRPRdir,"; done",sep="")
+      message("\n.. now executing: ",cmd)
+      system(cmd)
+      }
     return(hsmrL)
-    }
-    )
+    })
   message(".. done ...")
 
-  message("\n.. mapping of methylation-poor and -rich regions to genome features ...")
+  message("\n.. mapping of methylation-rich and -poor regions to genome features ...")
   if (!exists("genome_ann")) {
     genome_ann <- get_genome_annotation(infiles$parameters)
   }
   gwrList <- lapply(c(1:length(sampleLabels)),function(i) {
-     outfile  <- paste("rmp",sampleLabels[i],sep="-")
-     outfile  <- paste(outfile,"txt",sep=".")
-     gwithrdf <- map_mprr(hsmrList[[i]],species=species,sampleLabels[i],
-                          genome_ann,gnmsize,UTRflag=UTRFLAGSET,outfile)
-     }
-     )
-  MPRRdir <- paste(outputdir,"MPRR",sep="/")
-  cmd <- paste("mkdir -p ",MPRRdir,"; mv 1ds-* 5ds-* dst-* gwr-* mdr-* mpr-* mrr-* rmp-* ",MPRRdir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
-  readme <- paste("MPRR - Methylation-poor and -rich regions.\n\n",
+     outfile   <- paste("rmp",sampleLabels[i],sep="-")
+     outfile   <- paste(outfile,"txt",sep=".")
+     gwithrdfL <- map_mrpr(hsmrList[[i]],species=species,sampleLabels[i],
+                           genome_ann,gnmsize,UTRflag=UTRFLAGSET,outfile)
+     cmd <- paste("mv ",outfile," gw*-",sampleLabels[i],".* ",MRPRdir,sep="")
+     message("\n.. now executing: ",cmd)
+     system(cmd)
+     })
+  readme <- paste("MRPR - Methylation-rich and -poor regions.\n\n",
                   "Input: studymk, genome_ann (a list of GRanges objects providing annotated region labels and bounds;\n",
                   "                            output of BWASPR::get_genome_annotation())\n\n",
-                  "Output: files dst-*.txt 1ds-*.pdf 5ds-*.pdf	mpr-* mrr-*	rmp-* gwr-*\n\n",
-                  "Notes: Methylation-poor and -rich regions are determined based on the spacing between\n",
+                  "Output: files dst-*.txt 1ds-*.pdf 5ds-*.pdf	mpr-* mrr-*	rmp-* gwp-* gwr-*\n\n",
+                  "Notes: The output is generated by BWASPR functions det_mrpr() and map_mrpr().\n",
+                  "       Methylation-rich and -poor regions are determined based on the spacing between\n",
                   "        neighboring CpGhsm sites.  If sites occur at positions a,b,c,d,e, and f \n",
                   "        (and not in between), then b-a, c-b, ... are 1-distances, and f-a is a 5-distances.\n",
                   "        The file dst-*.txt shows the empirical distribution of d-distances for the sample.\n",
@@ -578,13 +635,15 @@ if (RUNmprr) {
                   "        if adjacent 1-distances are both in the top 10%).  Methylation-rich regions are determined\n",
                   "        as short 5-distances (in the low 10%; merged if adjacent 5-distances are both in the low\n",
                   "        10%).  Parts of the distribution are plotted in the 1ds-*.pdf and 5ds-*.pdf files.\n\n",
-                  "       The methylation-poor and -rich regions are listed in files mpr-*.txt and mrr-*.txt,\n",
+                  "       The methylation-rich and -poor regions are listed in files mrr-*.txt and mpr-*.txt,\n",
                   "        respectively.\n\n",
-                  "       The overlap of methylation-rich regions with genome features is summarized in files rmp-*.txt.\n",
+                  "       The overlap of methylation regions with genome features is summarized in files rmp-*.txt.\n",
                   "        Files gwr-*.txt show genes overlapping with methylation-rich regions, ordered by site\n",
                   "        density in the methylation-rich region.\n",
+                  "        Files gwp-*.txt show genes overlapping with methylation-poor regions, ordered by site\n",
+                  "        density in the methylation-poor region.\n",
                   sep="")
-  readmefile <- paste(MPRRdir,"0READMEmprr",sep="/")
+  readmefile <- paste(MRPRdir,"0READMEmrpr",sep="/")
   sink(readmefile)
   cat(sprintf("%s",readme))
   sink()
@@ -597,10 +656,57 @@ if (RUNmprr) {
 ### Section: Evaluating differential methylation patterns.
 ##
 #
+if (RUNdmt) {
+#Determine differentially methylated sites and genes.
+#  Output will be in dmt-* and dmg-* files.
+#
+  DMTdir  <- paste(outputdir,"DMT",sep="/")
+  cmd <- paste("mkdir -p",DMTdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
+  message("\n.. determining differentially methylated tiles and genes ...")
+  if (!exists("genome_ann")) {
+    genome_ann <- get_genome_annotation(infiles$parameters)
+  }
+
+  outfile1 <- paste("dmt",speciesstudy,sep="-")
+  outfile1 <- paste(outfile1,"txt",sep=".")
+  outfile2 <- paste("dmg",speciesstudy,sep="-")
+  outfile2 <- paste(outfile2,"txt",sep=".")
+  mtList   <- det_dmt(studymc,genome_ann,wsize=wsize,stepsize=stepsize,
+                      threshold,qvalue,mc.cores=numprc,
+                      destrand,outfile1,outfile2)
+  cmd <- paste("mv",outfile1,outfile2,DMTdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
+  readme <- paste("DMT - Differentially methylated tiles.\n\n",
+                  "Input: studymc wsize stepsize threshold qvalue\n",
+                  "Output: files dmt-*.txt dmg-*.txt\n\n",
+                  "Notes: Output files dmt-*.txt and dmg-*.txt are generated by BWASPR::det_dmt() and show the\n",
+                  "        differentially methylated tiles and genes as determined by methylKit::getMethylDiff with\n",
+                  "        parameters difference=threshold and qvalue, as provided in the ",configfile,"\n",
+                  "        configuration file.  Tiles refer to sliding windows along the gneome within which\n",
+                  "        methylation calls are cumulated by methylKit::tileMethylCounts.\n",
+                  "        The dmg-*.txt files show all genes with at least one differentially methylated tile.\n\n",
+                  "        A positive meth.diff value in comparison A.vs.B means that the B methylation percentage.\n",
+                  "        in that tile is higher than the A methylation percentage.\n\n",
+                  sep="")
+  readmefile <- paste(DMTdir,"0READMEdmt",sep="/")
+  sink(readmefile)
+  cat(sprintf("%s",readme))
+  sink()
+  message(".. done ...")
+}
+
+
 if (RUNdmsg) {
 #Determine differentially methylated sites and genes.
 #  Output will be in dms-* and dmg-* files.
 #
+  DMSGdir <- paste(outputdir,"DMSG",sep="/")
+  cmd <- paste("mkdir -p",DMSGdir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   message("\n.. determining differentially methylated sites and genes ...")
   if (!exists("genome_ann")) {
     genome_ann <- get_genome_annotation(infiles$parameters)
@@ -609,25 +715,19 @@ if (RUNdmsg) {
                           sample=samplelist,replicate=c(0),type=ctype,
                           mincov=highcoverage,assembly=asmblv)
 
-  outfile1 <- paste("dms",species,sep="-")
-  outfile1 <- paste(outfile1,studyLabel,sep="_")
+  outfile1 <- paste("dms",speciesstudy,sep="-")
   outfile1 <- paste(outfile1,"txt",sep=".")
-  outfile2 <- paste("dmg",species,sep="-")
-  outfile2 <- paste(outfile2,studyLabel,sep="_")
+  outfile2 <- paste("dmg",speciesstudy,sep="-")
   outfile2 <- paste(outfile2,"txt",sep=".")
   dmsgList <- det_dmsg(studyhc,genome_ann,threshold,qvalue,mc.cores=numprc,
                        destrand,outfile1,outfile2)
-  DMSGdir <- paste(outputdir,"DMSG",sep="/")
-  cmd <- paste("mkdir -p ",DMSGdir,"; mv dmg* dms* ",DMSGdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mv",outfile1,outfile2,DMSGdir,sep=" ")
+  message("\n.. now executing: ",cmd)
   system(cmd)
   readme <- paste("DMSG - Differentially methylated sites and genes.\n\n",
                   "Input: studyhc threshold qvalue\n",
-                  "       The CpGscd data input (mcstudy) is necessary to determine sites that are detectable\n",
-                  "        in both samples, and nbrpms (listed in the *.par file specified in the ",configfile,"\n",
-                  "        configuration file as argument to TOTALNBRPMSITES) provides the total number of\n",
-                  "        potential methylation sites (typically, all CpG sites), a necessary parameter for\n",
-                  "        the estimations.\n\n",
+                  "       The studyhc methylKit raw object contains all CpGscd sites with coverage at least\n",
+                  "        ",highcoverage," reads.\n",
                   "Output: files dms-*.txt dmg-*.txt	dmg-*details.txt dmg-*heatmaps.pdf	ogl-*.txt rnk-dmg-*.txt\n\n",
                   "Notes: Output files dms-*.txt and dmg-*.txt are generated by BWASPR::det_dmsg() and show the\n",
                   "        differentially methylated sites and genes as determined by methylKit::getMethylDiff with\n",
@@ -661,39 +761,41 @@ if (RUNdmgdtls) {
   message("\n.. deriving details for differentially methylated genes ...")
   dmgprp <- show_dmsg(studyhc,dmsgList,destrand,minNsites,maxNsites,minPdmsites,
                       mc.cores=numprc,outflabel)
-  cmd <- paste("mv dmg* ",DMSGdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mv dmg-",outflabel,"_*.vs.* ",DMSGdir,sep="")
+  message("\n.. now executing: ",cmd)
   system(cmd)
   message(".. done ...")
 }
 
 
 if (RUNogl) {
-#Print out ordered gene lists ordered gene lists with tabulated methylation
-#  properties (files ogl-*).
+#Print out ordered gene lists with tabulated methylation properties (files ogl-*).
 #
   if (!RUNload & !(RUNdmsg & RUNdmgdtls)) {
     message("ERROR: missing input.  Set RUNload=TRUE or RUNdmsg=RUNdmgdtls=TRUE.")
     q()
   }
+  OGLalldir <- paste(outputdir,"OGLall",sep="/")
+  cmd <- paste("mkdir -p",OGLalldir,sep=" ")
+  message("\n.. now executing: ",cmd)
+  system(cmd)
   outflabel <- paste(species,studyLabel,sep="_")
   message("\n.. printing ordered gene lists ...")
-if (maxgwidth > 0  |  minnbrdmsites > 1) {
-  summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,-1,
-                            1,withglink=glink,outflabel)
-  rnk_summaries <- rank_dmg(summaries,outflabel)
-  OGLalldir <- paste(outputdir,"OGLall",sep="/")
-  cmd <- paste("mkdir -p ",OGLalldir,"; mv ogl* rnk-dmg* wrt-* ",OGLalldir,sep="")
-# message("\n.. now executing: ",cmd)
-  system(cmd)
-}
+  if (maxgwidth > 0  |  minnbrdmsites > 1) {
+    summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,-1,
+                              1,withglink=glink,outflabel)
+    rnk_summaries <- rank_dmg(summaries,outflabel)
+    cmd <- paste("mv ogl-",speciesstudy,"_* rnk-dmg-",speciesstudy,"*.vs.* wrt-",speciesstudy,".txt ",OGLalldir,sep="")
+    message("\n.. now executing: ",cmd)
+    system(cmd)
+  }
 
   summaries <- explore_dmsg(studyhc,genome_ann,dmgprp,maxgwidth,
                             minnbrdmsites,withglink=glink,outflabel)
   rnk_summaries <- rank_dmg(summaries,outflabel)
   OGLdir <- paste(outputdir,"OGL",sep="/")
-  cmd <- paste("mkdir -p ",OGLdir,"; mv ogl* rnk-dmg* wrt-* ",OGLdir,sep="")
-# message("\n.. now executing: ",cmd)
+  cmd <- paste("mkdir -p ",OGLdir,"; mv ogl-",outflabel,"_* rnk-dmg-",outflabel,"*.vs.* wrt-",outflabel,".txt ",OGLdir,sep="")
+  message("\n.. now executing: ",cmd)
   system(cmd)
 
   readme <- paste("OGL - Ordered gene lists.\n\n",
@@ -709,14 +811,13 @@ if (maxgwidth > 0  |  minnbrdmsites > 1) {
                   "       Abbreviations used: %perSite, percent methylation per site\n",
                   "                           %perNucl, percent methylation per nucleotide of the gene\n\n",
                   "       Output files ogl-<study>_<sample1>.vs.<sample2>.txt give tables for each comparison with columns\n\n",
-                  "        gene_ID gwidth #Sites #per10Kb #dmSites #dmsp10kb %dmSites %psite1 %psite2 DMpSite ADMpSite DMpNucl ADMpNucl\n\n",
-                  "       ordered by DMpsite.  If available, a link to an NCBI entry of gene_ID is inserted as second column.\n",
+                  "        gene_ID gwidth #Sites #per10Kb #dmSites #dmsp10kb %dmSites %pSite1 %pSite2 DMpSite ADMpSite DMpNucl ADMpNucl\n\n",
+                  "       ordered by DMpSite.  If available, a link to an NCBI entry of gene_ID is inserted as second column.\n",
                   "       Abbreviations used: %dmSites, percent sites that are differentially methylated\n",
-                  "                           %psite1, average per site % methylation for sample1\n",
-                  "                           %psite2, average per site % methylation for sample2\n",
-                  "                           DMpsite, average per site difference in % methylation between sample1 and sample2\n",
-                  "                           ADMpsite, absolute value of DMpsite\n",
-                  "                           DMpNucl, gene\n",
+                  "                           %pSite1, average per site % methylation for sample1\n",
+                  "                           %pSite2, average per site % methylation for sample2\n",
+                  "                           DMpSite, average per site difference in % methylation between sample1 and sample2\n",
+                  "                           ADMpSite, absolute value of DMpSite\n",
                   "                           DMpNucl, average per nucleotide difference in % methylation between sample1 and sample2\n",
                   "                           ADMpNucl, absolute value of DMpNucl\n\n",
                   "       Output files rnk-dmg-<study>_<sample1>.vs.<sample2>.txt are equivalent to files\n",
@@ -724,7 +825,7 @@ if (maxgwidth > 0  |  minnbrdmsites > 1) {
                   "       Output files rnk-dmg-<study>_<sample1>.vs.<sample2>.pdf provide visualization of the distribution\n",
                   "        of ADMpNucl values.\n\n",
                   "       Output file wrt-<study>.txt gives results of the Wilcoxon signed rank test comparing\n",
-                  "        the %psite1 and %psite2 vectors\n\n",
+                  "        the %pSite1 and %pSite2 vectors\n\n",
                   "       In output directory OGL, tables are restricted to genes with gwidth <= maxgwidth and, for\n",
                   "        pairwise comparisons, #dmSites >= minnbrdmsites\n\n",
                   "       If either maxgwidth or minnbrdmsites is set, then output directory OGLall will show the full tables\n",
