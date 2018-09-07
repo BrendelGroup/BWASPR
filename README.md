@@ -54,7 +54,7 @@ for GFF3 annotation of various genomic features.
 
 A typical *BWASPR* workflow will read the specified \*.mcalls files and
 generate various output tables and plots, labeled in various ways with
-_species_\__study_\__sample_\__replicate_ labels.
+_species_\_ _study_\_ _sample_\_ _replicate_ labels.
 The [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) file shows a template
 workflow.
 Initial customization is done at the top of the file and mostly from
@@ -83,7 +83,7 @@ Details on running the workflow with the demo data are given in
 |            |                       |                            |                               |                                                 |                                                                                                                      |
 | RUNdmt     | studymc               | wsize, stepsize            | det_dmt()                     | differentially methylated tiles and genes       | dmt-\*.txt<br/>dmg-\*.txt                                                                                            |
 | RUNdmsg    | sample \*.mcalls<br/> | highcoverage<br/>destrand  | det_dmsg()                    | differentially methylated sites and genes       | dms-\*.txt<br/>dmg-\*.txt                                                                                            |
-| RUNdmgdtls | studyhc               | destrand                   | show_dmsg()                   | details for differentially methylated genes     | dmg-\*.vs.\*\_details.txt<br/>dmg-\*.vs.*\_heatmaps.pdf                                                              |
-| RUNogl     | studyhc               | -                          | explore_dmsg()<br/>rank_dmg() | ranked lists of differentially methylated genes | ogl-\*.txt<br/>rnk-dmg-\*.vs.\*.txt<br/>rnk-dmg-\*.vs.\*.pdf                                                         |
+| RUNdmgdtls | studyhc               | destrand                   | show_dmsg()                   | details for differentially methylated genes     | dmg-\*.vs.\*_details.txt<br/>dmg-\*.vs.*_heatmaps.pdf                                                              |
+| RUNogl     | studyhc               | -                          | explore_dmsg()<br/>rank_dmg() | ranked lists of differentially methylated genes | ogl-\*.txt<br/>rnk-dmg-\*.vs.\*.txt<br/>rnk-dmg-\*.vs.\*.pdf<br/>wrt-*.txt                                           |
 |            |                       |                            |                               |                                                 |                                                                                                                      |
 | RUNsave    | workflow output       | -                          | save.image()                  | save image of workflow output                   | \*.RData                                                                                                             |
