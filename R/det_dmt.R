@@ -47,7 +47,7 @@ det_dmt <- function(mrobj,genome_ann,wsize=1000,stepsize=1000,
     genes <- genome_ann$gene
     nbtreatments <- length(unique(treatment_list))
 
-    tiles <- tileMethylCounts(mrobj,win.size=1000,step.size=1000)
+    tiles <- tileMethylCounts(mrobj,win.size=wsize,step.size=stepsize)
 
     if (nbtreatments < 2) {
  	return(tiles)
