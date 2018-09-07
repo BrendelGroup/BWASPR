@@ -1,9 +1,9 @@
-#' map_mprr()
+#' map_mrpr()
 #' This function maps the scd and hsm sites onto different genomic features
 #'   (e.g. genes, exon, promoter, etc.)
 #'
 #' @param hsmrL List of data frames with hsm rich and poor regions, as put out by
-#    det_mprr()
+#    det_mrpr()
 #' @param species Label for the species being analyzed
 #' @param slabel Label for the sample
 #' @param genome_ann A list of GRanges objects that contains genome annotation.
@@ -28,16 +28,16 @@
 #'                        sample=list("forager","nurse"),replicate=c(0),
 #'                        type="CpGhsm",mincov=1,assembly=asmblv
 #'                       )
-#'   hsmrL <- det_mprr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
+#'   hsmrL <- det_mrpr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
 #'   ginfo <- get_genome_annotation(infiles$parameters)
-#'   map_mprr(hsmrL,species="Am",slabel="forager_hsm",ginfo,gnmsize,UTRflag=UTRflag,
+#'   map_mrpr(hsmrL,species="Am",slabel="forager_hsm",ginfo,gnmsize,UTRflag=UTRflag,
 #'            outfile="AmHE-region.map.txt"
 #'           )
 #'
 #' @export
 
 ################################################################################
-map_mprr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
+map_mrpr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
 
     if (outfile != "") {
         sink(outfile)
