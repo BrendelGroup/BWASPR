@@ -5,13 +5,14 @@ This repository contains R functions and scripts we use to analyze the
 \*.mcalls output files from the
 [BWASP](https://github.com/brendelgroup/BWASP) workflow.
 Required input consists of the \*.mcalls files (tab delimited data for the named
-columns
+columns)
 
 ```{bash}
 SeqID.Pos SequenceID  Position  Strand Coverage  Prcnt_Meth  Prcnt_Unmeth
 ```
-and two files specifying the data labels and \*.mcalls file locations and certain
-parameters, respectively. Let's look at the example files in [inst/extdata](./inst/extdata):
+and two files specifying the data labels and \*.mcalls file locations and
+certain parameters, respectively
+Let's look at the example files in [inst/extdata](./inst/extdata):
 
 ```
 AmHE.dat
@@ -46,11 +47,11 @@ The first file has columns for _species_ (here _Am_); _study_ (here _HE_);
 _sample_ (here _forager_ and _nurse_"); replicate number (here _0_, indicating
 single samples or, as in the case of this study, aggregates over replicates);
 and file locations (here for the _CpGhsm_ and _CpGscd_ \*.mcalls files);
-note that the file locations in this case are relative links, assuming you
+note that the file locations in this example are relative links, assuming you
 will run the example discussed in the [demo](./demo) directory.
-The second file species the genome assembly version, genome size (in base
-pairs), total number of potential methylation sites (CpGs), and file names
-for GFF3 annotation of various genomic features.
+The second file specifies the species name, genome assembly version, genome
+size (in base pairs), total number of potential methylation sites (CpGs), and
+file names for GFF3 annotation of various genomic features.
 
 A typical *BWASPR* workflow will read the specified \*.mcalls files and
 generate various output tables and plots, labeled in various ways with
