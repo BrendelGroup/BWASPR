@@ -11,7 +11,7 @@ columns)
 SeqID.Pos SequenceID  Position  Strand Coverage  Prcnt_Meth  Prcnt_Unmeth
 ```
 and two files specifying the data labels and \*.mcalls file locations and
-certain parameters, respectively
+certain parameters, respectively.
 Let's look at the example files in [inst/extdata](./inst/extdata):
 
 ```
@@ -29,9 +29,9 @@ Am      HE      nurse   0       CpGscd  ../inst/extdata/Amel-nurse.CpGscd.mcalls
 AmHE.par
 ================================================================================
 SPECIESNAME     Apis mellifera
-TOTALNBRPMSITES 20307353
 ASSEMBLYVERSION Amel_4.5
 GENOMESIZE      250270657
+TOTALNBRPMSITES 20307353
 SPECIESGFF3DIR  ../inst/extdata/AmGFF3DIR
 GENELISTGFF3    Amel.gene.gff3
 EXONLISTGFF3    Amel.exon.gff3
@@ -44,14 +44,15 @@ UTRFLAGSET      1
 ```
 
 The first file has columns for _species_ (here _Am_); _study_ (here _HE_);
-_sample_ (here _forager_ and _nurse_"); replicate number (here _0_, indicating
+_sample_ (here _forager_ and _nurse_"); replicate number (here 0, indicating
 single samples or, as in the case of this study, aggregates over replicates);
 and file locations (here for the _CpGhsm_ and _CpGscd_ \*.mcalls files);
 note that the file locations in this example are relative links, assuming you
 will run the example discussed in the [demo](./demo) directory.
 The second file specifies the species name, genome assembly version, genome
 size (in base pairs), total number of potential methylation sites (CpGs), and
-file names for GFF3 annotation of various genomic features.
+file names for GFF3 annotation of various genomic features (_UTRFLAGSET_ is set
+to 1 to use UTR annotation in the GFF3 file).
 
 A typical *BWASPR* workflow will read the specified \*.mcalls files and
 generate various output tables and plots, labeled in various ways with
@@ -70,7 +71,7 @@ Details on running the workflow with the demo data are given in
 
 | RUNflag    | input                 | (select) parameters        | function                      | theme                                           | output files                                                                                                         |
 |------------|-----------------------|----------------------------|-------------------------------|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| RUNcms     | studymk               | covlist, locount, hcount   | cmStats()                     | sample coverage and methylation statistics      | cms-\*.txt<br/>cms-\*.pdf                                                                                            |
+| RUNcms     | studymk               | covlist, locount, hicount  | cmStats()                     | sample coverage and methylation statistics      | cms-\*.txt<br/>cms-\*.pdf                                                                                            |
 | RUNpwc     | studymk<br/>studymc   | -                          | cmpSites()                    | pairwise sample comparisons                     | pwc-\*.vs.\*.txt                                                                                                     |
 | RUNcrl     | studymk               | destrand                   | cmpSamples()                  | correlations between aggregate samples          | crl-\*.txt<br/>crl-\*.pdf                                                                                            |
 |            |                       |                            |                               |                                                 |                                                                                                                      |
