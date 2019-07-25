@@ -23,7 +23,8 @@ From: ubuntu:18.04
                    libpq-dev \
                    libssl-dev \
                    libtbb-dev \
-                   libxml2-dev
+                   libxml2-dev \
+		   poppler-utils
 
 
     echo 'Installing R'
