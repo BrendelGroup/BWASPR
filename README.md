@@ -2,8 +2,7 @@
 ### R functions and scripts to process output from the BWASP workflow
 
 This repository contains R functions and scripts we use to analyze the
-\*.mcalls output files from the
-[BWASP](https://github.com/brendelgroup/BWASP) workflow.
+\*.mcalls output files from the[BWASP](https://github.com/brendelgroup/BWASP) workflow.
 
 
 ## Installation
@@ -75,7 +74,7 @@ You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
 [demo/sample.conf](./demo/sample.conf) in separate windows as a reference
 while viewing the table.
 Details on running the workflow with the demo data are given in
-[demo/0README](./demo/0README).
+[demo/README](./demo/README).
 
 
 ## RUNflag to expected output correspondence
