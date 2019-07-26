@@ -5,9 +5,11 @@ This repository contains R functions and scripts we use to analyze the
 \*.mcalls output files from the
 [BWASP](https://github.com/brendelgroup/BWASP) workflow.
 
-## INSTALLATION
+
+## Installation
 Please find detailed installation instructions and options in the
 [INSTALL](./INSTALL.md) document.
+
 
 ## What BWASPR does
 Required input to the _BWASPR_ workflow consists of the \*.mcalls files (tab
@@ -74,6 +76,9 @@ You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
 while viewing the table.
 Details on running the workflow with the demo data are given in
 [demo/0README](./demo/0README).
+
+
+## RUNflag to expected output correspondence
 
 | RUNflag    | input                 | (select) parameters        | function                      | theme                                           | output files                                                                                                         |
 |------------|-----------------------|----------------------------|-------------------------------|-------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
