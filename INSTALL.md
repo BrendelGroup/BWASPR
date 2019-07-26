@@ -1,6 +1,10 @@
 # BWASPR Installation and Setup
 
-## Installation as a singularity container
+## Installation as a singularity container [![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/3301)
+
+All the BWASPR dependencies are encapsulated in a
+[Singularity](https://www.sylabs.io/docs/) container available from
+[Singularity Hub](https://singularity-hub.org/).
 
 Assuming _git_ and  _singularity_ are installed on your system, you can get the
 BWASPR code from GitHub and the container from the
@@ -8,9 +12,14 @@ BWASPR code from GitHub and the container from the
 
 ```bash
 git clone https://github.com/BrendelGroup/BWASPR.git
-cd BWASPR
+cd BWASPR/demo
 singularity pull --name bwaspr.simg shub://BrendelGroup/BWASPR
+singularity exec -e -B `pwd` bwaspr.simg ./xdoit sample OUT-sample
 ```
+
+Here the last command (_singularity exec_) will execute the _Rscript.BWASPR_
+workflow described in the [demo](./demo) directory, using all the required
+R packages already loaded in the singularity container.
 
 For a gentle introduction to singularity, see our group
 [handbook article](https://github.com/BrendelGroup/bghandbook/blob/master/doc/06.2-Howto-Singularity-run.md).
@@ -33,5 +42,5 @@ packages using your distribution's package manager.
 
 ## Finally
 
-proceed to the [demo/README](./demo/README) document, and we'll tell you how to
-execute sample workflows (or, equally easy, your very own data analyses).
+proceed to the [demo/README](./demo/README.md) document, and we'll tell you how
+to execute sample workflows (or, equally easy, your very own data analyses).
