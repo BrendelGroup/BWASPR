@@ -33,5 +33,5 @@ packages using your distribution's package manager.
 
 ## Finally
 
-proceed to the [demo/0README](./demo/0README) document, and we'll tell you how to
+proceed to the [demo/README](./demo/README) document, and we'll tell you how to
 execute sample workflows (or, equally easy, your very own data analyses).
