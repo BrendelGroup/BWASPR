@@ -27,11 +27,11 @@ a guide to perform such an installation.
 The `bwaspr.simg` container was built on the 
 [current long-term supported Ubuntu 18.04 distribution](https://www.ubuntu.com/download/desktop)
 and thus the instructions apply to that particular Linux version.
-Fior different Linux distributions, you will have to install the equivalent
+For different Linux distributions, you will have to install the equivalent
 packages using your distribution's package manager.
 
 
 ## Finally
 
-proceed to the [demo/0README](./demo/0READE) document, and we'll tell you how to
+proceed to the [demo/0README](./demo/0README) document, and we'll tell you how to
 execute sample workflows (or, equally easy, your very own data analyses).
