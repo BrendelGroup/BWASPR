@@ -10,8 +10,8 @@ Input specification is via two files: the *.dat data file and the *.par
 parameter file, which are read by the BWASPR function setup_BWASPR().
 
 Although there are of course several ways of running R-based workflows, the data
-studies in this directory were conveniently produced by Rscript.  The workflow
-is represented in the file
+studies in this directory were conveniently produced by Rscript.
+The workflow is represented in the file
 
 	Rscript.BWASPR
 
@@ -31,7 +31,8 @@ which will call the Rscript command and put output in a directory NEW-arg1 (and
 compare with an existing output directory OUT-arg1, if it exists, a useful check
 on updated code).
 
-What will be run is determined by the logicals RUNsomething in the *.conf file.  The default
+What will be run is determined by the logicals RUNsomething in the *.conf file.
+The default
 
 	RUNload    <- FALSE
 
@@ -69,3 +70,14 @@ Run
 
 and take a look at the 0README files in the output directory and its
 subdirectories.
+
+If you decided to forgo the R package installation on your machine but have
+[Singularity](https://www.sylabs.io/docs/) installed, then the following will do
+nicely:
+
+	singularity pull --name bwaspr.simg shub://BrendelGroup/BWASPR
+	singularity exec -e -B `pwd` bwaspr.simg ./xcheck sample
+
+(using _xcheck_ here in case you ran _xdoit_ and want to compare local versus
+singularity output).
+

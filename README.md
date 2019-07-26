@@ -4,8 +4,14 @@
 This repository contains R functions and scripts we use to analyze the
 \*.mcalls output files from the
 [BWASP](https://github.com/brendelgroup/BWASP) workflow.
-Required input consists of the \*.mcalls files (tab delimited data for the named
-columns)
+
+## INSTALLATION
+Please find detailed installation instructions and options in the
+[INSTALL](./INSTALL.md) document.
+
+## What BWASPR does
+Required input to the _BWASPR_ workflow consists of the \*.mcalls files (tab
+delimited data for the named columns)
 
 ```{bash}
 SeqID.Pos SequenceID  Position  Strand Coverage  Prcnt_Meth  Prcnt_Unmeth
