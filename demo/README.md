@@ -81,3 +81,9 @@ nicely:
 (using _xcheck_ here in case you ran _xdoit_ and want to compare local versus
 singularity output).
 
+## From sample to real data:
+This demo is designed to show you the mechanics of the workflow on a small
+data set.
+So, how do you get a real data set?
+Back to [BWASP](https://github.com/brendelgroup/BWASP), which tells you how to
+generate the required _*.mcalls_ and _GFF3DIR_ files.
