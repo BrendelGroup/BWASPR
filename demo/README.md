@@ -1,5 +1,5 @@
-#RWORK 0README.  Last updated: July 25, 2019 (V. Brendel)
-#
+# BWASPR Demo
+
 Analyses in this directory are based on the BWASPR package, available on github:
 
 	https://github.com/brendelgroup/BWASPR
