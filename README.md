@@ -74,7 +74,7 @@ You may want to open the [demo/Rscript.BWASPR](./demo/Rscript.BWASPR) and
 [demo/sample.conf](./demo/sample.conf) in separate windows as a reference
 while viewing the table.
 Details on running the workflow with the demo data are given in
-[demo/README](./demo/README).
+[demo/README](./demo/README.md).
 
 
 ## RUNflag to expected output correspondence
