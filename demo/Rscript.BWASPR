@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	September 7, 2018
+#Version:	July 25, 2019
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -601,7 +601,7 @@ if (RUNmrpr) {
     if (doplots) {
 # The following cmd will get rid of empty first pages in the PDF files on a
 # Fedora Linux system.  Can be omitted or replaced as needed:
-      cmd <- paste("for fn in 1ds-",sampleLabels[i],".pdf 5ds-",sampleLabels[i],".pdf; do pdfseparate -f 2 $fn tmp-$fn; \\mv tmp-$fn $fn; mv $fn ",MRPRdir,"; done",sep="")
+      cmd <- paste("for fn in 1ds-",sampleLabels[i],".pdf 5ds-",sampleLabels[i],".pdf; do if [ `pdfinfo $fn | grep Pages | awk '{print $2}'` -gt 1 ]; then pdfseparate -f 2 $fn tmp-$fn; \\mv tmp-$fn $fn; fi; mv $fn ",MRPRdir,"; done",sep="")
       message("\n.. now executing: ",cmd)
       system(cmd)
       }
@@ -688,7 +688,7 @@ if (RUNdmt) {
                   "        configuration file.  Tiles refer to sliding windows along the gneome within which\n",
                   "        methylation calls are cumulated by methylKit::tileMethylCounts.\n",
                   "        The dmg-*.txt files show all genes with at least one differentially methylated tile.\n\n",
-                  "        A positive meth.diff value in comparison A.vs.B means that the B methylation percentage.\n",
+                  "        A positive meth.diff value in comparison A.vs.B means that the B methylation percentage\n",
                   "        in that tile is higher than the A methylation percentage.\n\n",
                   sep="")
   readmefile <- paste(DMTdir,"0READMEdmt",sep="/")
