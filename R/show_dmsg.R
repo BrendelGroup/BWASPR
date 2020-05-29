@@ -116,8 +116,8 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
             pdmsites <- 100 * sum(g$is.dm,na.rm=TRUE) / nsites
             if (nsites >= min.nsites  &  nsites <= max.nsites  &  pdmsites >= min.pdmsites) {
                 plot <- as.matrix(g[,c(sample1,sample2)])
-                # make sure that there are differences to show in the heatmap:
-                if (! all(plot[1] == plot)) {
+                # ... making sure that there are differences to show in the heatmap:
+                if (nrow(plot) >= 2  &&  !all(plot[,1] == plot[,2])) {
                     heatmap.2(plot, 
                               margins=c(10,10),
                               dendrogram='none',
