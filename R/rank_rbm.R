@@ -18,7 +18,7 @@
 #' @importFrom GenomicRanges findOverlaps
 #' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr group_by %>% summarise
+#' @import     dplyr
 #' @importFrom ggplot2 ggplot aes geom_col
 #'
 #' @examples
