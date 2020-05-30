@@ -109,7 +109,6 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         # plot heatmap for each dmgene
         #
         phoutfile <- paste(outfile,"heatmaps.pdf",sep="_")
-        ##pdf(paste(sample_match,'.pdf',sep=''))
         pdf(phoutfile)
         lapply(out,function(g) {
             nsites <- dim(g)[1]

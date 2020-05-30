@@ -25,7 +25,7 @@
 #' @importFrom GenomicRanges findOverlaps
 #' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr group_by %>% summarise
+#' @import     dplyr
 #' @importFrom stats wilcox.test
 #'
 #' @examples
@@ -88,7 +88,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
                             paste("https://www.ncbi.nlm.nih.gov/gene/?term",
                                    unique(gene_Name),sep="="),
                           gwidth = round(mean(gene_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/gwidth)*10000,2),
                           pmsum = round(sum(perc_meth),2),
                           pmpersite = round(pmsum/nbrsites,2),
@@ -98,7 +98,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
         else {
             ss_summary <- sites_gene %>% group_by(gene_ID) %>%
                 summarise(gwidth = round(mean(gene_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/gwidth)*10000,2),
                           pmsum = round(sum(perc_meth),2),
                           pmpersite = round(pmsum/nbrsites,2),
@@ -153,7 +153,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
                             paste("https://www.ncbi.nlm.nih.gov/gene/?term",
                                    unique(gene_Name),sep="="),
                           gwidth = round(mean(gene_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/gwidth)*10000,2),
                           nbrdmsites = sum(is.dm),
                           nbrdmper10kb = round((nbrdmsites/gwidth)*10000,2),
@@ -169,7 +169,7 @@ explore_dmsg <- function(mrobj,genome_ann,dmgprp,maxgwidth,minnbrdmsites,
         else {
             pw_summary <- sites %>% group_by(gene_ID) %>%
                 summarise(gwidth = round(mean(gene_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/gwidth)*10000,2),
                           nbrdmsites = sum(is.dm),
                           nbrdmper10kb = round((nbrdmsites/gwidth)*10000,2),
