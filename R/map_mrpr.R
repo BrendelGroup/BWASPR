@@ -93,9 +93,9 @@ map_mrpr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
                                     Sdnsty=(tmpdf$Sdnsty))
                            }
                            )
-    hsmrR.geneoverlap.gr           <- suppressWarnings((intersect(hsmrR.gr,gene.gr,ignore.strand=TRUE)))
-    hsmrR.exonoverlap.gr           <- suppressWarnings((intersect(hsmrR.gr,exon.gr,ignore.strand=TRUE)))
-    hsmrR.promoteroverlap.gr       <- suppressWarnings((intersect(hsmrR.gr,promoter.gr,ignore.strand=TRUE)))
+    hsmrR.geneoverlap.gr           <- suppressWarnings((GenomicRanges::intersect(hsmrR.gr,gene.gr,ignore.strand=TRUE)))
+    hsmrR.exonoverlap.gr           <- suppressWarnings((GenomicRanges::intersect(hsmrR.gr,exon.gr,ignore.strand=TRUE)))
+    hsmrR.promoteroverlap.gr       <- suppressWarnings((GenomicRanges::intersect(hsmrR.gr,promoter.gr,ignore.strand=TRUE)))
 
     hsmrR.In.GenicRegions          <- sum(width(hsmrR.geneoverlap.gr))
     hsmrR.In.ExonRegions           <- sum(width(hsmrR.exonoverlap.gr))
@@ -143,9 +143,9 @@ map_mrpr <- function(hsmrL,species,slabel,genome_ann,gnmsize,UTRflag,outfile) {
                                     Sdnsty=(tmpdf$Sdnsty))
                            }
                            )
-    hsmpR.geneoverlap.gr           <- suppressWarnings((intersect(hsmpR.gr,gene.gr,ignore.strand=TRUE)))
-    hsmpR.exonoverlap.gr           <- suppressWarnings((intersect(hsmpR.gr,exon.gr,ignore.strand=TRUE)))
-    hsmpR.promoteroverlap.gr       <- suppressWarnings((intersect(hsmpR.gr,promoter.gr,ignore.strand=TRUE)))
+    hsmpR.geneoverlap.gr           <- suppressWarnings((GenomicRanges::intersect(hsmpR.gr,gene.gr,ignore.strand=TRUE)))
+    hsmpR.exonoverlap.gr           <- suppressWarnings((GenomicRanges::intersect(hsmpR.gr,exon.gr,ignore.strand=TRUE)))
+    hsmpR.promoteroverlap.gr       <- suppressWarnings((GenomicRanges::intersect(hsmpR.gr,promoter.gr,ignore.strand=TRUE)))
 
     hsmpR.In.GenicRegions          <- sum(width(hsmpR.geneoverlap.gr))
     hsmpR.In.ExonRegions           <- sum(width(hsmpR.exonoverlap.gr))
