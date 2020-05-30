@@ -23,7 +23,7 @@
 #' @importFrom gplots heatmap.2 greenred
 #  @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr group_by_ %>%
+#' @import     dplyr
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
