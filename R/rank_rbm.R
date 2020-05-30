@@ -103,7 +103,7 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
         if (withglink == "NCBIgene"){
             rSstats <- sites_region %>% group_by(region_ID) %>%
                 summarise(rwidth = round(mean(region_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/rwidth)*10000,2),
                           pmsum = round(sum(perc_meth),2),
                           pmpersite = round(pmsum/nbrsites,2),
@@ -115,7 +115,7 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
         else {
             rSstats <- sites_region %>% group_by(region_ID) %>%
                 summarise(rwidth = round(mean(region_width),2),
-                          nbrsites = n(),
+                          nbrsites = dplyr::n(),
                           nbrper10kb = round((nbrsites/rwidth)*10000,2),
                           pmsum = round(sum(perc_meth),2),
                           pmpersite = round(pmsum/nbrsites,2),
