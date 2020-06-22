@@ -71,7 +71,7 @@ cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,o
                     slabel,type,length(sampledata$coverage),n ) )
       getMethylationStats(mrobjFiltered,plot=F,both.strands=F)
 
-      if (plotfile!="") {
+      if (plotfile!=""  &&  length(sampledata$coverage)>=20) {
         subtitle <- paste(slabel,type,"with coverage at least",n,
                           " (number of sites: ",length(sampledata$coverage),")",sep=" ")
         getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
@@ -81,7 +81,7 @@ cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,o
       }
     }
 
-    mrobjFiltered <- filterByCoverage(mrobj,lo.count=locount,lo.perc=NULL,hi.count=hicount,hi.perc=NULL)
+    mrobjFiltered <- filterByCoverage(mrobj,lo.count=locount,lo.perc=NULL,hi.count=hicount+1,hi.perc=NULL)
     sampledata <- getData(mrobjFiltered)
 
     cat( sprintf( "\n\nmethylKit::getCoverageStats output for \"%s\" %s-sites (#: %d) in coverage range [%d-%d]\t- ",
@@ -91,7 +91,7 @@ cmStats <- function(mrobj,type="CpGhsm",covlist=c(10),locount=100,hicount=1000,o
                   slabel,type,length(sampledata$coverage),locount,hicount ) )
     getMethylationStats(mrobjFiltered,plot=F,both.strands=F)
 
-    if (plotfile!="") {
+    if (plotfile!=""  &&  length(sampledata$coverage)>=20) {
       subtitle <- paste(slabel,type,"coverage range [",locount,"-",hicount,"]",
                         " (number of sites: ",length(sampledata$coverage),")",sep=" ")
       getCoverageStats(mrobjFiltered,plot=T,sub=subtitle,both.strands=F,labels=FALSE,
