@@ -31,10 +31,10 @@ setup_BWASPR <- function(datafile,parfile) {
                       )
     colnames(dfiles) <- c("Species", "Study", "Sample", "Replicate", "Type",
                           "Source")
-    pfile<- read.csv(parfile, sep="\t", skip=0, header=FALSE,
-                     comment.char="#",
-                     stringsAsFactors=FALSE
-                    )
+    pfile <- read.csv(parfile, sep="\t", skip=0, header=FALSE,
+                      comment.char="#",
+                      stringsAsFactors=FALSE
+                     )
     colnames(pfile) <- c("Variable", "Value")
     files <- list("datafiles"=dfiles,"parameters"=pfile)
     message("... done ...")
