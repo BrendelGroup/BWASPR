@@ -23,7 +23,6 @@
 #'   matching data are found).
 #'
 #' @importFrom methylKit methRead
-## @importFrom utils write.table
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

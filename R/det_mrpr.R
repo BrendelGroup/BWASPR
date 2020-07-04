@@ -18,7 +18,6 @@
 #' @importFrom methylKit getData getCoverageStats getMethylationStats
 #' @importFrom pastecs stat.pen
 #' @import ggplot2 R.devices
-#' @import dplyr
 #' @import gridExtra
 #'
 #' @examples

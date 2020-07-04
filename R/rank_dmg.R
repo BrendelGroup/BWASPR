@@ -6,7 +6,6 @@
 #' 
 #' @return A list of data frames summarizing genes sorted by ADMpNucl 
 #' 
-#' @importFrom utils write.table 
 #' @importFrom ggplot2 ggplot
 #'
 #' @examples

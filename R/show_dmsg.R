@@ -21,9 +21,7 @@
 #' @importFrom methylKit percMethylation reorganize unite
 #' @importFrom GenomicRanges findOverlaps values
 #' @importFrom gplots heatmap.2 greenred
-#  @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @import     dplyr
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

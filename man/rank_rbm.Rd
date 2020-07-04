@@ -7,8 +7,14 @@
   and returns a list of dataframes containing the GRange regions ranked by
   methylation site density.}
 \usage{
-rank_rbm(mrobjscd, mrobjhsm, region.gr, rlabel = "", withglink = "",
-  outflabel = "")
+rank_rbm(
+  mrobjscd,
+  mrobjhsm,
+  region.gr,
+  rlabel = "",
+  withglink = "",
+  outflabel = ""
+)
 }
 \arguments{
 \item{mrobjscd}{A methylKit methylRaw or methylRawList object for scd sites}

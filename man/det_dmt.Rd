@@ -6,9 +6,18 @@
   This function generates list of differentially methylated CpG tiles and the
   corresponding genes, as determined by application of methylKit functions.}
 \usage{
-det_dmt(mrobj, genome_ann, wsize = 1000, stepsize = 1000,
-  threshold = 25, qvalue = 0.01, mc.cores = 1, destrand = FALSE,
-  outfile1 = "dmt.txt", outfile2 = "dmg.txt")
+det_dmt(
+  mrobj,
+  genome_ann,
+  wsize = 1000,
+  stepsize = 1000,
+  threshold = 25,
+  qvalue = 0.01,
+  mc.cores = 1,
+  destrand = FALSE,
+  outfile1 = "dmt.txt",
+  outfile2 = "dmg.txt"
+)
 }
 \arguments{
 \item{mrobj}{A methylKit methylRaw or methylRawList object}

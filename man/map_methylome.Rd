@@ -6,8 +6,17 @@
 This function maps the scd and hsm sites onto different genomic features
   (e.g. genes, exon, promoter, etc.)}
 \usage{
-map_methylome(studymk, slabel, studymc, clabel, genome_ann, species,
-  gnmsize, UTRflag, outfile = "")
+map_methylome(
+  studymk,
+  slabel,
+  studymc,
+  clabel,
+  genome_ann,
+  species,
+  gnmsize,
+  UTRflag,
+  outfile = ""
+)
 }
 \arguments{
 \item{studymk}{methylRaw object representing an hsm sample}

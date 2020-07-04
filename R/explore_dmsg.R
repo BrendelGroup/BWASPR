@@ -23,10 +23,9 @@
 #' 
 #' @importFrom methylKit reorganize unite
 #' @importFrom GenomicRanges findOverlaps
-#' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @import     dplyr
-#' @importFrom stats wilcox.test
+#' @importFrom dplyr %>% group_by summarise
+
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
