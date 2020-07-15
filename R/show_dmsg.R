@@ -22,7 +22,7 @@
 #' @importFrom GenomicRanges findOverlaps values
 #' @importFrom gplots heatmap.2 greenred
 #' @importFrom S4Vectors subjectHits queryHits
-#' @importFrom dplyr %>% group_by
+#' @importFrom dplyr %>% group_by_
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
