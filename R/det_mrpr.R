@@ -16,9 +16,9 @@
 #' @return List of two data frames, recording hsm rich and poor regions.
 #'
 #' @importFrom methylKit getData getCoverageStats getMethylationStats
+#' @importFrom dplyr arrange
 #' @importFrom pastecs stat.pen
 #' @import ggplot2 R.devices
-#' @import dplyr
 #' @import gridExtra
 #'
 #' @examples

@@ -9,8 +9,14 @@
   indcate clustering of hsm sites, and long distances indicate regions relatively
   devoid of hsm sites.}
 \usage{
-det_mrpr(mrobj, sampleL, ddset = c(1, 5), outfile = "", nr2d = 10L,
-  doplots = TRUE)
+det_mrpr(
+  mrobj,
+  sampleL,
+  ddset = c(1, 5),
+  outfile = "",
+  nr2d = 10L,
+  doplots = TRUE
+)
 }
 \arguments{
 \item{mrobj}{A methylRaw object.}

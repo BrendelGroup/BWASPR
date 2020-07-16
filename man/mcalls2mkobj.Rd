@@ -6,9 +6,16 @@
 This function will select BWASP mcalls files according to specified
 selection criteria and read the data into methylBase objects.}
 \usage{
-mcalls2mkobj(inputdf, species = "all", study = "all", sample = "all",
-  replicate = c(1:20), type = "CpGhsm", mincov = 1,
-  assembly = "unknown")
+mcalls2mkobj(
+  inputdf,
+  species = "all",
+  study = "all",
+  sample = "all",
+  replicate = c(1:20),
+  type = "CpGhsm",
+  mincov = 1,
+  assembly = "unknown"
+)
 }
 \arguments{
 \item{inputdf}{A data frame as returned by setup_BWASPR from the input

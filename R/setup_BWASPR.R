@@ -11,7 +11,6 @@
 #'         (identified as list item "datafiles") and a data frame with
 #'         parameter assignments (identified as list item "parameters")
 #'
-## @importFrom utils read.csv
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

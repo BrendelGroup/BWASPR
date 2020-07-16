@@ -10,7 +10,7 @@
 #'   fpUTRnotCDS,tpUTRnotCDS,tpUTRunique,ncexon
 #'
 #' @importFrom genomation gffToGRanges
-#' @importFrom GenomicRanges setdiff GRanges
+#' @importFrom GenomicRanges GRanges setdiff
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

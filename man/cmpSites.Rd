@@ -5,8 +5,18 @@
 \title{cmpSites()
 This function compares (potential) methylation sites between two samples.}
 \usage{
-cmpSites(sample1hsm, sample1scd, sample1label, sample2hsm, sample2scd,
-  sample2label, nbrpms, plotfile, covlist, hheight)
+cmpSites(
+  sample1hsm,
+  sample1scd,
+  sample1label,
+  sample2hsm,
+  sample2scd,
+  sample2label,
+  nbrpms,
+  plotfile,
+  covlist,
+  hheight
+)
 }
 \arguments{
 \item{sample1hsm}{A methylRaw object for hsm sites of sample 1.}

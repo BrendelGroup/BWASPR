@@ -21,9 +21,8 @@
 #' @importFrom methylKit percMethylation reorganize unite
 #' @importFrom GenomicRanges findOverlaps values
 #' @importFrom gplots heatmap.2 greenred
-#  @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @import     dplyr
+#' @importFrom dplyr %>% group_by_
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -104,7 +103,7 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         #
         splitter     <- c('gene_ID','gene_Name','gene_gene')
         splitter     <- splitter[splitter%in%names(meth_dmg_comb)][1]
-        grouped      <- meth_dmg_comb%>%group_by_(.dots=splitter)
+        grouped      <- meth_dmg_comb %>% group_by_(.dots=splitter)
         out          <- split(grouped,grouped[splitter])
         # plot heatmap for each dmgene
         #

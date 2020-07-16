@@ -16,9 +16,8 @@
 #'   methylation hsm site density
 #' 
 #' @importFrom GenomicRanges findOverlaps
-#' @importFrom utils write.table 
 #' @importFrom S4Vectors subjectHits queryHits
-#' @import     dplyr
+#' @importFrom dplyr %>% group_by summarise
 #' @importFrom ggplot2 ggplot aes geom_col
 #'
 #' @examples

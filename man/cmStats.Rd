@@ -6,8 +6,15 @@
 This function generates coverage and methylation statistics for the
   input data set.}
 \usage{
-cmStats(mrobj, type = "CpGhsm", covlist = c(10), locount = 100,
-  hicount = 1000, outfile = "", plotfile = "")
+cmStats(
+  mrobj,
+  type = "CpGhsm",
+  covlist = c(10),
+  locount = 100,
+  hicount = 1000,
+  outfile = "",
+  plotfile = ""
+)
 }
 \arguments{
 \item{mrobj}{A methylRaw object}

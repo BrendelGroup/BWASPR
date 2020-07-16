@@ -8,8 +8,15 @@ and sorts genes by meth_diff per 10kb for each comparison; sample
 percent methylation per site values are compared with the Wilcoxon
 signed rank test}
 \usage{
-explore_dmsg(mrobj, genome_ann, dmgprp, maxgwidth, minnbrdmsites,
-  withglink = "NCBIgene", outflabel = "")
+explore_dmsg(
+  mrobj,
+  genome_ann,
+  dmgprp,
+  maxgwidth,
+  minnbrdmsites,
+  withglink = "NCBIgene",
+  outflabel = ""
+)
 }
 \arguments{
 \item{mrobj}{A methylKit methylRaw or methylRawList object}
