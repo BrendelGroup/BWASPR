@@ -24,7 +24,7 @@ From: ubuntu:18.04
                    libssl-dev \
                    libtbb-dev \
                    libxml2-dev \
-		   poppler-utils
+                   poppler-utils
 
 
     echo 'Installing R'
@@ -46,7 +46,7 @@ From: ubuntu:18.04
     apt -y install r-cran-sqldf
     apt -y install r-cran-venneuler
     apt -y install r-cran-rcurl
-    apt -y install r-cran-xml2
+    apt -y install r-cran-xml
    
     echo 'Installing other CRAN and Bioconductor packages'
     ######
