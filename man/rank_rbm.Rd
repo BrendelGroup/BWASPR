@@ -12,8 +12,8 @@ rank_rbm(
   mrobjhsm,
   region.gr,
   rlabel = "",
-  minrwwidth = 1,
-  maxrwdith = 1e+06,
+  minrwidth = 1,
+  maxrwidth = 1e+06,
   minnbrsites = 1,
   withglink = "",
   outflabel = ""
@@ -29,14 +29,14 @@ annotation)}
 
 \item{rlabel}{A string to identify the type of region analyzed}
 
+\item{minrwidth}{Minimal region width for region to be included in plot}
+
+\item{maxrwidth}{Maximal region width for region to be included in plot}
+
 \item{withglink}{Either NCBIgene or "" to indicate inclusion of a gene link
 column in the output if available}
 
 \item{outflabel}{A string to identify the output dataframe}
-
-\item{minrwidth}{Minimal region width for region to be included in plot}
-
-\item{maxrwidth}{Maximal region width for region to be included in plot}
 
 \item{minbrsites}{Minimal number of methylation sites in region for region
 to be included in plot}

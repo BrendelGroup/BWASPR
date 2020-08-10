@@ -532,15 +532,15 @@ if (RUNrnk) {
   }
   message("\n.. ranked genes for each sample ...")
   rgL <- rank_rbm(studymc,studymk,region.gr=genome_ann$gene,rlabel="genes",
-                  minrwidth=500, maxrwidth=5000,
-                  minnbrsites=5,
+                  minrwidth=mingenewidth, maxrwidth=maxgenewidth,
+                  minnbrsites=minnbrmsgene,
                   withglink=glink,
                   outflabel=speciesstudy)
   message(".. done ...")
   message("\n.. ranked promoters for each sample ...")
   rpL <- rank_rbm(studymc,studymk,region.gr=genome_ann$promoter,
                   rlabel="promoters",
-                  minnbrsites=5,
+                  minnbrsites=minnbrmsprm,
                   withglink=glink,
                   outflabel=speciesstudy)
   cmd <- paste("mv ranked-*-",speciesstudy,"_*.txt sites-*",speciesstudy,"_*.txt plot-*",speciesstudy,"_*.pdf ",RNKdir,sep="")
