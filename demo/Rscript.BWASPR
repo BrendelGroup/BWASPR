@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	July 25, 2019
+#Version:	August 10, 2020
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -538,7 +538,6 @@ if (RUNrnk) {
                   outflabel=speciesstudy)
   message(".. done ...")
   message("\n.. ranked promoters for each sample ...")
-message(speciesstudy)
   rpL <- rank_rbm(studymc,studymk,region.gr=genome_ann$promoter,
                   rlabel="promoters",
                   minnbrsites=5,
