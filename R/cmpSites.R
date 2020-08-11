@@ -15,6 +15,8 @@
 #'   to be explored; e.g., c(6,8,10) would compare sites with minimum
 #'   coverage 6, 8, and 10, successively
 #' @param hheight Histogram height for methylation level plot; default: 0.10
+#' @param nbrpnts Number of common sites to be sampled for the methylation
+#'   levels scatter plot; default: 5000
 #'
 #' @return A list of data frames containing data on unique and common
 #'   sites comparing the two samples.
@@ -41,13 +43,14 @@
 #'   s2hsm <- methylKit::getData(AmHEhsm[[2]])
 #'   s2scd <- methylKit::getData(AmHEscd[[2]])
 #'   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
-#'                        plotfile="pwc.pdf",covlist=c(6,10,20),hheight=0.10)
+#'                        plotfile="pwc.pdf",covlist=c(6,10,20),hheight=0.10,
+#'                        nbrpnts=5000)
 #'
 #' @export
 
 cmpSites <- function(sample1hsm,sample1scd,sample1label,
                      sample2hsm,sample2scd,sample2label,nbrpms,
-                     plotfile,covlist,hheight) {
+                     plotfile,covlist,hheight,nbrpnts=5000) {
     message("... calculating site statistics ...")
 
     # ... adding a unique key to the data frame rows:
@@ -195,7 +198,7 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
       
 # Scatter plot of sample2 versus sample1 percent methylation:
 #
-        plot4 <- ggplot(data = commonset, aes(x=s1PrcntM,y=s2PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,10)) + scale_y_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,10)) + geom_point(shape=1) + geom_smooth(method="lm")
+        plot4 <- ggplot(data = commonset[sample(nrow(commonset),min(nbrpnts,dim(commonset)[1])),], aes(x=s1PrcntM,y=s2PrcntM)) + scale_x_continuous(sample1label,limits=c(0,100),breaks=seq(0,100,10)) + scale_y_continuous(sample2label,limits=c(0,100),breaks=seq(0,100,10)) + geom_point(shape=1) + geom_smooth(method="lm")
       
         tmp <- sprintf( "Methylation Levels in Common Sites (Coverage >= %2d)\n", n )
         mytitle=textGrob(tmp, gp=gpar(cex=1.0), just="top")
