@@ -149,7 +149,6 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",minrwidth=1,
         outfile   <- paste(outfile,sample,sep="_")
         ptoutfile <- paste(outfile,"pdf",sep=".")
         pdf(ptoutfile)
-        #print(ggplot(head(rSMdf[rSMdf$nbrper10kb<200,],50), aes(x=nbrper10kb,y=prcntM)) +
         print(ggplot(rSMdf[rSMdf$rwidth   >= minrwidth &
                            rSMdf$rwidth   <= maxrwidth &
                            rSMdf$nbrsites >= minnbrsites,],
