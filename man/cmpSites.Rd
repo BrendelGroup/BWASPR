@@ -15,7 +15,8 @@ cmpSites(
   nbrpms,
   plotfile,
   covlist,
-  hheight
+  hheight,
+  nbrpnts = 5000
 )
 }
 \arguments{
@@ -42,6 +43,9 @@ to be explored; e.g., c(6,8,10) would compare sites with minimum
 coverage 6, 8, and 10, successively}
 
 \item{hheight}{Histogram height for methylation level plot; default: 0.10}
+
+\item{nbrpnts}{Number of common sites to be sampled for the methylation
+levels scatter plot; default: 5000}
 }
 \value{
 A list of data frames containing data on unique and common
@@ -66,6 +70,7 @@ This function compares (potential) methylation sites between two samples.
   s2hsm <- methylKit::getData(AmHEhsm[[2]])
   s2scd <- methylKit::getData(AmHEscd[[2]])
   mydflist <- cmpSites(s1hsm,s1scd,"Am_HE_fr",s2hsm,s2scd,"Am_HE_rn",nbrpms,
-                       plotfile="pwc.pdf",covlist=c(6,10,20),hheight=0.10)
+                       plotfile="pwc.pdf",covlist=c(6,10,20),hheight=0.10,
+                       nbrpnts=5000)
 
 }

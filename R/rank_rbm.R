@@ -1,14 +1,19 @@
 #' rank_rbm() 
-#'   This function subsets the provided methylRaw objects by the specified GRange
-#'   and returns a list of dataframes containing the GRange regions ranked by
-#'   methylation site density.
+#'   This function subsets the provided methylRaw objects by the specified
+#'   GRange and returns a list of dataframes containing the GRange regions
+#'   ranked by methylation site density.
 #'
 #' @param mrobjscd A methylKit methylRaw or methylRawList object for scd sites
 #' @param mrobjhsm A methylKit methylRaw or methylRawList object for hsm sites
-#' @param region.gr A GRanges object (typically based on the relevant genome annotation)
+#' @param region.gr A GRanges object (typically based on the relevant genome
+#'   annotation)
 #' @param rlabel A string to identify the type of region analyzed
-#' @param withglink Either NCBIgene or "" to indicate inclusion of a gene link column
-#'   in the output if available
+#' @param minrwidth Minimal region width for region to be included in plot
+#' @param maxrwidth Maximal region width for region to be included in plot
+#' @param minbrsites Minimal number of methylation sites in region for region
+#'   to be included in plot
+#' @param withglink Either NCBIgene or "" to indicate inclusion of a gene link
+#'   column in the output if available
 #' @param outflabel A string to identify the output dataframe 
 #' 
 #' @return A list of lists of dataframes containing (for each sample) the GRange
@@ -34,7 +39,9 @@
 #'
 #' @export
 
-rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabel="") {
+rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",minrwidth=1,
+                     maxrwidth=1000000,minnbrsites=1,withglink="",
+                     outflabel="") {
     message('... rank_rbm ...')
     # read basic information:
     #
@@ -51,21 +58,21 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
     MpRegion <- lapply(1:length(getSampleID(mrobjscd)), function(i) {
         rcd           <- getData(rcL[[i]])
         rcd           <- cbind(rcd,round(100.*rcd[,6]/rcd[,5],2))
-	names(rcd)[8] <- "prcntM"
-	rcg   <- makeGRangesFromDataFrame(rcd,keep.extra.columns=TRUE)
-	match <- findOverlaps(rcg,region.gr,type="equal")
-	r     <- as.data.frame(rcg[queryHits(match)])
-	a     <- as.data.frame(region.gr[subjectHits(match)])
+        names(rcd)[8] <- "prcntM"
+        rcg   <- makeGRangesFromDataFrame(rcd,keep.extra.columns=TRUE)
+        match <- findOverlaps(rcg,region.gr,type="equal")
+        r     <- as.data.frame(rcg[queryHits(match)])
+        a     <- as.data.frame(region.gr[subjectHits(match)])
         colnames(a) <- lapply(colnames(a), function(i) paste('region',i,sep='_'))
-	ra    <- cbind(r,a)
-	c     <- c("region_ID","seqnames","start","end","width","strand",
-	           "coverage","numCs","numTs","prcntM")
-	ra    <- ra[c]
+        ra    <- cbind(r,a)
+        c     <- c("region_ID","seqnames","start","end","width","strand",
+                   "coverage","numCs","numTs","prcntM")
+        ra    <- ra[c]
         wtoutfile <- paste("ranked",rlabel,"byPrcntM",outflabel,sep="-")
         wtoutfile <- paste(wtoutfile,sample_list[i],sep="_")
         wtoutfile <- paste(wtoutfile,"txt",sep=".")
         write.table(ra[order(- ra$prcntM),], wtoutfile, sep='\t', row.names=FALSE, quote=FALSE)
-	return(ra)
+        return(ra)
     })
 
     # determinine methylation site density in specified regions ...
@@ -77,7 +84,7 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
         sites               <- reorganize(mrobjhsm,
                                           sample.ids=list(sample),
                                           treatment=c(0)
-					 )[[1]]
+                                         )[[1]]
         sites.gr            <- as(sites,'GRanges')
         sites.gr$perc_meth  <- (sites.gr$numCs/sites.gr$coverage) * 100
 
@@ -126,11 +133,11 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
         rSstats <- rSstats[order(- rSstats$nbrper10kb),]
         rSstats <- subset(rSstats, select = -c(pmsum))
 
-	# prepare the regional Site & Methylation statistics data frame:
-	#
- 	rSMdf <- merge(rSstats,MpRegion[match(sample,sample_list)],by="region_ID")
-	rSMdf <- rSMdf[order(- rSMdf$nbrper10kb),]
-	rSMdf$width <- NULL	# ... remove the duplicated width information
+        # prepare the regional Site & Methylation statistics data frame:
+        #
+        rSMdf <- merge(rSstats,MpRegion[match(sample,sample_list)],by="region_ID")
+        rSMdf <- rSMdf[order(- rSMdf$nbrper10kb),]
+        rSMdf$width <- NULL	# ... remove the duplicated width information
 
         outfile   <- paste("ranked",rlabel,"bySiteDensity",outflabel,sep="-")
         outfile   <- paste(outfile,sample,sep="_")
@@ -142,10 +149,14 @@ rank_rbm <- function(mrobjscd,mrobjhsm,region.gr,rlabel="",withglink="",outflabe
         outfile   <- paste(outfile,sample,sep="_")
         ptoutfile <- paste(outfile,"pdf",sep=".")
         pdf(ptoutfile)
-        print(ggplot(head(rSMdf[rSMdf$nbrper10kb<200,],50), aes(x=nbrper10kb,y=prcntM)) +
-	      labs(title=outfile) +
-	      geom_point(size=2,shape=23,color="red") +
-	      geom_smooth(method="lm", se=TRUE, fullrange=FALSE, level=0.95)
+        #print(ggplot(head(rSMdf[rSMdf$nbrper10kb<200,],50), aes(x=nbrper10kb,y=prcntM)) +
+        print(ggplot(rSMdf[rSMdf$rwidth   >= minrwidth &
+                           rSMdf$rwidth   <= maxrwidth &
+                           rSMdf$nbrsites >= minnbrsites,],
+              aes(x=nbrper10kb,y=prcntM)) +
+              labs(title=outfile) +
+              geom_point(size=2,shape=23,color="red") +
+              geom_smooth(method="lm", se=TRUE, fullrange=FALSE, level=0.95)
              )
 
         dev.off()

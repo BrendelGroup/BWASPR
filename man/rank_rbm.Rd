@@ -3,15 +3,18 @@
 \name{rank_rbm}
 \alias{rank_rbm}
 \title{rank_rbm() 
-  This function subsets the provided methylRaw objects by the specified GRange
-  and returns a list of dataframes containing the GRange regions ranked by
-  methylation site density.}
+  This function subsets the provided methylRaw objects by the specified
+  GRange and returns a list of dataframes containing the GRange regions
+  ranked by methylation site density.}
 \usage{
 rank_rbm(
   mrobjscd,
   mrobjhsm,
   region.gr,
   rlabel = "",
+  minrwidth = 1,
+  maxrwidth = 1e+06,
+  minnbrsites = 1,
   withglink = "",
   outflabel = ""
 )
@@ -21,14 +24,22 @@ rank_rbm(
 
 \item{mrobjhsm}{A methylKit methylRaw or methylRawList object for hsm sites}
 
-\item{region.gr}{A GRanges object (typically based on the relevant genome annotation)}
+\item{region.gr}{A GRanges object (typically based on the relevant genome
+annotation)}
 
 \item{rlabel}{A string to identify the type of region analyzed}
 
-\item{withglink}{Either NCBIgene or "" to indicate inclusion of a gene link column
-in the output if available}
+\item{minrwidth}{Minimal region width for region to be included in plot}
+
+\item{maxrwidth}{Maximal region width for region to be included in plot}
+
+\item{withglink}{Either NCBIgene or "" to indicate inclusion of a gene link
+column in the output if available}
 
 \item{outflabel}{A string to identify the output dataframe}
+
+\item{minbrsites}{Minimal number of methylation sites in region for region
+to be included in plot}
 }
 \value{
 A list of lists of dataframes containing (for each sample) the GRange
@@ -37,9 +48,9 @@ A list of lists of dataframes containing (for each sample) the GRange
 }
 \description{
 rank_rbm() 
-  This function subsets the provided methylRaw objects by the specified GRange
-  and returns a list of dataframes containing the GRange regions ranked by
-  methylation site density.
+  This function subsets the provided methylRaw objects by the specified
+  GRange and returns a list of dataframes containing the GRange regions
+  ranked by methylation site density.
 }
 \examples{
   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
