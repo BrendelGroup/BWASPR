@@ -220,7 +220,8 @@ cmpSites <- function(sample1hsm,sample1scd,sample1label,
         plot(v,main = maintext)
         text(0.5,0.4,clabel)
       }
-      cat( sprintf( "\n\n" ) )
+      #cat( sprintf( "\n\n" ) )
+      dev.off()
     }
 
     message("... done ...")

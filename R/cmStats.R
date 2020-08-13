@@ -15,7 +15,6 @@
 #' @return the coverage count for the highest threshold in covlist
 #'
 #' @importFrom methylKit getData getCoverageStats getMethylationStats
-#  @importFrom grDevices dev.off pdf
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")

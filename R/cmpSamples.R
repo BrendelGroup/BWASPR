@@ -14,7 +14,6 @@
 #' @return the data obtained from methylKit::unite()
 #'
 #' @importFrom methylKit unite getData getCorrelation PCASamples
-#' @importFrom grDevices dev.off pdf
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
