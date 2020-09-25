@@ -96,19 +96,19 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     
     ################################################################################
     
-    cat( sprintf("%s genome size:                       %9d bp\n",species,gnmsize) )
-    cat( sprintf("  %s genic region size:                 %9d bp (%5.1f%%)\n",species,gene.width,round(100*gene.fraction,1)) )
-    cat( sprintf("    %s exon region size:                  %9d bp (%5.1f%%)\n",species,exon.width,round(100*exon.fraction,1)) )
-    cat( sprintf("      %s CDS region size:                   %9d bp (%5.1f%%)\n",species,CDS.width,round(100*CDS.fraction,1)) )
+    cat( sprintf("%s genome size:                       %10s bp\n",species,format(gnmsize,scientific=FALSE,digits=10)) )
+    cat( sprintf("  %s genic region size:                 %10s bp (%5.1f%%)\n",species,format(gene.width,scientific=FALSE,digits=10),round(100*gene.fraction,1)) )
+    cat( sprintf("    %s exon region size:                  %10s bp (%5.1f%%)\n",species,format(exon.width,scientific=FALSE,digits=10),round(100*exon.fraction,1)) )
+    cat( sprintf("      %s CDS region size:                   %10s bp (%5.1f%%)\n",species,format(CDS.width,scientific=FALSE,digits=10),round(100*CDS.fraction,1)) )
     if (UTRflag == 1) {
-        cat( sprintf("      %s five-prime UTR region size:        %9d bp (%5.1f%%)\n",species,fiveprimeUTR.width,round(100*fiveprimeUTR.fraction,1)) )
-        cat( sprintf("      %s three-prime UTR region size:       %9d bp (%5.1f%%)\n",species,threeprimeUTR.width,round(100*threeprimeUTR.fraction,1)) )
+        cat( sprintf("      %s five-prime UTR region size:        %10s bp (%5.1f%%)\n",species,format(fiveprimeUTR.width,scientific=FALSE,digits=10),round(100*fiveprimeUTR.fraction,1)) )
+        cat( sprintf("      %s three-prime UTR region size:       %10s bp (%5.1f%%)\n",species,format(threeprimeUTR.width,scientific=FALSE,digits=10),round(100*threeprimeUTR.fraction,1)) )
     }
-    cat( sprintf("      %s other exon region size:            %9d bp (%5.1f%%)\n",species,ncexon.width,round(100*ncexon.fraction,1)) )
-    cat( sprintf("    %s intron region size:                %9d bp (%5.1f%%)\n",species,intron.width,round(100*intron.fraction,1)) )
-    cat( sprintf("  %s intergenic region size:            %9d bp (%5.1f%%)\n",species,intergenic.width,round(100*intergenic.fraction,1)) )
-    cat( sprintf("    %s promoter region size:              %9d bp (%5.1f%%)\n",species,promoter.width,round(100*promoter.fraction,1)) )
-    cat( sprintf("    %s other intergenic region size:      %9d bp (%5.1f%%)\n",species,intergenicsanspromoter.width,round(100*intergenicsanspromoter.fraction,1)) )
+    cat( sprintf("      %s other exon region size:            %10s bp (%5.1f%%)\n",species,format(ncexon.width,scientific=FALSE,digits=10),round(100*ncexon.fraction,1)) )
+    cat( sprintf("    %s intron region size:                %10s bp (%5.1f%%)\n",species,format(intron.width,scientific=FALSE,digits=10),round(100*intron.fraction,1)) )
+    cat( sprintf("  %s intergenic region size:            %10s bp (%5.1f%%)\n",species,format(intergenic.width,scientific=FALSE,digits=10),round(100*intergenic.fraction,1)) )
+    cat( sprintf("    %s promoter region size:              %10s bp (%5.1f%%)\n",species,format(promoter.width,scientific=FALSE,digits=10),round(100*promoter.fraction,1)) )
+    cat( sprintf("    %s other intergenic region size:      %10s bp (%5.1f%%)\n",species,format(intergenicsanspromoter.width,scientific=FALSE,digits=10),round(100*intergenicsanspromoter.fraction,1)) )
     cat( sprintf( "\n\n" ) )
     
     
