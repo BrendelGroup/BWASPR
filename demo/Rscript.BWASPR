@@ -602,13 +602,13 @@ if (RUNmrpr) {
   message("\n.. now executing: ",cmd)
   system(cmd)
   ddset <- c(1,5)
-  nr2d <- 10L
+  nbrxtrms <- 100L
   doplots <- TRUE
   message("\n.. methylation-rich and -poor regions for aggregate samples ...")
   hsmrList <- lapply(c(1:length(sampleLabels)),function(i) {
     outfile  <- paste("dst",sampleLabels[i],sep="-")
     outfile  <- paste(outfile,"txt",sep=".")
-    hsmrL <- det_mrpr(studymk[[i]],sampleLabels[i],ddset,outfile,nr2d,doplots)
+    hsmrL <- det_mrpr(studymk[[i]],sampleLabels[i],ddset,nbrxtrms,outfile,doplots)
     cmd <- paste("mv ",outfile," m*r-",sampleLabels[i],".* ",MRPRdir,sep="")
     message("\n.. now executing: ",cmd)
     system(cmd)

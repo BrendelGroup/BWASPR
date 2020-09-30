@@ -13,8 +13,8 @@ det_mrpr(
   mrobj,
   sampleL,
   ddset = c(1, 5),
+  nbrxtrms = 100L,
   outfile = "",
-  nr2d = 10L,
   doplots = TRUE
 )
 }
@@ -26,9 +26,9 @@ det_mrpr(
 \item{ddset}{Vector of distances; d=1 is required to detect methylation-poor
 regions; default: c(1,5)}
 
-\item{outfile}{If specified, then output is saved in the specified file name.}
+\item{nbrxtrms}{integer; number of extreme regions to evaluate}
 
-\item{nr2d}{integer; number of regions to display}
+\item{outfile}{If specified, then output is saved in the specified file name.}
 
 \item{doplots}{Logical; if true, then show plots of distances}
 }
@@ -49,6 +49,7 @@ det_mrpr()
   myfiles <- setup_BWASPR(datafile=mydatf,parfile=myparf)
   AmHE <- mcalls2mkobj(myfiles$datafiles,species="Am",study="HE",
                        type="CpGhsm", mincov=1,assembly="Amel-4.5")
-  det_mrpr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),outfile="dst-Am_HE_fr.txt",nr2d=10L,doplots=TRUE)
+  det_mrpr(AmHE[[1]],"Am_HE_fr",ddset=c(1,5),nbrxtrms=100L,
+           outfile="dst-Am_HE_fr.txt",doplots=TRUE)
 
 }
