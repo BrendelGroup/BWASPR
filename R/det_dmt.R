@@ -65,7 +65,6 @@ det_dmt <- function(mrobj,genome_ann,wsize=1000,stepsize=1000,
                                 )
         pair_tiles@treatment=c(0,1)
         utiles <- unite(pair_tiles,destrand=destrand)
-#getMethylDiff(myDiff,difference=25,qvalue=0.01,type="hyper")
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
         message(paste("... comparison: ",pairname," ...",sep=""))
