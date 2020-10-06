@@ -50,8 +50,12 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
     dmsites.gr          <- do.call("c", dmsg$dmsites)
     dmgenes.gr          <- do.call("c", dmsg$dmgenes)
     sample_match_list   <- as.list(unique(as.character(dmgenes.gr$comparison)))
+    # ... let's see whether there are any cores left for inside the mclapply
+    #     loop:
+    mc <- max(floor((mc.cores - length(sample_match_list)) /
+                    length(sample_match_list)), 1)
     # analyze each sample_match    
-    dmgprp <- lapply(sample_match_list, function(sample_match) {
+    dmgprp <- mclapply(sample_match_list, function(sample_match) {
         sample1         <- unlist(strsplit(sample_match,'\\.'))[1]
         sample2         <- unlist(strsplit(sample_match,'\\.'))[3]
         message(paste('... comparing ',sample1,' vs. ',sample2,' ...',sep=''))
@@ -63,7 +67,7 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
-        pair_meth       <- unite(pair_mrobj,destrand=destrand,mc.cores=mc.cores)
+        pair_meth       <- unite(pair_mrobj,destrand=destrand,mc.cores=mc)
         # calc methylation level
         #
         p_meth          <- round(percMethylation(pair_meth,rowids=FALSE,
@@ -131,7 +135,7 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         })
         dev.off()
         return(meth_dmg_comb)
-    })
+    }, mc.cores=mc.cores)
     names(dmgprp) <- sample_match_list
 
     message('... show_dmsg() finished ...')

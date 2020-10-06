@@ -52,7 +52,10 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
 # If mrobj consists of multiple treatments, compare corresponding samples:
     unique_treatment_list <- unique(treatment_list)
     pairs <- combn(unique_treatment_list, 2, simplify=FALSE)
-    dmsites.gr <- lapply(pairs, function(pair) {
+    # ... let's see whether there are any cores left for inside the mclapply
+    #     loop:
+    mc <- max(floor((mc.cores - length(pairs)) / length(pairs)), 1)
+    dmsites.gr <- mclapply(pairs, function(pair) {
         pair_samples <- list(sample_list[pair[1]+1],sample_list[pair[2]+1])
         pair_treatments <- c(pair[1],pair[2])
         pair_mrobj <- reorganize(mrobj,
@@ -64,7 +67,7 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         pairname <- paste(sample_list[pair[1]+1],
                           sample_list[pair[2]+1],sep=".vs.")
         message(paste("... comparison: ",pairname," ...",sep=""))
-        pairdiff <- calculateDiffMeth(meth,mc.cores=mc.cores)
+        pairdiff <- calculateDiffMeth(meth,mc.cores=mc)
         difsites <- getMethylDiff(pairdiff,difference=threshold,qvalue=qvalue)
         gr <- as(difsites,"GRanges")
         if (length(gr) > 0) {
@@ -72,7 +75,7 @@ det_dmsg <- function(mrobj,genome_ann,threshold=25.0,qvalue=0.01,mc.cores=1,
         }
         message("... done ...")
         return(gr)
-       }
+       }, mc.cores=mc.cores
        )
     if (length(dmsites.gr) == 0) {
         message("No differentially methylated sites are found.")
