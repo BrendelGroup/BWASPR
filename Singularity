@@ -29,28 +29,27 @@ From: ubuntu:18.04
 
     echo 'Installing R'
     #### 
-    add-apt-repository -y ppa:marutter/rrutter3.5
-    add-apt-repository -y ppa:marutter/c2d4u3.5
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
     apt -y update
-    apt -y install r-base-core r-base-dev
+    apt -y install r-base
     R CMD javareconf
 
-    echo 'Installing CRAN packages'
+    echo 'Installing CRAN and Bioconductor packages'
     ######
-    apt -y install r-cran-biocmanager
-    apt -y install r-cran-dplyr
-    apt -y install r-cran-gplots
-    apt -y install r-cran-gridextra
-    apt -y install r-cran-pastecs
-    apt -y install r-cran-rjava
-    apt -y install r-cran-sqldf
-    apt -y install r-cran-venneuler
-    apt -y install r-cran-rcurl
-    apt -y install r-cran-xml
-   
-    echo 'Installing other CRAN and Bioconductor packages'
-    ######
-    echo 'install.packages("R.devices", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             > R2install
+    echo 'install.packages("BiocManager", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             > R2install
+    echo 'install.packages("dplyr", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("gplots", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("gtable", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("gridExtra", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("gridExtra", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("pastecs", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("RCurl", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("rJava", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("sqldf", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("venneuler", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("XML", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("R.devices", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'            >> R2install
     echo 'BiocManager::install(c("BiocGenerics", "GenomicRanges", "genomation","methylKit"), ask=FALSE)'    >> R2install
 
     Rscript R2install
