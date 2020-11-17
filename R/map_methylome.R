@@ -15,6 +15,7 @@
 #' @return Should return something useful
 #'
 #' @importFrom BiocGenerics width
+#' @importFrom IRanges subsetByOverlaps
 #'
 #' @examples
 #'   mydatf <- system.file("extdata","Am.dat",package="BWASPR")
@@ -120,53 +121,54 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     ################################################################################
     
     clabel.gr <- as(studymc,"GRanges")
-    clabel.geneoverlap.gr                       <- suppressWarnings((subsetByOverlaps(clabel.gr,gene.gr,ignore.strand=TRUE)))
-    clabel.exonoverlap.gr                       <- suppressWarnings((subsetByOverlaps(clabel.gr,exon.gr,ignore.strand=TRUE)))
-    clabel.ncexonoverlap.gr                               <- suppressWarnings((subsetByOverlaps(clabel.gr,ncexon.gr,ignore.strand=TRUE)))
-    clabel.CDSoverlap.gr                        <- suppressWarnings((subsetByOverlaps(clabel.gr,CDS.gr,ignore.strand=TRUE)))
+    clabel.geneoverlap.gr                           <- suppressWarnings(subsetByOverlaps(clabel.gr,gene.gr,ignore.strand=TRUE))
+    clabel.exonoverlap.gr                           <- suppressWarnings(subsetByOverlaps(clabel.gr,exon.gr,ignore.strand=TRUE))
+    clabel.ncexonoverlap.gr                         <- suppressWarnings(subsetByOverlaps(clabel.gr,ncexon.gr,ignore.strand=TRUE))
+    clabel.CDSoverlap.gr                            <- suppressWarnings(subsetByOverlaps(clabel.gr,CDS.gr,ignore.strand=TRUE))
     if (UTRflag == 1) {
-        clabel.fiveprimeUTRoverlap.gr               <- suppressWarnings((subsetByOverlaps(clabel.gr,fiveprimeUTRunique.gr,ignore.strand=TRUE)))
-        clabel.threeprimeUTRoverlap.gr              <- suppressWarnings((subsetByOverlaps(clabel.gr,threeprimeUTRunique.gr,ignore.strand=TRUE)))
+        clabel.fiveprimeUTRoverlap.gr               <- suppressWarnings(subsetByOverlaps(clabel.gr,fiveprimeUTRunique.gr,ignore.strand=TRUE))
+        clabel.threeprimeUTRoverlap.gr              <- suppressWarnings(subsetByOverlaps(clabel.gr,threeprimeUTRunique.gr,ignore.strand=TRUE))
     }
-    clabel.promoteroverlap.gr                   <- suppressWarnings((subsetByOverlaps(clabel.gr,promoter.gr,ignore.strand=TRUE)))
-    clabel.SitesInGenicRegions.number           <- length(clabel.geneoverlap.gr) 
-    clabel.SitesInExonRegions.number            <- length(clabel.exonoverlap.gr)
-    clabel.SitesInNcExonRegions.number            <- length(clabel.ncexonoverlap.gr)
-    clabel.SitesInCDSRegions.number             <- length(clabel.CDSoverlap.gr)
+    clabel.promoteroverlap.gr                       <- suppressWarnings(subsetByOverlaps(clabel.gr,promoter.gr,ignore.strand=TRUE))
+    clabel.promoteroverlap.gr                       <- suppressWarnings(subsetByOverlaps(clabel.promoteroverlap.gr,gene.gr,ignore.strand=TRUE,invert=TRUE))
+    clabel.SitesInGenicRegions.number               <- length(clabel.geneoverlap.gr) 
+    clabel.SitesInExonRegions.number                <- length(clabel.exonoverlap.gr)
+    clabel.SitesInNcExonRegions.number              <- length(clabel.ncexonoverlap.gr)
+    clabel.SitesInCDSRegions.number                 <- length(clabel.CDSoverlap.gr)
     if (UTRflag == 1) {
         clabel.SitesInfiveprimeUTRRegions.number    <- length(clabel.fiveprimeUTRoverlap.gr)
         clabel.SitesInthreeprimeUTRRegions.number   <- length(clabel.threeprimeUTRoverlap.gr)
     }
-    clabel.SitesInIntronRegions.number          <- length(clabel.geneoverlap.gr) - length(clabel.exonoverlap.gr)
-    clabel.SitesInPromoterRegions.number        <- length(clabel.promoteroverlap.gr)
-    clabel.SitesInIntergenicRegions.number      <- length(clabel.gr)- length(clabel.geneoverlap.gr) - length(clabel.promoteroverlap.gr)
-    clabel.SitesInFullIntergenicRegions.number  <- clabel.SitesInIntergenicRegions.number + clabel.SitesInPromoterRegions.number
-    clabel.SitesInGenicRegions.fraction          <- clabel.SitesInGenicRegions.number/length(clabel.gr)
-    clabel.SitesInExonRegions.fraction           <- clabel.SitesInExonRegions.number/length(clabel.gr) 
-    clabel.SitesInNcExonRegions.fraction         <- clabel.SitesInNcExonRegions.number/clabel.SitesInExonRegions.number
-    clabel.SitesInCDSRegions.fraction            <- clabel.SitesInCDSRegions.number/clabel.SitesInExonRegions.number
+    clabel.SitesInIntronRegions.number              <- length(clabel.geneoverlap.gr) - length(clabel.exonoverlap.gr)
+    clabel.SitesInPromoterRegions.number            <- length(clabel.promoteroverlap.gr)
+    clabel.SitesInIntergenicRegions.number          <- length(clabel.gr)- length(clabel.geneoverlap.gr) - length(clabel.promoteroverlap.gr)
+    clabel.SitesInFullIntergenicRegions.number      <- clabel.SitesInIntergenicRegions.number + clabel.SitesInPromoterRegions.number
+    clabel.SitesInGenicRegions.fraction             <- clabel.SitesInGenicRegions.number/length(clabel.gr)
+    clabel.SitesInExonRegions.fraction              <- clabel.SitesInExonRegions.number/length(clabel.gr) 
+    clabel.SitesInNcExonRegions.fraction            <- clabel.SitesInNcExonRegions.number/clabel.SitesInExonRegions.number
+    clabel.SitesInCDSRegions.fraction               <- clabel.SitesInCDSRegions.number/clabel.SitesInExonRegions.number
     if (UTRflag == 1) {
-        clabel.SitesInfiveprimeUTRRegions.fraction   <- clabel.SitesInfiveprimeUTRRegions.number/clabel.SitesInExonRegions.number
-        clabel.SitesInthreeprimeUTRRegions.fraction  <- clabel.SitesInthreeprimeUTRRegions.number/clabel.SitesInExonRegions.number
+        clabel.SitesInfiveprimeUTRRegions.fraction  <- clabel.SitesInfiveprimeUTRRegions.number/clabel.SitesInExonRegions.number
+        clabel.SitesInthreeprimeUTRRegions.fraction <- clabel.SitesInthreeprimeUTRRegions.number/clabel.SitesInExonRegions.number
     }
-    clabel.SitesInIntronRegions.fraction         <- clabel.SitesInIntronRegions.number/length(clabel.gr)
-    clabel.SitesInPromoterRegions.fraction       <- clabel.SitesInPromoterRegions.number/length(clabel.gr)
-    clabel.SitesInIntergenicRegions.fraction     <- clabel.SitesInIntergenicRegions.number/length(clabel.gr)
-    clabel.SitesInFullIntergenicRegions.fraction <- clabel.SitesInFullIntergenicRegions.number/length(clabel.gr)
+    clabel.SitesInIntronRegions.fraction            <- clabel.SitesInIntronRegions.number/length(clabel.gr)
+    clabel.SitesInPromoterRegions.fraction          <- clabel.SitesInPromoterRegions.number/length(clabel.gr)
+    clabel.SitesInIntergenicRegions.fraction        <- clabel.SitesInIntergenicRegions.number/length(clabel.gr)
+    clabel.SitesInFullIntergenicRegions.fraction    <- clabel.SitesInFullIntergenicRegions.number/length(clabel.gr)
     
-    clabel.density                              <- ((length(clabel.gr) * 10000) / gnmsize)
-    clabel.SitesInGenicRegions.density          <- ((clabel.SitesInGenicRegions.number * 10000) / gene.width)
-    clabel.SitesInExonRegions.density           <- ((clabel.SitesInExonRegions.number  * 10000) / exon.width)
-    clabel.SitesInNcExonRegions.density         <- ((clabel.SitesInNcExonRegions.number  * 10000) / ncexon.width)
-    clabel.SitesInCDSRegions.density            <- ((clabel.SitesInCDSRegions.number   *10000)/CDS.width)
+    clabel.density                                  <- ((length(clabel.gr) * 10000) / gnmsize)
+    clabel.SitesInGenicRegions.density              <- ((clabel.SitesInGenicRegions.number * 10000) / gene.width)
+    clabel.SitesInExonRegions.density               <- ((clabel.SitesInExonRegions.number  * 10000) / exon.width)
+    clabel.SitesInNcExonRegions.density             <- ((clabel.SitesInNcExonRegions.number  * 10000) / ncexon.width)
+    clabel.SitesInCDSRegions.density                <- ((clabel.SitesInCDSRegions.number   *10000)/CDS.width)
     if (UTRflag ==1) {
         clabel.SitesInfiveprimeUTRRegions.density   <- ((clabel.SitesInfiveprimeUTRRegions.number *10000)/ fiveprimeUTR.width)
         clabel.SitesInthreeprimeUTRRegions.density  <- ((clabel.SitesInthreeprimeUTRRegions.number *10000)/ threeprimeUTR.width)
     }
-    clabel.SitesInIntronRegions.density         <- ((clabel.SitesInIntronRegions.number * 10000) /intron.width)
-    clabel.SitesInFullIntergenicRegions.density <- ((clabel.SitesInFullIntergenicRegions.number * 10000) / intergenic.width)
-    clabel.SitesInPromoterRegions.density       <- ((clabel.SitesInPromoterRegions.number * 10000) / promoter.width)
-    clabel.SitesInIntergenicRegions.density     <- ((clabel.SitesInIntergenicRegions.number * 10000) / intergenicsanspromoter.width)
+    clabel.SitesInIntronRegions.density             <- ((clabel.SitesInIntronRegions.number * 10000) /intron.width)
+    clabel.SitesInFullIntergenicRegions.density     <- ((clabel.SitesInFullIntergenicRegions.number * 10000) / intergenic.width)
+    clabel.SitesInPromoterRegions.density           <- ((clabel.SitesInPromoterRegions.number * 10000) / promoter.width)
+    clabel.SitesInIntergenicRegions.density         <- ((clabel.SitesInIntergenicRegions.number * 10000) / intergenicsanspromoter.width)
     
     cat( sprintf( "Number and density (per 10kb) of sites in %s\n\n",clabel) )
     cat( sprintf("Number of sites identified in %s %s:                            %9d     (%8.2f)\n",species,clabel,length(clabel.gr),clabel.density) )
@@ -186,53 +188,54 @@ map_methylome <- function(studymk,slabel,studymc,clabel,
     
     
     slabel.gr <- as(studymk,"GRanges")
-    slabel.geneoverlap.gr                        <- suppressWarnings((subsetByOverlaps(slabel.gr,gene.gr,ignore.strand=TRUE)))
-    slabel.exonoverlap.gr                        <- suppressWarnings((subsetByOverlaps(slabel.gr,exon.gr,ignore.strand=TRUE)))
-    slabel.ncexonoverlap.gr                      <- suppressWarnings((subsetByOverlaps(slabel.gr,ncexon.gr,ignore.strand=TRUE)))
-    slabel.CDSoverlap.gr                         <- suppressWarnings((subsetByOverlaps(slabel.gr,CDS.gr,ignore.strand=TRUE)))
+    slabel.geneoverlap.gr                           <- suppressWarnings(subsetByOverlaps(slabel.gr,gene.gr,ignore.strand=TRUE))
+    slabel.exonoverlap.gr                           <- suppressWarnings(subsetByOverlaps(slabel.gr,exon.gr,ignore.strand=TRUE))
+    slabel.ncexonoverlap.gr                         <- suppressWarnings(subsetByOverlaps(slabel.gr,ncexon.gr,ignore.strand=TRUE))
+    slabel.CDSoverlap.gr                            <- suppressWarnings(subsetByOverlaps(slabel.gr,CDS.gr,ignore.strand=TRUE))
     if (UTRflag == 1) {
-        slabel.fiveprimeUTRoverlap.gr                <- suppressWarnings((subsetByOverlaps(slabel.gr,fiveprimeUTRunique.gr,ignore.strand=TRUE)))
-        slabel.threeprimeUTRoverlap.gr               <- suppressWarnings((subsetByOverlaps(slabel.gr,threeprimeUTRunique.gr,ignore.strand=TRUE)))
+        slabel.fiveprimeUTRoverlap.gr               <- suppressWarnings(subsetByOverlaps(slabel.gr,fiveprimeUTRunique.gr,ignore.strand=TRUE))
+        slabel.threeprimeUTRoverlap.gr              <- suppressWarnings(subsetByOverlaps(slabel.gr,threeprimeUTRunique.gr,ignore.strand=TRUE))
     }
-    slabel.promoteroverlap.gr                    <- suppressWarnings((subsetByOverlaps(slabel.gr,promoter.gr,ignore.strand=TRUE)))
-    slabel.SitesInGenicRegions.number            <- length(slabel.geneoverlap.gr) 
-    slabel.SitesInExonRegions.number             <- length(slabel.exonoverlap.gr)
-    slabel.SitesInNcExonRegions.number           <- length(slabel.ncexonoverlap.gr)
-    slabel.SitesInCDSRegions.number              <- length(slabel.CDSoverlap.gr)
+    slabel.promoteroverlap.gr                       <- suppressWarnings(subsetByOverlaps(slabel.gr,promoter.gr,ignore.strand=TRUE))
+    slabel.promoteroverlap.gr                       <- suppressWarnings(subsetByOverlaps(slabel.promoteroverlap.gr,gene.gr,ignore.strand=TRUE,invert=TRUE))
+    slabel.SitesInGenicRegions.number               <- length(slabel.geneoverlap.gr) 
+    slabel.SitesInExonRegions.number                <- length(slabel.exonoverlap.gr)
+    slabel.SitesInNcExonRegions.number              <- length(slabel.ncexonoverlap.gr)
+    slabel.SitesInCDSRegions.number                 <- length(slabel.CDSoverlap.gr)
     if (UTRflag == 1) {
-        slabel.SitesInfiveprimeUTRRegions.number     <- length(slabel.fiveprimeUTRoverlap.gr)
-        slabel.SitesInthreeprimeUTRRegions.number    <- length(slabel.threeprimeUTRoverlap.gr)
+        slabel.SitesInfiveprimeUTRRegions.number    <- length(slabel.fiveprimeUTRoverlap.gr)
+        slabel.SitesInthreeprimeUTRRegions.number   <- length(slabel.threeprimeUTRoverlap.gr)
     }
-    slabel.SitesInIntronRegions.number           <- length(slabel.geneoverlap.gr) - length(slabel.exonoverlap.gr)
-    slabel.SitesInPromoterRegions.number         <- length(slabel.promoteroverlap.gr)
-    slabel.SitesInIntergenicRegions.number       <- length(slabel.gr)- length(slabel.geneoverlap.gr) - length(slabel.promoteroverlap.gr)
-    slabel.SitesInFullIntergenicRegions.number   <- slabel.SitesInIntergenicRegions.number + slabel.SitesInPromoterRegions.number
-    slabel.SitesInGenicRegions.fraction          <- slabel.SitesInGenicRegions.number/length(slabel.gr)
-    slabel.SitesInExonRegions.fraction           <- slabel.SitesInExonRegions.number/length(slabel.gr) 
-    slabel.SitesInNcExonRegions.fraction         <- slabel.SitesInNcExonRegions.number/slabel.SitesInExonRegions.number
-    slabel.SitesInCDSRegions.fraction            <- slabel.SitesInCDSRegions.number/slabel.SitesInExonRegions.number
+    slabel.SitesInIntronRegions.number              <- length(slabel.geneoverlap.gr) - length(slabel.exonoverlap.gr)
+    slabel.SitesInPromoterRegions.number            <- length(slabel.promoteroverlap.gr)
+    slabel.SitesInIntergenicRegions.number          <- length(slabel.gr)- length(slabel.geneoverlap.gr) - length(slabel.promoteroverlap.gr)
+    slabel.SitesInFullIntergenicRegions.number      <- slabel.SitesInIntergenicRegions.number + slabel.SitesInPromoterRegions.number
+    slabel.SitesInGenicRegions.fraction             <- slabel.SitesInGenicRegions.number/length(slabel.gr)
+    slabel.SitesInExonRegions.fraction              <- slabel.SitesInExonRegions.number/length(slabel.gr) 
+    slabel.SitesInNcExonRegions.fraction            <- slabel.SitesInNcExonRegions.number/slabel.SitesInExonRegions.number
+    slabel.SitesInCDSRegions.fraction               <- slabel.SitesInCDSRegions.number/slabel.SitesInExonRegions.number
     if (UTRflag == 1) {
-        slabel.SitesInfiveprimeUTRRegions.fraction   <- slabel.SitesInfiveprimeUTRRegions.number/slabel.SitesInExonRegions.number
-        slabel.SitesInthreeprimeUTRRegions.fraction  <- slabel.SitesInthreeprimeUTRRegions.number/slabel.SitesInExonRegions.number
+        slabel.SitesInfiveprimeUTRRegions.fraction  <- slabel.SitesInfiveprimeUTRRegions.number/slabel.SitesInExonRegions.number
+        slabel.SitesInthreeprimeUTRRegions.fraction <- slabel.SitesInthreeprimeUTRRegions.number/slabel.SitesInExonRegions.number
     }
-    slabel.SitesInIntronRegions.fraction         <- slabel.SitesInIntronRegions.number/length(slabel.gr)
-    slabel.SitesInPromoterRegions.fraction       <- slabel.SitesInPromoterRegions.number/length(slabel.gr)
-    slabel.SitesInIntergenicRegions.fraction     <- slabel.SitesInIntergenicRegions.number/length(slabel.gr)
-    slabel.SitesInFullIntergenicRegions.fraction <- slabel.SitesInFullIntergenicRegions.number/length(slabel.gr)
+    slabel.SitesInIntronRegions.fraction            <- slabel.SitesInIntronRegions.number/length(slabel.gr)
+    slabel.SitesInPromoterRegions.fraction          <- slabel.SitesInPromoterRegions.number/length(slabel.gr)
+    slabel.SitesInIntergenicRegions.fraction        <- slabel.SitesInIntergenicRegions.number/length(slabel.gr)
+    slabel.SitesInFullIntergenicRegions.fraction    <- slabel.SitesInFullIntergenicRegions.number/length(slabel.gr)
     
-    slabel.density                              <- ((length(slabel.gr) * 10000) / gnmsize)
-    slabel.SitesInGenicRegions.density          <- ((slabel.SitesInGenicRegions.number * 10000) / gene.width)
-    slabel.SitesInExonRegions.density           <- ((slabel.SitesInExonRegions.number  * 10000) / exon.width)
-    slabel.SitesInNcExonRegions.density         <- ((slabel.SitesInNcExonRegions.number  * 10000) / ncexon.width)
-    slabel.SitesInCDSRegions.density            <- ((slabel.SitesInCDSRegions.number   *10000)/CDS.width)
+    slabel.density                                  <- ((length(slabel.gr) * 10000) / gnmsize)
+    slabel.SitesInGenicRegions.density              <- ((slabel.SitesInGenicRegions.number * 10000) / gene.width)
+    slabel.SitesInExonRegions.density               <- ((slabel.SitesInExonRegions.number  * 10000) / exon.width)
+    slabel.SitesInNcExonRegions.density             <- ((slabel.SitesInNcExonRegions.number  * 10000) / ncexon.width)
+    slabel.SitesInCDSRegions.density                <- ((slabel.SitesInCDSRegions.number   *10000)/CDS.width)
     if (UTRflag ==1) {
         slabel.SitesInfiveprimeUTRRegions.density   <- ((slabel.SitesInfiveprimeUTRRegions.number *10000)/ fiveprimeUTR.width)
         slabel.SitesInthreeprimeUTRRegions.density  <- ((slabel.SitesInthreeprimeUTRRegions.number *10000)/ threeprimeUTR.width)
     }
-    slabel.SitesInIntronRegions.density         <- ((slabel.SitesInIntronRegions.number * 10000) /intron.width)
-    slabel.SitesInFullIntergenicRegions.density <- ((slabel.SitesInFullIntergenicRegions.number * 10000) / intergenic.width)
-    slabel.SitesInPromoterRegions.density       <- ((slabel.SitesInPromoterRegions.number * 10000) / promoter.width)
-    slabel.SitesInIntergenicRegions.density     <- ((slabel.SitesInIntergenicRegions.number * 10000) / intergenicsanspromoter.width)
+    slabel.SitesInIntronRegions.density             <- ((slabel.SitesInIntronRegions.number * 10000) /intron.width)
+    slabel.SitesInFullIntergenicRegions.density     <- ((slabel.SitesInFullIntergenicRegions.number * 10000) / intergenic.width)
+    slabel.SitesInPromoterRegions.density           <- ((slabel.SitesInPromoterRegions.number * 10000) / promoter.width)
+    slabel.SitesInIntergenicRegions.density         <- ((slabel.SitesInIntergenicRegions.number * 10000) / intergenicsanspromoter.width)
     
     cat( sprintf( "Number and density (per 10kb) of sites in %s\n\n",slabel) )
     cat( sprintf("Number of sites identified in %s %s:                            %9d     (%8.2f) (%6.2f%% of control)\n",species,slabel,length(slabel.gr),slabel.density,100*length(slabel.gr)/length(clabel.gr)) )
