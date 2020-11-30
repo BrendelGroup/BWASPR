@@ -80,8 +80,8 @@ det_dmt <- function(mrobj,genome_ann,wsize=1000,stepsize=1000,
        )
     if (length(dmtiles.gr) == 0) {
         message("No differentially methylated tiles are found.")
-        return(list('dmgenes' = GRanges(),
-                    'dmtiles' = GRanges()))
+        return(list('dmtiles' = GRanges(),
+                    'dmgenes' = GRanges()))
     }
     if (outfile1 != '') {
         dmtiles <- unlist(GRangesList(unlist(dmtiles.gr)))
