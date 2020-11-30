@@ -134,7 +134,7 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
 
       # ... getting distance statistics:
       #
-      ddlist <- ddstats(gdvector,xlabel,"black")
+      ddlist <- ddstats(gdvector,xlabel,"blue")
       dstats <- ddlist$dstats
       plotme[[1]] <- ddlist$plot1
       plotme[[2]] <- ddlist$plot2
@@ -291,10 +291,9 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
                           select = c(Rtype,Sample,SeqID,From,To,Rlgth,NbrSites,Sdnsty))
         DFhsmrR <- arrange(DFhsmrR, -Sdnsty)
         sampleL.DFhsmrR.df <- as.data.frame(DFhsmrR)
-        write.table(sampleL.DFhsmrR.df, sprintf("mrr-%s.txt",sampleL),
-                    quote=F, sep="\t", row.names=F, col.names=F)
         cat( sprintf("\n Top %3d (out of %5d) methylation-rich regions in \"%s\":\n",
                      nbrxtrms, dim(DFhsmrR)[1], sampleL) )
+        cat( sprintf(" (Sdnsty = sites per 1kb)\n\n") )
         print( head(DFhsmrR, n = nbrxtrms) )
       }
     
@@ -303,10 +302,9 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
                           select = c(Rtype,Sample,SeqID,From,To,Rlgth,NbrSites,Sdnsty))
         DFhsmrP <- arrange(DFhsmrP, +Sdnsty)
         sampleL.DFhsmrP.df <- as.data.frame(DFhsmrP)
-        write.table(sampleL.DFhsmrP.df, sprintf("mpr-%s.txt",sampleL),
-                    quote=F, sep="\t", row.names=F, col.names=F)
         cat( sprintf("\n Top %3d (out of %5d) methylation-poor regions in \"%s\":\n",
                      nbrxtrms, dim(DFhsmrP)[1], sampleL) )
+        cat( sprintf(" (Sdnsty = sites per 1kb)\n\n") )
         print( head(DFhsmrP, n = nbrxtrms) )
       }
       cat( sprintf("\n\n") )
@@ -319,17 +317,16 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
       }
     }
     
-    DFhsmrPRT <- data.frame( DFhsmr$SeqID, DFhsmr$From, DFhsmr$To, DFhsmr$Rtype,
-                             DFhsmr$Sample, DFhsmr$Rlgth, DFhsmr$NbrSites, DFhsmr$Sdnsty)
+    DFhsmrPRT <- data.frame( DFhsmr$SeqID, as.character(DFhsmr$From-1), as.character(DFhsmr$To),
+                             DFhsmr$Rtype, DFhsmr$Sample, as.character(DFhsmr$Rlgth),
+                             as.character(DFhsmr$NbrSites), as.numeric(as.character(DFhsmr$Sdnsty)))
     names(DFhsmrPRT) <- c("SeqID", "From", "To", "Rtype", "Sample", "Rlgth", "NbrSites", "Sdnsty")
     
-    tabfile <- sprintf("mdr-%s.tab",sampleL)
     bedfile <- sprintf("mdr-%s.bed",sampleL)
-    sink(tabfile)
+    sink(bedfile)
     write.table( format(DFhsmrPRT,scientific=FALSE,digits=1L),
                  row.names = FALSE, quote = FALSE, sep="\t" )
     sink()
-    cmd <- sprintf("sed -e 's/ //g' %s > %s",tabfile,bedfile)
     system(cmd)
 
     cat( sprintf( "\n\n" ) )
@@ -355,14 +352,12 @@ ddstats <- function(v,xlabel,mycolor) {
   dstncdf <- as.data.frame(v)
   pme <- subset(dstncdf,v<=600)
   plot1 <-  ggplot(pme, aes(x=v)) + scale_x_continuous(xlabel,limits=c(0,600),
-    breaks=seq(0,600,60)) + geom_histogram(aes(y=..density..),binwidth=20,closed="right",
-    color="black",fill="white") + scale_y_continuous(limits=c(0,0.005)) +
-    geom_density(alpha=.2,color=mycolor)
+    breaks=seq(0,600,60)) + geom_histogram(binwidth=20,closed="right",
+    color=mycolor,fill="white")
   pme <- subset(dstncdf,v<=60)
   plot2 <-  ggplot(pme, aes(x=v)) + scale_x_continuous(xlabel,limits=c(0,60),
-    breaks=seq(0,60,4)) + geom_histogram(aes(y=..density..),binwidth=2,closed="right",
-    color="black",fill="white") + scale_y_continuous(limits=c(0,0.05)) +
-    geom_density(alpha=.2,color=mycolor)
+    breaks=seq(0,60,4)) + geom_histogram(binwidth=2,closed="right",
+    color=mycolor,fill="white")
   rlist <- list("dstats" = dstats, "plot1" = plot1, "plot2" = plot2)
 
   return(rlist)
