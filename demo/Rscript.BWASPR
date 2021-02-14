@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	November 29, 2020
+#Version:	February 12, 2021
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -525,7 +525,7 @@ if (RUNacs) {
 #
 if (RUNrnk) {
 #Produce ranked*.txt, sites*.txt, and plot*.pdf files showing methylation-percentage
-# and site density ranked annotated regions and exploritory plots comparing the
+# and site density ranked annotated regions and exploratory plots comparing the
 # measures.
 #
   RNKdir <- paste(outputdir,"RNK",sep="/")
