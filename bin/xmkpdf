@@ -1,0 +1,171 @@
+#!/bin/bash
+#
+# xmkpdf
+
+# Usage: $0 Pc PA y y
+#        $0 Sd LI y n
+#        $0 Cb LI n n
+
+species=$1
+study=$2
+hasreplicates=$3
+inclrscript=$4
+
+if [ ${hasreplicates} == 'y' ]; then
+  dirs="CMS PWC CRL REPCMS REPCRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
+else
+  dirs="CMS PWC CRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
+fi
+
+
+sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}_${study}.conf > tmpf-${species}_${study}.conf
+cat <(echo "${species}_${study}.conf"; echo ""; echo ""; cat tmpf-${species}_${study}.conf) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}_${study}.conf.pdf
+
+sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}.par > tmpf-${species}.par
+cat <(echo "${species}.par"; echo ""; echo ""; cat tmpf-${species}.par) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}.par.pdf
+
+sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}.dat > tmpf-${species}.dat
+cat <(echo "${species}.dat"; echo ""; echo ""; cat tmpf-${species}.dat) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}.dat.pdf
+
+if [ ${inclrscript} == 'y' ]; then
+cat <(echo "Rscript.BWASPR"; echo ""; echo ""; cat ../Rscript.BWASPR) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-Rscript.BWASPR.pdf
+fi
+
+
+cp -r OUT-${species}_${study} TMP-${species}_${study}
+cd TMP-${species}_${study}
+
+
+cat <(echo "0README"; echo ""; echo ""; cat 0README) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o 0README.pdf
+
+
+for dir in ${dirs}
+do
+  cd ${dir}
+  curpdfs=$(ls *.pdf)
+
+  for file in 0README*
+  do
+    echo "... converting ${file}"
+    cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; cat ${file}) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+  done
+  for file in *.txt
+  do
+    echo "... converting ${file}"
+    n=`wc -l ${file}| cut -d" " -f1`
+    if [ $n -ge 200 ]; then
+      cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; head -n 25 ${file}; echo "..."; echo "... only first 25 lines shown ...") | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+    else
+      cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; cat ${file}) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+    fi
+  done
+  echo "... combinining output PDFs"
+  pdfunite 0README*.pdf *.txt.pdf  ${curpdfs}  output.pdf
+  echo "done"
+cd ..
+done
+cd ..
+
+if [ ${hasreplicates} == 'y' ]; then
+  if [ ${inclrscript} == 'y' ]; then
+    thePDFfiles=" \
+	tmpf-${species}_${study}.conf.pdf \
+	tmpf-${species}.par.pdf \
+	tmpf-${species}.dat.pdf \
+	tmpf-Rscript.BWASPR.pdf \
+	TMP-${species}_${study}/0README.pdf \
+	TMP-${species}_${study}/CMS/output.pdf \
+	TMP-${species}_${study}/PWC/output.pdf \
+	TMP-${species}_${study}/CRL/output.pdf \
+	TMP-${species}_${study}/REPCMS/output.pdf \
+	TMP-${species}_${study}/REPCRL/output.pdf \
+	TMP-${species}_${study}/MMP/output.pdf \
+	TMP-${species}_${study}/ACS/output.pdf \
+	TMP-${species}_${study}/RNK/output.pdf \
+	TMP-${species}_${study}/MRPR/output.pdf \
+	TMP-${species}_${study}/DMT/output.pdf \
+	TMP-${species}_${study}/DMSG/output.pdf \
+	TMP-${species}_${study}/OGL/output.pdf"
+  else
+    thePDFfiles=" \
+	tmpf-${species}_${study}.conf.pdf \
+	tmpf-${species}.par.pdf \
+	tmpf-${species}.dat.pdf \
+	TMP-${species}_${study}/0README.pdf \
+	TMP-${species}_${study}/CMS/output.pdf \
+	TMP-${species}_${study}/PWC/output.pdf \
+	TMP-${species}_${study}/CRL/output.pdf \
+	TMP-${species}_${study}/REPCMS/output.pdf \
+	TMP-${species}_${study}/REPCRL/output.pdf \
+	TMP-${species}_${study}/MMP/output.pdf \
+	TMP-${species}_${study}/ACS/output.pdf \
+	TMP-${species}_${study}/RNK/output.pdf \
+	TMP-${species}_${study}/MRPR/output.pdf \
+	TMP-${species}_${study}/DMT/output.pdf \
+	TMP-${species}_${study}/DMSG/output.pdf \
+	TMP-${species}_${study}/OGL/output.pdf"
+  fi
+else
+  if [ ${inclrscript} == 'y' ]; then
+    thePDFfiles=" \
+	tmpf-${species}_${study}.conf.pdf \
+	tmpf-${species}.par.pdf \
+	tmpf-${species}.dat.pdf \
+	tmpf-Rscript.BWASPR.pdf \
+	TMP-${species}_${study}/0README.pdf \
+	TMP-${species}_${study}/CMS/output.pdf \
+	TMP-${species}_${study}/PWC/output.pdf \
+	TMP-${species}_${study}/CRL/output.pdf \
+	TMP-${species}_${study}/MMP/output.pdf \
+	TMP-${species}_${study}/ACS/output.pdf \
+	TMP-${species}_${study}/RNK/output.pdf \
+	TMP-${species}_${study}/MRPR/output.pdf \
+	TMP-${species}_${study}/DMT/output.pdf \
+	TMP-${species}_${study}/DMSG/output.pdf \
+	TMP-${species}_${study}/OGL/output.pdf"
+  else
+    thePDFfiles=" \
+	tmpf-${species}_${study}.conf.pdf \
+	tmpf-${species}.par.pdf \
+	tmpf-${species}.dat.pdf \
+	TMP-${species}_${study}/0README.pdf \
+	TMP-${species}_${study}/CMS/output.pdf \
+	TMP-${species}_${study}/PWC/output.pdf \
+	TMP-${species}_${study}/CRL/output.pdf \
+	TMP-${species}_${study}/MMP/output.pdf \
+	TMP-${species}_${study}/ACS/output.pdf \
+	TMP-${species}_${study}/RNK/output.pdf \
+	TMP-${species}_${study}/MRPR/output.pdf \
+	TMP-${species}_${study}/DMT/output.pdf \
+	TMP-${species}_${study}/DMSG/output.pdf \
+	TMP-${species}_${study}/OGL/output.pdf"
+  fi
+fi
+
+pdfunite ${thePDFfiles}  ${species}_${study}-BWASPR-output.pdf
+
+\rm -rf tmpf-Rscript.BWASPR.pdf tmpf-${species}* TMP-${species}_${study}
