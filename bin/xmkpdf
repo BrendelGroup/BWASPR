@@ -2,35 +2,30 @@
 #
 # xmkpdf
 
-# Usage: $0 Pc PA y y
-#        $0 Sd LI y n
-#        $0 Cb LI n n
+# Usage: $0 Pc PA y
+#        $0 Cb LI n
 
 species=$1
 study=$2
-hasreplicates=$3
-inclrscript=$4
+inclrscript=$3
 
-if [ ${hasreplicates} == 'y' ]; then
-  dirs="CMS PWC CRL REPCMS REPCRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
-else
-  dirs="CMS PWC CRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
-fi
+basedir="/projects/vbrendel/SIMETH"
+dirs="CMS PWC CRL REPCMS REPCRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
 
 
-sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}_${study}.conf > tmpf-${species}_${study}.conf
+sed -e "s#$basedir#.#" ${species}_${study}.conf > tmpf-${species}_${study}.conf
 cat <(echo "${species}_${study}.conf"; echo ""; echo ""; cat tmpf-${species}_${study}.conf) | \
 	unoconv --stdin -f pdf \
 	  -P PaperFormat=A3 -P PaperOrientation=landscape \
        	  -o tmpf-${species}_${study}.conf.pdf
 
-sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}.par > tmpf-${species}.par
+sed -e "s#$basedir#.#" ${species}.par > tmpf-${species}.par
 cat <(echo "${species}.par"; echo ""; echo ""; cat tmpf-${species}.par) | \
 	unoconv --stdin -f pdf \
 	  -P PaperFormat=A3 -P PaperOrientation=landscape \
        	  -o tmpf-${species}.par.pdf
 
-sed -e "s#/projects/vbrendel/SIMETH#.#" ${species}.dat > tmpf-${species}.dat
+sed -e "s#$basedir#.#" ${species}.dat > tmpf-${species}.dat
 cat <(echo "${species}.dat"; echo ""; echo ""; cat tmpf-${species}.dat) | \
 	unoconv --stdin -f pdf \
 	  -P PaperFormat=A3 -P PaperOrientation=landscape \
@@ -56,8 +51,16 @@ cat <(echo "0README"; echo ""; echo ""; cat 0README) | \
 
 for dir in ${dirs}
 do
+  if [ ! -d ${dir} ]; then
+    continue
+  fi
+  echo ".. working on ${dir}"
   cd ${dir}
-  curpdfs=$(ls *.pdf)
+  if test -n "$(shopt -s nullglob; echo *.pdf)"; then
+    curpdfs=$(ls *.pdf)
+  else
+    curpdfs=''
+  fi
 
   for file in 0README*
   do
@@ -90,82 +93,30 @@ cd ..
 done
 cd ..
 
-if [ ${hasreplicates} == 'y' ]; then
-  if [ ${inclrscript} == 'y' ]; then
-    thePDFfiles=" \
-	tmpf-${species}_${study}.conf.pdf \
-	tmpf-${species}.par.pdf \
-	tmpf-${species}.dat.pdf \
-	tmpf-Rscript.BWASPR.pdf \
-	TMP-${species}_${study}/0README.pdf \
-	TMP-${species}_${study}/CMS/output.pdf \
-	TMP-${species}_${study}/PWC/output.pdf \
-	TMP-${species}_${study}/CRL/output.pdf \
-	TMP-${species}_${study}/REPCMS/output.pdf \
-	TMP-${species}_${study}/REPCRL/output.pdf \
-	TMP-${species}_${study}/MMP/output.pdf \
-	TMP-${species}_${study}/ACS/output.pdf \
-	TMP-${species}_${study}/RNK/output.pdf \
-	TMP-${species}_${study}/MRPR/output.pdf \
-	TMP-${species}_${study}/DMT/output.pdf \
-	TMP-${species}_${study}/DMSG/output.pdf \
-	TMP-${species}_${study}/OGL/output.pdf"
-  else
-    thePDFfiles=" \
-	tmpf-${species}_${study}.conf.pdf \
-	tmpf-${species}.par.pdf \
-	tmpf-${species}.dat.pdf \
-	TMP-${species}_${study}/0README.pdf \
-	TMP-${species}_${study}/CMS/output.pdf \
-	TMP-${species}_${study}/PWC/output.pdf \
-	TMP-${species}_${study}/CRL/output.pdf \
-	TMP-${species}_${study}/REPCMS/output.pdf \
-	TMP-${species}_${study}/REPCRL/output.pdf \
-	TMP-${species}_${study}/MMP/output.pdf \
-	TMP-${species}_${study}/ACS/output.pdf \
-	TMP-${species}_${study}/RNK/output.pdf \
-	TMP-${species}_${study}/MRPR/output.pdf \
-	TMP-${species}_${study}/DMT/output.pdf \
-	TMP-${species}_${study}/DMSG/output.pdf \
-	TMP-${species}_${study}/OGL/output.pdf"
-  fi
-else
-  if [ ${inclrscript} == 'y' ]; then
-    thePDFfiles=" \
-	tmpf-${species}_${study}.conf.pdf \
-	tmpf-${species}.par.pdf \
-	tmpf-${species}.dat.pdf \
-	tmpf-Rscript.BWASPR.pdf \
-	TMP-${species}_${study}/0README.pdf \
-	TMP-${species}_${study}/CMS/output.pdf \
-	TMP-${species}_${study}/PWC/output.pdf \
-	TMP-${species}_${study}/CRL/output.pdf \
-	TMP-${species}_${study}/MMP/output.pdf \
-	TMP-${species}_${study}/ACS/output.pdf \
-	TMP-${species}_${study}/RNK/output.pdf \
-	TMP-${species}_${study}/MRPR/output.pdf \
-	TMP-${species}_${study}/DMT/output.pdf \
-	TMP-${species}_${study}/DMSG/output.pdf \
-	TMP-${species}_${study}/OGL/output.pdf"
-  else
-    thePDFfiles=" \
-	tmpf-${species}_${study}.conf.pdf \
-	tmpf-${species}.par.pdf \
-	tmpf-${species}.dat.pdf \
-	TMP-${species}_${study}/0README.pdf \
-	TMP-${species}_${study}/CMS/output.pdf \
-	TMP-${species}_${study}/PWC/output.pdf \
-	TMP-${species}_${study}/CRL/output.pdf \
-	TMP-${species}_${study}/MMP/output.pdf \
-	TMP-${species}_${study}/ACS/output.pdf \
-	TMP-${species}_${study}/RNK/output.pdf \
-	TMP-${species}_${study}/MRPR/output.pdf \
-	TMP-${species}_${study}/DMT/output.pdf \
-	TMP-${species}_${study}/DMSG/output.pdf \
-	TMP-${species}_${study}/OGL/output.pdf"
-  fi
-fi
+
+thePDFfiles=""
+
+if [ -e tmpf-${species}_${study}.conf.pdf ]; then thePDFfiles+="tmpf-${species}_${study}.conf.pdf "; fi
+if [ -e tmpf-${species}.par.pdf ]; then thePDFfiles+="tmpf-${species}.par.pdf "; fi
+if [ -e tmpf-${species}.dat.pdf ]; then thePDFfiles+="tmpf-${species}.dat.pdf "; fi
+if [ -e tmpf-Rscript.BWASPR.pdf ]; then thePDFfiles+="tmpf-Rscript.BWASPR.pdf "; fi
+if [ -e TMP-${species}_${study}/0README.pdf ]; then thePDFfiles+="TMP-${species}_${study}/0README.pdf "; fi
+if [ -e TMP-${species}_${study}/CMS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/CMS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/PWC/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/PWC/output.pdf "; fi
+if [ -e TMP-${species}_${study}/CRL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/CRL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/REPCMS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/REPCMS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/REPCRL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/REPCRL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/MMP/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/MMP/output.pdf "; fi
+if [ -e TMP-${species}_${study}/ACS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/ACS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/RNK/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/RNK/output.pdf "; fi
+if [ -e TMP-${species}_${study}/MRPR/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/MRPR/output.pdf "; fi
+if [ -e TMP-${species}_${study}/DMT/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/DMT/output.pdf "; fi
+if [ -e TMP-${species}_${study}/DMSG/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/DMSG/output.pdf "; fi
+if [ -e TMP-${species}_${study}/OGL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/OGL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/OGLall/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/OGLall/output.pdf "; fi
 
 pdfunite ${thePDFfiles}  ${species}_${study}-BWASPR-output.pdf
+echo ""
+echo "Please see ${species}_${study}-BWASPR-output.pdf for the combined output record."
 
 \rm -rf tmpf-Rscript.BWASPR.pdf tmpf-${species}* TMP-${species}_${study}
