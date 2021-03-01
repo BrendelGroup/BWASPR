@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+
+list1="$1"
+list2="$2"
+nrnks=$3
+pvalue=$4
+
+l1=`tail -n +2 ${list1} |
+	head -n ${nrnks} | cut -f1,4 | sed -e "s#\t#' : #" | tr '\n' ',' |
+	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+   `
+l2=`tail -n +2 ${list2} |
+	head -n ${nrnks} | cut -f1,4 | sed -e "s#\t#' : #" | tr '\n' ',' |
+	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+   `
+
+python3 - "${l1}" "${l2}" "${pvalue}" << EOF
+import sys
+import os
+import ast
+sys.path.append(os.path.abspath("/opt/rbo"))
+from rbo import rbo_dict
+
+d = dict(ast.literal_eval(sys.argv[1]))
+e = dict(ast.literal_eval(sys.argv[2]))
+
+pval = float(sys.argv[3])
+
+r = rbo_dict(d, e, p=pval, sort_ascending=True)
+print("ext: %4.2f (min: %4.2f max: %4.2f)" % (round(r.ext,2),round(r.min,2),round(r.min+r.res,2)))
+
+EOF
+
+#echo "Back to bash"

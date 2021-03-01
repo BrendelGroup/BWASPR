@@ -1,0 +1,122 @@
+#!/bin/bash
+#
+# xmkpdf
+
+# Usage: $0 Pc PA y
+#        $0 Cb LI n
+
+species=$1
+study=$2
+inclrscript=$3
+
+basedir="/projects/vbrendel/SIMETH"
+dirs="CMS PWC CRL REPCMS REPCRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
+
+
+sed -e "s#$basedir#.#" ${species}_${study}.conf > tmpf-${species}_${study}.conf
+cat <(echo "${species}_${study}.conf"; echo ""; echo ""; cat tmpf-${species}_${study}.conf) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}_${study}.conf.pdf
+
+sed -e "s#$basedir#.#" ${species}.par > tmpf-${species}.par
+cat <(echo "${species}.par"; echo ""; echo ""; cat tmpf-${species}.par) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}.par.pdf
+
+sed -e "s#$basedir#.#" ${species}.dat > tmpf-${species}.dat
+cat <(echo "${species}.dat"; echo ""; echo ""; cat tmpf-${species}.dat) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-${species}.dat.pdf
+
+if [ ${inclrscript} == 'y' ]; then
+cat <(echo "Rscript.BWASPR"; echo ""; echo ""; cat ../Rscript.BWASPR) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o tmpf-Rscript.BWASPR.pdf
+fi
+
+
+cp -r OUT-${species}_${study} TMP-${species}_${study}
+cd TMP-${species}_${study}
+
+
+cat <(echo "0README"; echo ""; echo ""; cat 0README) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o 0README.pdf
+
+
+for dir in ${dirs}
+do
+  if [ ! -d ${dir} ]; then
+    continue
+  fi
+  echo ".. working on ${dir}"
+  cd ${dir}
+  if test -n "$(shopt -s nullglob; echo *.pdf)"; then
+    curpdfs=$(ls *.pdf)
+  else
+    curpdfs=''
+  fi
+
+  for file in 0README*
+  do
+    echo "... converting ${file}"
+    cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; cat ${file}) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+  done
+  for file in *.txt
+  do
+    echo "... converting ${file}"
+    n=`wc -l ${file}| cut -d" " -f1`
+    if [ $n -ge 200 ]; then
+      cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; head -n 25 ${file}; echo "..."; echo "... only first 25 lines shown ...") | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+    else
+      cat <(echo "Directory: ${dir} File: ${file}"; echo ""; echo ""; cat ${file}) | \
+	unoconv --stdin -f pdf \
+	  -P PaperFormat=A3 -P PaperOrientation=landscape \
+       	  -o ${file}.pdf
+    fi
+  done
+  echo "... combinining output PDFs"
+  pdfunite 0README*.pdf *.txt.pdf  ${curpdfs}  output.pdf
+  echo "done"
+cd ..
+done
+cd ..
+
+
+thePDFfiles=""
+
+if [ -e tmpf-${species}_${study}.conf.pdf ]; then thePDFfiles+="tmpf-${species}_${study}.conf.pdf "; fi
+if [ -e tmpf-${species}.par.pdf ]; then thePDFfiles+="tmpf-${species}.par.pdf "; fi
+if [ -e tmpf-${species}.dat.pdf ]; then thePDFfiles+="tmpf-${species}.dat.pdf "; fi
+if [ -e tmpf-Rscript.BWASPR.pdf ]; then thePDFfiles+="tmpf-Rscript.BWASPR.pdf "; fi
+if [ -e TMP-${species}_${study}/0README.pdf ]; then thePDFfiles+="TMP-${species}_${study}/0README.pdf "; fi
+if [ -e TMP-${species}_${study}/CMS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/CMS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/PWC/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/PWC/output.pdf "; fi
+if [ -e TMP-${species}_${study}/CRL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/CRL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/REPCMS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/REPCMS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/REPCRL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/REPCRL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/MMP/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/MMP/output.pdf "; fi
+if [ -e TMP-${species}_${study}/ACS/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/ACS/output.pdf "; fi
+if [ -e TMP-${species}_${study}/RNK/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/RNK/output.pdf "; fi
+if [ -e TMP-${species}_${study}/MRPR/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/MRPR/output.pdf "; fi
+if [ -e TMP-${species}_${study}/DMT/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/DMT/output.pdf "; fi
+if [ -e TMP-${species}_${study}/DMSG/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/DMSG/output.pdf "; fi
+if [ -e TMP-${species}_${study}/OGL/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/OGL/output.pdf "; fi
+if [ -e TMP-${species}_${study}/OGLall/output.pdf ]; then thePDFfiles+="TMP-${species}_${study}/OGLall/output.pdf "; fi
+
+pdfunite ${thePDFfiles}  ${species}_${study}-BWASPR-output.pdf
+echo ""
+echo "Please see ${species}_${study}-BWASPR-output.pdf for the combined output record."
+
+\rm -rf tmpf-Rscript.BWASPR.pdf tmpf-${species}* TMP-${species}_${study}
