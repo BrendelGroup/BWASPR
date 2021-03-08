@@ -32,7 +32,7 @@ get_genome_annotation <- function(inputdf) {
     UTRflag               <- inputdf[inputdf$Variable == 'UTRFLAGSET', "Value"]
 
     if (UTRflag == 1) {
-        fpUTRlist  <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
+        fpUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '5UTRLISTGFF3', "Value"],sep="/")
         tpUTRlist <- paste(GFF3DIR,inputdf[inputdf$Variable == '3UTRLISTGFF3', "Value"],sep="/")
     }
 
@@ -76,7 +76,7 @@ get_genome_annotation <- function(inputdf) {
         }
     }
     else {	# return empty GRanges if there are no UTR annotations ..,
-        fpUTR.gr  <- GRanges()
+        fpUTR.gr <- GRanges()
         tpUTR.gr <- GRanges()
         fpUTRnotCDS.gr <- GRanges()
         tpUTRnotCDS.gr <- GRanges()

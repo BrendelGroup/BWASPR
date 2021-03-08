@@ -19,7 +19,7 @@
 #'
 #' @import methylKit
 #' @importFrom GenomicRanges GRangesList
-#' @importFrom IRanges subsetByOverlaps
+#' @importFrom IRanges findOverlaps subsetByOverlaps
 #' @importFrom BiocGenerics as.data.frame
 #' @importFrom S4Vectors mcols
 #'
@@ -91,7 +91,10 @@ det_dmt <- function(mrobj,genome_ann,wsize=1000,stepsize=1000,
         write.table(dmtiles.df,file=outfile1,sep='\t',row.names=FALSE,quote=FALSE)
     }
 
+    gmcls <- mcols(genes)
     dmgenes.gr <- lapply(seq_along(pairs), function(i) {
+        tmpdf <- findOverlaps(genes,dmtiles.gr[[i]],ignore.strand=TRUE,select="arbitrary")
+        mcols(genes) <- cbind(gmcls,mcols(dmtiles.gr[[i]])[tmpdf, ,drop=FALSE])
         gr <- subsetByOverlaps(genes,dmtiles.gr[[i]],ignore.strand=TRUE)
         pairname <- paste(sample_list[pairs[[i]][1]+1],
                           sample_list[pairs[[i]][2]+1],sep=".vs.")
