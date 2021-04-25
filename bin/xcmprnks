@@ -1,21 +1,44 @@
 #!/bin/bash
 #
 
-list1="$1"
-list2="$2"
-nrnks=$3
-pvalue=$4
+# A useful little function that echoes to stderr:
+#
+echoerr() { printf "%s\n" "$*" >&2; }
 
-l1=`tail -n +2 ${list1} |
-	head -n ${nrnks} | cut -f1,4 | sed -e "s#\t#' : #" | tr '\n' ',' |
-	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
-   `
-l2=`tail -n +2 ${list2} |
-	head -n ${nrnks} | cut -f1,4 | sed -e "s#\t#' : #" | tr '\n' ',' |
-	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
-   `
 
-python3 - "${l1}" "${l2}" "${pvalue}" << EOF
+# Function 'cmprrnks' to calculate the rbo value from two input lists:
+#
+function cmprrnks {
+
+local list1="$1"
+local list2="$2"
+local field=$3
+local nbrrnks=$4
+local rbopvl=$5
+local nbrshfs=$6
+
+if [ $nbrshfs -gt 0 ]; then
+  l1=`paste  <(tail -n +2 ${list1} | cut -f1 | head -n ${nbrshfs} | shuf | head -n ${nbrrnks})  <(tail -n +2 ${list1} | cut -f${field} | head -n ${nbrshfs} | head -n ${nbrrnks}) |
+ 	 sed -e "s#\t#' : #" | tr '\n' ',' |
+ 	 sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+     `
+  l2=`paste  <(tail -n +2 ${list2} | cut -f1 | head -n ${nbrshfs} | shuf | head -n ${nbrrnks})  <(tail -n +2 ${list2} | cut -f${field} | head -n ${nbrshfs} | head -n ${nbrrnks}) |
+ 	 sed -e "s#\t#' : #" | tr '\n' ',' |
+ 	 sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+     `
+else
+  l1=`tail -n +2 ${list1} |
+	head -n ${nbrrnks} | cut -f1,${field} | sed -e "s#\t#' : #" | tr '\n' ',' |
+	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+     `
+  l2=`tail -n +2 ${list2} |
+	head -n ${nbrrnks} | cut -f1,${field} | sed -e "s#\t#' : #" | tr '\n' ',' |
+	sed -e "s#^#{'#; s#,#, '#g;" | sed -e "s#, '\\$#}#;"
+     `
+fi
+
+
+python3 - "${l1}" "${l2}" "${rbopvl}" << EOF
 import sys
 import os
 import ast
@@ -32,4 +55,246 @@ print("ext: %4.2f (min: %4.2f max: %4.2f)" % (round(r.ext,2),round(r.min,2),roun
 
 EOF
 
-#echo "Back to bash"
+} # end cmprrnks
+
+
+
+##### Process command line arguments #####
+#
+# Default values:
+#
+showusage=0
+showdetails=0
+rflagset=0
+lflagset=0
+fflagset=0
+nbrrnks=40
+rbopvl=0.95
+nbrshfs=40
+nexp=100;
+ctff=5
+
+while getopts ":hHr:l:f:n:p:s:x:t:" optname
+  do
+    case "$optname" in
+      "h")
+        showusage=1
+        ;;
+      "H")
+        showusage=1
+        showdetails=1
+        ;;
+      "r")
+        rflagset=1
+        ranklists=$OPTARG
+        ;;
+      "l")
+        lflagset=1
+        labels=($OPTARG)
+        ;;
+      "f")
+        fflagset=1
+        field=$OPTARG
+        ;;
+      "n")
+        nbrrnks=$OPTARG
+        ;;
+      "p")
+        rbopvl=$OPTARG
+        ;;
+      "s")
+        nbrshfs=$OPTARG
+        ;;
+      "x")
+        nexp=$OPTARG
+        ;;
+      "t")
+        ctff=$OPTARG
+        ;;
+      "?")
+        echo "Unknown option $OPTARG."
+        ;;
+      ":")
+        echo "No argument value provided for option $OPTARG."
+        ;;
+      *)
+      # Bad luck!?:
+        echo "An unknown error occurred while processing options."
+        ;;
+    esac
+  done
+
+
+if [[ $showdetails == 1 ]]
+  then
+    echo ""
+    echo "$0 compares ranked lists by the rank-biased overlap measure as implemented in"
+    echo "https://github.com/dlukes/rbo (clone rbo into the directory in which $0 resides,"
+    echo "or change the line sys.path.append(os.path.abspath(\"/opt/rbo\")) in this script)."
+    echo ""
+    echo "The lists to be compared should be specified by the argument to -r."
+    echo "Each list should be a tab-delimited file with a one-line header (specifying column labels)."
+    echo "Column 1 should provide unique row identifiers. The argument to -f indicates which column"
+    echo "to use for scoring. Examples:"
+    echo ""
+    echo "$0  -r 'LISTDIR/file1.tsv LISTdir/file2.tsv'  -l 'lst1 lst2'  -f 4"
+    echo ""
+    echo " ... will compare file1.tsv with file2.tsv in LISTDIR, using the forth column entries as scores;"
+    echo " the lists will be identifed as lst1 and lst2 in the output."
+    echo ""
+    echo "$0  -r LISTDIR/  -l 'lst1 lst2 lst3'  -f 4"
+    echo ""
+    echo " ... will compare all files in LISTDIR. Here we assume that there are 3 ranked lists in the"
+    echo " directory, which will be identified as lst1, lst2, and lst3 in the output."
+    echo ""
+    echo "Arguments -n and -p specify the list lengths (number of ranks) and pvalue to be used in the rbo()"
+    echo "function."
+    echo ""
+    echo "A permutation test is used to evaluate the significance of the observed rbo value. The labels for"
+    echo "the first 'nbrshfs' ranks are permutated 'nexp-1' times. The real rbo value is *-starred if it is"
+    echo "among the top 'ctff' scores of the set of scores thus generated. With the default settings, the"
+    echo "rbo value is *-starred if it is in the top 5."
+    echo ""
+fi
+if [[ $showusage == 1  ||  $rflagset == 0  ||  $lflagset == a  ||  $fflagset == 0 ]]
+  then
+    echo ""
+    echo "USAGE: xdo1 [-hH] -r ranklists -l labels -f field [-n nbrrnks] [-p rbopvl] [-s nbrshfs] [-x nexp -t ctff]"
+    echo ""
+    echo "-h: print this usage reminder.   -H: print additional documentation."
+    echo ""
+    echo "Required arguments:"
+    echo "                  ranklists = list to compare"
+    echo "                  labels    = list labels"
+    echo "                  field     = value field"
+    echo "Optional arguments:"
+    echo "                  nbrrnks   = number of ranks to consider [default: 40]"
+    echo "                  rbopvl    = rbo pvalue [default: 0.95]"
+    echo "                  nbrshfs   = number of ranks to shuffle [default: 40]"
+    echo "                  nexp      = number of permutations [default: 100]"
+    echo "                  ctff      = significance level (as percent) [default: 5]"
+    echo ""
+    echo "Output:"
+    echo "   1) stdout - a matrix of rbo values; significant values are *-starred."
+    echo "   2) files 'xy-rnkcmp.out' for all label pairs 'x' and 'y' - list of rbo values"
+    echo "      (x versus y value followed by permutation values) and statistics."
+    echo ""
+    exit
+fi
+
+
+rlists=(${ranklists}*)
+if [ ${#rlists[@]} != ${#labels[@]} ]; then
+  echo "Problem: The number of labels (${#labels[@]}) does not match the number of rank files (${#rlists[@]})."
+  echo "Please fix."
+  exit 1
+fi
+
+echoerr "Running: $0 -r $ranklists -l ${labels[*]} -f $field -n $nbrrnks -p $rbopvl -s $nbrshfs -x $nexp -t $ctff"
+echoerr ""
+
+echo "#$0 was run with"
+echo "# rank lists: ${rlists[*]}"
+echo "# labels    : ${labels[*]}"
+echo "# arguments : -f $field -n $nbrrnks -p $rbopvl -s $nbrshfs -x $nexp -t $ctff"
+ctff=`echo "scale=0; ($nexp * $ctff / 100)/1" | bc -l`
+echo "# cutoff    : $ctff"
+echo ""
+
+((nexp--))
+i=0
+for file1 in ${rlists[*]}
+do
+  ((++i))
+  j=0
+  for file2 in ${rlists[*]}
+  do
+    ((++j))
+    if [ $j -gt $i ]; then
+      echoerr "$file1 vs $file2"
+      >&2 cmprrnks $file1 $file2 $field $nbrrnks $rbopvl 0
+    fi
+  done
+done
+
+ea=()
+i=0
+for file1 in ${rlists[*]}
+do
+  ((++i))
+  j=0
+  for file2 in ${rlists[*]}
+  do
+    ((++j))
+    if [ $j -gt $i ]; then
+      e=`cmprrnks $file1 $file2 $field $nbrrnks $rbopvl 0 | cut -d" " -f2`
+      rnkfile="${labels[$i-1]}${labels[$j-1]}""-rnkcmp.out"
+      line="${labels[$i-1]}${labels[$j-1]}	$e"
+      rnk=1
+      for n in $(eval echo "{1..$nexp}"); do
+        r=`cmprrnks $file1 $file2 $field $nbrrnks $rbopvl $nbrshfs | cut -d" " -f2`
+        echoerr "$rnkfile: $n-th	permutation: $r versus $e"
+        line=$line"	$r"
+        if (( $(echo "$r > $e" | bc -l) )); then
+          ((++rnk)) 
+        fi
+      done
+      if [ $rnk -le ${ctff} ]; then 
+        ea[${#ea[@]}]="*"$e
+      else
+        ea[${#ea[@]}]=$e
+      fi
+      echo "$line" > $rnkfile
+
+cat $rnkfile | egrep -v "^#" |
+awk -v rnk="$rnk" '{
+  e = min = max = sum = $2
+  sum2 = $2 * $2
+  for (n=3; n <= NF; n++) {
+    if ($n < min) min = $n
+    if ($n > max) max = $n
+    sum += $n
+    sum2 += $n * $n
+  }
+  m=sum/(NF-1)
+  v=(sum2 - (sum*sum)/(NF-1))/(NF-2)
+  s=sqrt(v)
+  z=(e-m)/s
+  print "# e=" e ", min=" min ", avg=" m ", max=" max ", std=" s ", z=" z " rnk= " rnk " (of " NF-1 ")"
+}' >> $rnkfile
+
+    fi
+  done
+done
+
+
+l=${#labels[@]}
+line=" 	"
+
+for ((i=1;i<$l;i++)); 
+do
+  line=$line${labels[$i-1]}"	"
+done
+line=$line${labels[$i-1]}
+echo "$line"
+
+k=0
+for ((i=1;i<$l;i++)); 
+do
+  line="${labels[$i-1]}""	"
+  for ((j=1;j<=$l;j++)); 
+  do
+    if [ $j -lt $i ]; then
+      line=$line"	"
+    elif [ $j -eq $i ]; then
+      line=$line"x	"
+    elif [ $j -lt $l ]; then
+      line=$line"${ea[$k]}	"
+      ((k++))
+    else
+      line=$line"${ea[$k]}"
+      ((k++))
+    fi
+  done
+  echo "$line"
+done
