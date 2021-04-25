@@ -42,7 +42,7 @@ python3 - "${l1}" "${l2}" "${rbopvl}" << EOF
 import sys
 import os
 import ast
-sys.path.append(os.path.abspath("./rbo"))
+sys.path.append(os.path.abspath("/opt/rbo"))
 from rbo import rbo_dict
 
 d = dict(ast.literal_eval(sys.argv[1]))
@@ -130,7 +130,7 @@ if [[ $showdetails == 1 ]]
     echo ""
     echo "$0 compares ranked lists by the rank-biased overlap measure as implemented in"
     echo "https://github.com/dlukes/rbo (clone rbo into the directory in which $0 resides,"
-    echo "or change the line sys.path.append(os.path.abspath(\"./rbo\")) in this script)."
+    echo "or change the line sys.path.append(os.path.abspath(\"/opt/rbo\")) in this script)."
     echo ""
     echo "The lists to be compared should be specified by the argument to -r."
     echo "Each list should be a tab-delimited file with a one-line header (specifying column labels)."
