@@ -159,7 +159,7 @@ fi
 if [[ $showusage == 1  ||  $rflagset == 0  ||  $lflagset == a  ||  $fflagset == 0 ]]
   then
     echo ""
-    echo "USAGE: xdo1 [-hH] -r ranklists -l labels -f field [-n nbrrnks] [-p rbopvl] [-s nbrshfs] [-x nexp -t ctff]"
+    echo "USAGE: xcmprnks [-hH] -r ranklists -l labels -f field [-n nbrrnks] [-p rbopvl] [-s nbrshfs] [-x nexp -t ctff]"
     echo ""
     echo "-h: print this usage reminder.   -H: print additional documentation."
     echo ""
