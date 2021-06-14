@@ -70,7 +70,7 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
         if ( !identical(sampledata$chr[i],seqid) ) {
           if (checkflag) {
             cat( sprintf("Check1: %s\thas %4d sites and %4d %2d-distances\n",
-                         seqid, nsites, nsites-d, d) )
+                         seqid, nsites, max(0,nsites-d), d) )
           }
           seqid <- sampledata$chr[i]
           nsites= 1
@@ -80,11 +80,11 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
           }
         } else if ( i == nrow(sampledata) ) {
           nsites <- nsites + 1
-          if ( nsites >= d ) {
+          if ( nsites > d ) {
             dstnc = sampledata$start[i] - sampledata$start[i-d]
             if (checkflag) {
-              cat( sprintf("\t%s\t%9d %9d %d-dstnc:\t%6d\n",
-                   sampledata$chr[i], sampledata$start[i-d],
+              cat( sprintf("nsites=%5d\t%s\t%9d %9d %d-dstnc:\t%6d\n",
+                   nsites, sampledata$chr[i], sampledata$start[i-d],
                    sampledata$start[i], d, dstnc) ) 
             }
             gndstnc <- gndstnc + 1
@@ -101,8 +101,8 @@ det_mrpr <- function(mrobj,sampleL,ddset=c(1,5),nbrxtrms=100L,outfile="",doplots
           if ( nsites >  d ) {
             dstnc = sampledata$start[i] - sampledata$start[i-d]
             if (checkflag) {
-              cat( sprintf("\t%s\t%9d %9d %d-dstnc:\t%6d\n",
-                   sampledata$chr[i], sampledata$start[i-d],
+              cat( sprintf("nsites=%5d\t%s\t%9d %9d %d-dstnc:\t%6d\n",
+                   nsites, sampledata$chr[i], sampledata$start[i-d],
                    sampledata$start[i], d, dstnc) ) 
             }
             gndstnc <- gndstnc + 1
