@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	February 12, 2021
+#Version:	July 7, 2021
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -229,7 +229,7 @@ if (RUNpwc) {
   stopCluster(cl)
   #cusData is a list of lists.  The outer list contains data for each pairwise
   #  comparison.  These data are in the form of lists of data frames as returned
-  #  by cmpSites(): for each comparions, the data frames are
+  #  by cmpSites(): for each comparison, the data frames are
   #    commonHSM, unique1HSM, unique2HSM,
   #    commonSCD, unique1SCD, unique2SCD,
   #    hsm1cSCD, unique1HSMn2SCD,

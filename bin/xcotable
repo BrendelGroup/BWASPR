@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# xcotable
 
 if [ "$#" -ne 1 ]; then
   echo ""
@@ -8,14 +9,14 @@ if [ "$#" -ne 1 ]; then
   echo ""
   echo "Usage: $0 Rwork-Directory"
   echo ""
-  echo "Example: xmkcotable OUT-Cb_LI."
+  echo "Example: xcotable OUT-Cb_LI."
   echo ""
   exit 1
 fi
 
 rdir=$1
 
-owi=(`egrep -h "Overlap index" $1/PWC/pwc*txt | cut -d":" -f2 | tr -d '	' | tr '\n' ' '`)
+ovi=(`egrep -h "Overlap index" $1/PWC/pwc*txt | cut -d":" -f2 | tr -d '	' | tr '\n' ' '`)
 labels=(`head -1 $1/CRL/*.txt`)
 
 echo "	${labels[@]}"
@@ -23,16 +24,18 @@ echo "	${labels[@]}"
 l=${#labels[@]}
 line=" 	"
 
-k=0
 for ((i=0;i<$l;i++)); 
 do
   crl=(`egrep "^${labels[$i]}" $rdir/CRL/*.txt`)
   line=${crl[0]}
+  k=$i
+  d=$((l-1))
   for ((j=0;j<$l;j++)); 
   do
-    if [[ $j < $i ]]; then
-      line=$line"	"${owi[$k]}
-      ((k++))
+    if [[ $j -lt $i ]]; then
+      if [[ $j -gt 0 ]]; then k=$((k+d)); fi
+      line=$line"	"${ovi[$k-1]}
+      ((d--))
     else
       line=$line"	"${crl[$j+1]}
     fi
