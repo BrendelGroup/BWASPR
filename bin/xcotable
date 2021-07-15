@@ -19,7 +19,7 @@ rdir=$1
 ovi=(`egrep -h "Overlap index" $1/PWC/pwc*txt | cut -d":" -f2 | tr -d '	' | tr '\n' ' '`)
 labels=(`head -1 $1/CRL/*.txt`)
 
-echo "	${labels[@]}"
+echo "	${labels[@]}" | tr ' ' '\t'
 
 l=${#labels[@]}
 line=" 	"
