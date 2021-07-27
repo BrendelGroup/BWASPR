@@ -40,8 +40,9 @@ From: ubuntu:20.04
     echo 'install.packages("BiocManager", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'         > R2install
     echo 'install.packages("dplyr", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
     echo 'install.packages("gplots", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("ggplots", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("ggdendro", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
     echo 'install.packages("gtable", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
-    echo 'install.packages("gridExtra", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'          >> R2install
     echo 'install.packages("gridExtra", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'          >> R2install
     echo 'install.packages("pastecs", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'            >> R2install
     echo 'install.packages("RCurl", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
