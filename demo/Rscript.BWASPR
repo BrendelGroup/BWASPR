@@ -1,5 +1,5 @@
 #Rscript.BWASPR
-#Version:	July 7, 2021
+#Version:	July 27, 2021
 #Contact:	Volker Brendel (vbrendel@indiana.edu)
 #Documentation:	https://github.com/brendelgroup/BWASPR
 
@@ -170,8 +170,14 @@ if (RUNpwc) {
     message("\n.. no pairs to compare ....")
   } else if (l == 2) {
 #First, produce pairwise sample site comparisons and save the output in file
-#  pwc-*.txt and plots in pwc-*.pdf.
-#
+#  pwc-*.txt and plots in pwc-*.pdf.  cuSList is a list of data frames as
+#  returned by cmpSites():
+#    commonHSM, unique1HSM, unique2HSM,
+#    commonSCD, unique1SCD, unique2SCD,
+#    hsm1cSCD, unique1HSMn2SCD,
+#    hsm2cSCD, unique2HSMn1SCD,
+#    unique1HSM2SCD, unique2HSM1SCD.
+#  For details, see the pwc-*.txt output file.
     sample1hsm <- methylKit::getData(studymk[[1]])
     sample1scd <- methylKit::getData(studymc[[1]])
     s1l <- sampleLabels[[1]]
@@ -195,6 +201,8 @@ if (RUNpwc) {
 #First, produce pairwise sample site comparisons and save the output in files
 #  pwc-* (done in parallel).
 #  Note: no plots are generated - for unclear reasons, venneuler stalls when invoked on a cluster ...
+#  Also, cuSList data will not be saved, as this could use up a lot of memory. If you do
+#  want to save the data, then replace "return(1)" by "return(cuSList)."
 #
   v <- c(1:length(studymk@treatment))
   numprcINcl <- dim(combn(v,2))[2]
@@ -224,18 +232,9 @@ if (RUNpwc) {
       cmd <- paste("mv",outfile,PWCdir,sep=" ")
       message("\n.. now executing: ",cmd)
       system(cmd)
-      return(cuSlist)
+      return(1)
     })
   stopCluster(cl)
-  #cusData is a list of lists.  The outer list contains data for each pairwise
-  #  comparison.  These data are in the form of lists of data frames as returned
-  #  by cmpSites(): for each comparison, the data frames are
-  #    commonHSM, unique1HSM, unique2HSM,
-  #    commonSCD, unique1SCD, unique2SCD,
-  #    hsm1cSCD, unique1HSMn2SCD,
-  #    hsm2cSCD, unique2HSMn1SCD,
-  #    unique1HSM2SCD, unique2HSM1SCD.
-  #  For details, see the *.txt output files of the above code section.
   }
   readme <- paste("PWC - Pairwise comparisons between all samples.\n\n",
                   "Input: studymk, studymc, nbrpms, hheight, nbrpnts\n\n",
