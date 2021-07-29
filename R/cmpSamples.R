@@ -38,8 +38,8 @@ cmpSamples <- function(mrobj,destrand=FALSE,filter.lo.count=NULL,
 		       filter.hi.perc=NULL,mc.cores=1,plotfile="") {
     message("... comparing samples ...")
 
-    mrobj=filterByCoverage(mrobj,lo.count=filter.lo.count,filter.lo.perc,
-                                 filter.hi.count,filter.hi.perc)
+    mrobj=filterByCoverage(mrobj,lo.count=filter.lo.count,lo.perc=filter.lo.perc,
+                                 hi.count=filter.hi.count,hi.perc=filter.hi.perc)
     mbobj <- unite(mrobj,destrand=destrand,mc.cores=mc.cores)
     data <- getData(mbobj)
 
