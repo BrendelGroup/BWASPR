@@ -2,9 +2,13 @@
 #' This function will methylKit::unite() input samples and compare
 #' them using methylKit::getCorrelation() and methylKit::PCASamples.
 #'
-#' @param mrobj A methylRaw object as returned by methylKit::unite()
+#' @param mrobj A methylRawList object
 #' @param destrand methylKit::unite() parameter; default: FALSE.
 #'   destrand=TRUE combines CpG methylation calls from both strands.
+#' @param filter.lo.count methylKit::filterByCoverage() parameter; default: NULL.
+#' @param filter.lo.perc methylKit::filterByCoverage() parameter; default: NULL.
+#' @param filter.hi.count methylKit::filterByCoverage() parameter; default: NULL.
+#' @param filter.hi.perc methylKit::filterByCoverage() parameter; default: NULL.
 #' @param mc.cores Integer denoting how many cores should be used for parallel
 #'   diffential methylation calculations
 #' @param plotfile If specified other than the default "", then plots
@@ -23,13 +27,19 @@
 #'                        sample="all",replicate=c(0),
 #'                        type="CpGhsm", mincov=1,
 #'                        assembly="Amel-4.5")
-#'   cmpSamples(AmHE,destrand=TRUE,mc.cores=4,plotfile="myplots")
+#'   cmpSamples(AmHE,destrand=TRUE,filter.lo.count=NULL,
+#'                   filter.lo.perc=NULL,filter.hi.count=NULL,
+#'                   filter.hi.perc=NULL,mc.cores=4,plotfile="myplots") {
 #'
 #' @export
 
-cmpSamples <- function(mrobj,destrand=FALSE,mc.cores=1,plotfile="") {
+cmpSamples <- function(mrobj,destrand=FALSE,filter.lo.count=NULL,
+		       filter.lo.perc=NULL,filter.hi.count=NULL,
+		       filter.hi.perc=NULL,mc.cores=1,plotfile="") {
     message("... comparing samples ...")
 
+    mrobj=filterByCoverage(mrobj,lo.count=filter.lo.count,filter.lo.perc,
+                                 filter.hi.count,filter.hi.perc)
     mbobj <- unite(mrobj,destrand=destrand,mc.cores=mc.cores)
     data <- getData(mbobj)
 
