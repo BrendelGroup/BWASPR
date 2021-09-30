@@ -10,6 +10,21 @@ Please find detailed installation instructions and options in the
 [INSTALL](./INSTALL.md) document.
 
 
+## Reference
+
+Claire Morandine and Volker P. Brendel
+(2021) _Tools and applications for integrative analysis of DNA methylation
+in social insects._ In review.
+Pre-print: [at BioRxiv](https://www.biorxiv.org/content/10.1101/2021.08.19.457008v2)
+
+
+## Contact
+
+Please direct all comments and suggestions to
+[Volker Brendel](<mailto:vbrendel@indiana.edu>)
+at [Indiana University](http://brendelgroup.org/).
+
+
 ## What BWASPR does
 Required input to the _BWASPR_ workflow consists of the \*.mcalls files (tab
 delimited data for the named columns)
