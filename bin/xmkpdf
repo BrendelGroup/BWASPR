@@ -9,7 +9,7 @@ species=$1
 study=$2
 inclrscript=$3
 
-basedir="/projects/vbrendel/SIMETH"
+basedir=PROJECTrootDIR
 dirs="CMS PWC CRL REPCMS REPCRL MMP ACS RNK MRPR DMT DMSG OGL OGLall"
 
 
