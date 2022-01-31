@@ -1,9 +1,9 @@
 # BWASPR Installation and Setup
 
-## Installation as a singularity container [![https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg](https://www.singularity-hub.org/static/img/hosted-singularity--hub-%23e32929.svg)](https://singularity-hub.org/collections/3301)
+## Installation as a Singularity container
 
 All the BWASPR dependencies are encapsulated in a
-[Singularity](https://www.sylabs.io/docs/) container available from our group
+[Singularity](https://apptainer.org/) container available from our
 [Singularity Hub](http://BrendelGroup.org/SingularityHub/).
 
 Assuming _git_ and  _singularity_ are installed on your system, you can get the
@@ -19,19 +19,16 @@ singularity exec -e -B `pwd` bwaspr.sif ./xdoit sample OUT-sample
 
 Here the last command (_singularity exec_) will execute the _Rscript.BWASPR_
 workflow described in the [demo](./demo) directory, using all the required
-R packages already loaded in the singularity container.
-
-For a gentle introduction to singularity, see our group
-[handbook article](https://github.com/BrendelGroup/bghandbook/blob/master/doc/06.2-Howto-Singularity-run.md).
+R packages already loaded in the Singularity container.
 
 
 ## Optional: System-wide Installation
 
-BWASPR use via the singularity container is highly recommended, with no known
+BWASPR use via the Singularity container is highly recommended, with no known
 drawbacks.
 However, if desired, you can of course install all the required R packages
 individually on your computer system.
-The singularity [recipe file](./Singularity) in this repository should serve as
+The Singularity [definition file](./bwaspr.def) in this repository should serve as
 a guide to perform such an installation.
 The `bwaspr.sif` container was built on the 
 [current long-term supported Ubuntu 20.04 distribution](https://www.ubuntu.com/download/desktop)
