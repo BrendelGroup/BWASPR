@@ -15,9 +15,13 @@ From: ubuntu:20.04
                    build-essential \
                    openjdk-11-jdk \
                    software-properties-common \
+                   libtool automake \
                    libcairo2-dev \
                    libcurl4-gnutls-dev \
+                   libudunits2-dev \
+                   libharfbuzz-dev libfribidi-dev \
                    libgd-dev \
+                   libgeos-dev \
                    libgd-graph-perl \
                    libmariadb-client-lgpl-dev-compat \
                    libpq-dev \
@@ -38,15 +42,17 @@ From: ubuntu:20.04
     echo 'Installing CRAN and Bioconductor packages'
     ######
     echo 'install.packages("BiocManager", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'         > R2install
+    echo 'BiocManager::install(c("BiocVersion"), ask=FALSE)'                                              >> R2install
     echo 'install.packages("dplyr", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
     echo 'install.packages("gplots", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
-    echo 'install.packages("ggplots", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
-    echo 'install.packages("ggdendro", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
+    echo 'install.packages("ggplot2", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'            >> R2install
+    echo 'install.packages("ggdendro", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'           >> R2install
     echo 'install.packages("gtable", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'             >> R2install
     echo 'install.packages("gridExtra", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'          >> R2install
     echo 'install.packages("pastecs", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'            >> R2install
     echo 'install.packages("RCurl", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
     echo 'install.packages("rJava", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
+    echo 'install.packages("shiny", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
     echo 'install.packages("sqldf", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'              >> R2install
     echo 'install.packages("venneuler", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'          >> R2install
     echo 'install.packages("XML", repos="http://ftp.ussg.iu.edu/CRAN", dependencies=TRUE)'                >> R2install

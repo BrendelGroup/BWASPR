@@ -12,10 +12,11 @@ Please find detailed installation instructions and options in the
 
 ## Reference
 
-Claire Morandine and Volker P. Brendel
-(2021) _Tools and applications for integrative analysis of DNA methylation
-in social insects._ Molecular Ecology Resources, in print.
-Pre-print: [at BioRxiv](https://www.biorxiv.org/content/10.1101/2021.08.19.457008v3)
+__Claire Morandin and Volker P. Brendel (2021)__
+ _Tools and applications for integrative analysis of DNA methylation in social insects._
+Molecular Ecology Resources, 00, 1-19. [https://doi.org/10.1111/1755-0998.13566](https://doi.org/10.1111/1755-0998.13566).
+
+Original pre-print: [at BioRxiv](https://www.biorxiv.org/content/10.1101/2021.08.19.457008v3).
 
 
 ## Contact
