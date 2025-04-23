@@ -54,7 +54,7 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
     #     loop:
     mc <- max(floor((mc.cores - length(sample_match_list)) /
                     length(sample_match_list)), 1)
-    # analyze each sample_match    
+    # analyze each sample_match
     dmgprp <- mclapply(sample_match_list, function(sample_match) {
         sample1         <- unlist(strsplit(sample_match,'\\.'))[1]
         sample2         <- unlist(strsplit(sample_match,'\\.'))[3]
@@ -63,7 +63,7 @@ show_dmsg <- function(mrobj,dmsg,destrand=FALSE,min.nsites=2,max.nsites=60,
         #
         pair_dmsites.gr <- dmsites.gr[GenomicRanges::values(dmsites.gr)$comparison%in%sample_match]
         pair_dmgenes.gr <- dmgenes.gr[GenomicRanges::values(dmgenes.gr)$comparison%in%sample_match]
-        # subset the mrobj with current sample_match 
+        # subset the mrobj with current sample_match
         #
         pair_mrobj      <- reorganize(mrobj,sample.ids=list(sample1,sample2),
                                       treatment=c(0,1))
